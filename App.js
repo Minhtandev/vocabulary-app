@@ -8,6 +8,7 @@ import { Minigame } from "./src/screens/Minigame";
 import { FlashcardDetail } from "./src/screens/FlashcardDetail";
 import { Vocabulary } from "./src/screens/Vocabulary";
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

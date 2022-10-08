@@ -2,9 +2,9 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Flashcard } from "./screens/Flashcard";
-import { LearnVoc } from "./screens/LearnVoc";
-import { Minigame } from "./screens/Minigame";
+import { Flashcard } from "./src/screens/Flashcard";
+import { LearnVoc } from "./src/screens/LearnVoc";
+import { Minigame } from "./src/screens/Minigame";
 
 const Stack = createNativeStackNavigator();
 

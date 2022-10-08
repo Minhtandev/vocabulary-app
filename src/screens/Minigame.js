@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GameCard from "../src/components/minigame/GameCard";
+import GameCard from "../components/minigame/GameCard";
 // import { ProgressBar } from "react-native-paper";
 
 export const Minigame = ({ navigation, route }) => {

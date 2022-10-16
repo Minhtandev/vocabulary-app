@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
 
   //text
   small: {
-    color: "#FFF",
     fontSize: 12,
     color: "#D8D9CF",
   },
@@ -108,4 +107,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
-

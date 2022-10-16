@@ -9,6 +9,8 @@ import {
   Pressable,
 } from "react-native";
 
+var width = Dimensions.get("window").width;
+
 const DATA = [
   {
     id: "001",
@@ -38,8 +40,13 @@ const Item = ({ name, defi }) => (
       <Text style={styles.name}>{name ? name : "lỗi"}</Text>
       <Text style={styles.defi}>{defi ? defi : "lỗi"}</Text>
     </View>
-    <View style={styles.action}>
-      <Text>:</Text>
+    <View style={styles.btns}>
+      <Pressable style={styles.add_btn}>
+        <Text style={styles.btn_text}>THÊM THẺ</Text>
+      </Pressable>
+      <Pressable style={styles.add_btn}>
+        <Text style={styles.btn_text}>THÊM THẺ</Text>
+      </Pressable>
     </View>
   </View>
 );
@@ -50,8 +57,6 @@ export const FlashcardDetail = ({ navigation }) => (
       <Text>Toolbar</Text>
     </View>
     <FlatList
-      columnWrapperStyle={{ justifyContent: "space-between" }}
-      numColumns={2}
       data={DATA}
       renderItem={({ item }) => (
         <Item
@@ -79,14 +84,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
+    flex: 1,
     backgroundColor: "#4d4d4d",
-    width: 150,
+    width: width,
     marginTop: 5,
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 5,
     paddingLeft: 15,
-    paddingRight: 15,
     paddingTop: 15,
     paddingBottom: 10,
     borderRadius: 10,
@@ -96,13 +101,34 @@ const styles = StyleSheet.create({
     right: 10,
     top: 10,
   },
+  btns: {
+    flexDirection: "row",
+  },
   //button
+  add_btn: {
+    backgroundColor: "#5F9DF7",
+    borderRadius: 50,
+    paddingTop: 5,
+    paddingLeft: 30,
+    paddingBottom: 5,
+    paddingRight: 5,
+    width: 130,
+    marginTop: 10,
+    marginBottom: 5,
+    marginRight: 10,
+  },
+
   //text
+  btn_text: {
+    color: "#FFF",
+    fontWeight: "500",
+  },
   name: {
     color: "#FFFFFF",
     fontWeight: "700",
   },
   defi: {
-    color: "#FFFFFF",
+    fontSize: 12,
+    color: "#D8D9CF",
   },
 });

@@ -12,7 +12,7 @@ export const LearnVoc = ({ navigation, route }) => {
         <Pressable
           style={styles.topic}
           onPress={() => {
-            setTopicPress(topicPress + 1);
+            navigation.navigate("Vocabulary");
           }}
         >
           <View style={styles.indexTopic}>

@@ -1,5 +1,6 @@
+import { Audio } from "expo-av";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -23,6 +24,12 @@ const COLOR = {
   wrong: "#de3f44",
   progress: "#0897ef",
   button: "#34b1fd",
+};
+
+const RESULTS = {
+  first: "Not good at all",
+  second: "That's not good enough",
+  third: "Very good",
 };
 
 const gameData = [
@@ -68,6 +75,7 @@ const gameData = [
 ];
 
 export const Minigame = ({ navigation, route }) => {
+  const [startGame, setStartGame] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [disabledCard, setDisabledCard] = useState(false);
@@ -79,6 +87,32 @@ export const Minigame = ({ navigation, route }) => {
   const [bgColor, setBgColor] = useState("#fff");
   //===== modal show
   const [modalVisible, setModalVisible] = useState(false);
+  //==== âm thanh true - false
+  const [sound, setSound] = useState();
+  async function playSoundTrue() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/correct-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+  async function playSoundFalse() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/incorrect-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
   // ====== handle press card
   const handlePress = (index) => {
     //*********** */ mỗi card chỉ được click 1 lần
@@ -87,7 +121,7 @@ export const Minigame = ({ navigation, route }) => {
     if (answers.includes(index)) {
       newAnswers = newAnswers.filter((item) => item !== index);
       setAnswers(newAnswers);
-      //-->> fixxxx đổi màu
+      //-->> fixxxx đổi màu -> OK
     } else if (newAnswers.length < 2) {
       newAnswers.push(index);
       setAnswers(newAnswers);
@@ -98,9 +132,11 @@ export const Minigame = ({ navigation, route }) => {
       // setBackgroundColor
       let result = compareAnswer(newAnswers, trueAnswer);
       if (result) {
+        playSoundTrue();
         setBgColor(COLOR.success);
         setScore((score) => score + 1);
       } else {
+        playSoundFalse();
         setBgColor(COLOR.wrong);
         setWrong((wrong) => wrong + 1);
         //------------------------
@@ -162,252 +198,388 @@ export const Minigame = ({ navigation, route }) => {
             // opacity: 0.6,
           }}
         >
-          {/*---- progressBar ----*/}
-          <View style={styles.progress}>
-            {/* QuestionCounter */}
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#f4f9ec",
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-                borderRadius: 50,
-              }}
-            >
-              <Text style={styles.text}>{currentQuestionIndex + 1}</Text>
-              <Text style={styles.text}> / {gameData.length}</Text>
-            </View>
-            <View
-              style={{
-                width: "60%",
-                height: 20,
-                borderRadius: 20,
-                backgroundColor: "#f4f9ec",
-              }}
-            >
-              <Animated.View
-                style={[
-                  {
-                    height: 20,
-                    borderRadius: 20,
-                    backgroundColor: COLOR.progress,
-                  },
-                  {
-                    width: progressAnim,
-                  },
-                ]}
-              ></Animated.View>
-            </View>
-            {/*--> close game ----*/}
-            <View>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Ionicons
-                  name="close-circle-sharp"
-                  size={40}
-                  color="#f4f9ec"
-                  style={{ marginRight: 5 }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          {/*----  Point ----*/}
-          <View style={styles.point}>
-            <View
-              style={{
-                ...styles.pointPart,
-                backgroundColor: "#f0fdf3",
-              }}
-            >
-              <Feather
-                name="check-circle"
-                size={40}
-                color={COLOR.success}
-                style={{ marginRight: 5 }}
-              />
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: COLOR.success,
-                  fontWeight: "bold",
-                }}
-              >
-                {score}
-              </Text>
-            </View>
-            <View
-              style={{
-                ...styles.pointPart,
-                backgroundColor: "#fce4e5",
-              }}
-            >
-              <Feather
-                name="x-circle"
-                size={40}
-                color={COLOR.wrong}
-                style={{ marginRight: 5 }}
-              />
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: COLOR.wrong,
-                  fontWeight: "bold",
-                }}
-              >
-                {wrong}
-              </Text>
-            </View>
-          </View>
-          {/*---- Game ----*/}
-          <View style={styles.main}>
-            {cards.length > 0 &&
-              cards.map((item, index) =>
-                answers.includes(index) ? (
-                  <GameCard
-                    key={item.id}
-                    title={item.title}
-                    index={index}
-                    onPress={handlePress}
-                    disabled={disabledCard}
-                    style={{ backgroundColor: bgColor }}
-                  ></GameCard>
-                ) : (
-                  <GameCard
-                    key={item.id}
-                    title={item.title}
-                    index={index}
-                    onPress={handlePress}
-                    disabled={disabledCard}
-                    // style={{ backgroundColor: "#fff" }}
-                  ></GameCard>
-                )
-              )}
-          </View>
-          {/*---- Next Button ---*/}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleNextQuestion}
-              // disabled={currentQuestionIndex + 1 === gameData.length}
-            >
-              <Text
-                style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
-              >
-                {showNextButton ? "Next" : "Close"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {/*------- MODAL -------*/}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                // width: "60%",
-                // height: "50%",
-                backgroundColor: "rgba(0, 0, 0, 0.7)",
-                alignItems: "center",
-                justifyContent: "center",
+          {!startGame && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={true}
+              onRequestClose={() => {
+                Alert.alert("Cloesd.");
+                setModalVisible(false);
               }}
             >
               <View
                 style={{
-                  width: "80%",
-                  height: "70%",
-                  borderRadius: 10,
-                  backgroundColor: "#fff",
-                  padding: 30,
+                  flex: 1,
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
                   alignItems: "center",
-                  // justifyContent: "space-evenly",
+                  justifyContent: "center",
                 }}
               >
                 <View
                   style={{
-                    flex: 2,
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    width: "80%",
+                    height: "40%",
+                    borderRadius: 10,
+                    backgroundColor: "#fff",
+                    padding: 30,
+                    justifyContent: "space-evenly",
+                    alignItems: "baseline",
                   }}
                 >
-                  <Image
-                    source={require("../../assets/highScore.jpg")}
-                    style={{ width: 150 }}
-                    resizeMode="contain"
-                  ></Image>
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        marginBottom: 10,
+                      }}
+                    >
+                      Hướng dẫn:{" "}
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          textShadowColor: COLOR.success,
+                          textShadowOffset: { width: 0, height: 0 },
+                          textShadowRadius: 20,
+                        }}
+                      >
+                        GAME GHÉP TỪ
+                      </Text>
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 2,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        marginBottom: 10,
+                      }}
+                    >
+                      - Người chơi chọn 1 cặp thẻ: gồm 1 thẻ tiếng Anh và 1 thẻ
+                      tiếng Việt để tạo thành một từ vựng đúng.
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        marginBottom: 10,
+                      }}
+                    >
+                      - Nhấn 2 lần liên tiếp vào 1 thẻ bất kì để bỏ chọn thẻ đó.
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      width: "100%",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Pressable
+                      style={{
+                        ...styles.buttonMini,
+                        width: "46%",
+                        backgroundColor: "#fff",
+                        borderColor: COLOR.button,
+                        paddingVertical: 12,
+                      }}
+                      borderWidth={1}
+                      onPress={() => navigation.goBack()}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          color: COLOR.button,
+                          fontSize: 16,
+                        }}
+                      >
+                        Back
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      style={{
+                        ...styles.buttonMini,
+                        width: "46%",
+                        paddingVertical: 12,
+                      }}
+                      onPress={() => setStartGame(true)}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          color: "#fff",
+                          fontSize: 16,
+                        }}
+                      >
+                        Continue
+                      </Text>
+                    </Pressable>
+                  </View>
                 </View>
+              </View>
+            </Modal>
+          )}
+          {startGame && (
+            <>
+              {/*---- progressBar ----*/}
+              <View style={styles.progress}>
+                {/* QuestionCounter */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    backgroundColor: "#f4f9ec",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                    borderRadius: 50,
+                  }}
+                >
+                  <Text style={styles.text}>{currentQuestionIndex + 1}</Text>
+                  <Text style={styles.text}> / {gameData.length}</Text>
+                </View>
+                <View
+                  style={{
+                    width: "60%",
+                    height: 20,
+                    borderRadius: 20,
+                    backgroundColor: "#f4f9ec",
+                  }}
+                >
+                  <Animated.View
+                    style={[
+                      {
+                        height: 20,
+                        borderRadius: 20,
+                        backgroundColor: COLOR.progress,
+                      },
+                      {
+                        width: progressAnim,
+                      },
+                    ]}
+                  ></Animated.View>
+                </View>
+                {/*--> close game ----*/}
+                <View>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons
+                      name="close-circle-sharp"
+                      size={40}
+                      color="#f4f9ec"
+                      style={{ marginRight: 5 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {/*----  Point ----*/}
+              <View style={styles.point}>
+                <View
+                  style={{
+                    ...styles.pointPart,
+                    backgroundColor: "#f0fdf3",
+                  }}
+                >
+                  <Feather
+                    name="check-circle"
+                    size={40}
+                    color={COLOR.success}
+                    style={{ marginRight: 5 }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: COLOR.success,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {score}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.pointPart,
+                    backgroundColor: "#fce4e5",
+                  }}
+                >
+                  <Feather
+                    name="x-circle"
+                    size={40}
+                    color={COLOR.wrong}
+                    style={{ marginRight: 5 }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: COLOR.wrong,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {wrong}
+                  </Text>
+                </View>
+              </View>
+              {/*---- Game ----*/}
+              <View style={styles.main}>
+                {cards.length > 0 &&
+                  cards.map((item, index) =>
+                    answers.includes(index) ? (
+                      <GameCard
+                        key={item.id}
+                        title={item.title}
+                        index={index}
+                        onPress={handlePress}
+                        disabled={disabledCard}
+                        style={{ backgroundColor: bgColor }}
+                      ></GameCard>
+                    ) : (
+                      <GameCard
+                        key={item.id}
+                        title={item.title}
+                        index={index}
+                        onPress={handlePress}
+                        disabled={disabledCard}
+                        // style={{ backgroundColor: "#fff" }}
+                      ></GameCard>
+                    )
+                  )}
+              </View>
+              {/*---- Next Button ---*/}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleNextQuestion}
+                  // disabled={currentQuestionIndex + 1 === gameData.length}
+                >
+                  <Text
+                    style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
+                  >
+                    {showNextButton ? "Next" : "Close"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/*------- MODAL -------*/}
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Cloesd.");
+                  setModalVisible(!modalVisible);
+                }}
+              >
                 <View
                   style={{
                     flex: 1,
-                    justifyContent: "center",
+                    // width: "60%",
+                    // height: "50%",
+                    backgroundColor: "rgba(0, 0, 0, 0.7)",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  <Text style={{ marginBottom: 20 }}>Very Good</Text>
-                  <Text
+                  <View
                     style={{
-                      fontSize: 16,
-                      fontWeight: "bold",
-                      marginBottom: 10,
+                      width: "80%",
+                      height: "70%",
+                      borderRadius: 10,
+                      backgroundColor: "#fff",
+                      padding: 30,
+                      alignItems: "center",
+                      // justifyContent: "space-evenly",
                     }}
                   >
-                    Your score is:
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#ffbd14",
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {score} CORRECT AND {wrong} WRONG
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flex: 2,
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Pressable
-                    style={styles.buttonMini}
-                    onPress={handleTestAgain}
-                  >
-                    <Text
+                    <View
                       style={{
-                        fontWeight: "bold",
-                        color: "#fff",
-                        fontSize: 16,
+                        flex: 2,
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Test Again
-                    </Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.buttonMini}
-                    onPress={() => navigation.goBack()}
-                  >
-                    <Text
+                      <Image
+                        source={require("../../assets/highScore.jpg")}
+                        style={{ width: 150 }}
+                        resizeMode="contain"
+                      ></Image>
+                    </View>
+                    <View
                       style={{
-                        fontWeight: "bold",
-                        color: "#fff",
-                        fontSize: 16,
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Back to Topic
-                    </Text>
-                  </Pressable>
+                      <Text style={{ marginBottom: 20 }}>
+                        {score / gameData.length <= 0.4
+                          ? RESULTS.first
+                          : score / gameData.length <= 0.8
+                          ? RESULTS.second
+                          : RESULTS.third}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          marginBottom: 10,
+                        }}
+                      >
+                        Your score is:
+                      </Text>
+                      <Text
+                        style={{
+                          color: "#ffbd14",
+                          fontSize: 20,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {score} CORRECT AND {wrong} WRONG
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flex: 2,
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Pressable
+                        style={styles.buttonMini}
+                        onPress={handleTestAgain}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            color: "#fff",
+                            fontSize: 16,
+                          }}
+                        >
+                          Test Again
+                        </Text>
+                      </Pressable>
+                      <Pressable
+                        style={styles.buttonMini}
+                        onPress={() => navigation.goBack()}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            color: "#fff",
+                            fontSize: 16,
+                          }}
+                        >
+                          Back to Topic
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </View>
-          </Modal>
+              </Modal>
+            </>
+          )}
         </ImageBackground>
       </View>
     </SafeAreaView>
@@ -456,6 +628,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#34b1fd",
     padding: 20,
     marginVertical: 5,
+    marginHorizontal: 10,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",

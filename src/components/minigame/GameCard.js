@@ -10,9 +10,14 @@ const GameCard = ({
   disabled = false,
 }) => {
   const [bgColor, setBgColor] = useState("#fff");
+  const [count, setCount] = useState(0);
   const handlePress = (index) => {
+    setCount(count + 1);
     onPress(index);
     setBgColor("#e7f1d6");
+    if (count % 2 === 1) {
+      setBgColor("#fff");
+    }
   };
   return (
     <TouchableOpacity

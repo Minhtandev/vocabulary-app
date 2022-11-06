@@ -1,74 +1,83 @@
-import React, { useState } from "react";
+//Của react và react native
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  Button,
   FlatList,
   Dimensions,
   Pressable,
 } from "react-native";
 
-var width = Dimensions.get("window").width;
+//Của database
+import { db } from "../../config/firebase_config";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
-const DATA = [
-  {
-    id: "001",
-    name: "blue",
-    defi: "xanh",
-  },
-  {
-    id: "002",
-    name: "red",
-    defi: "đỏ",
-  },
-  {
-    id: "003",
-    name: "blue",
-    defi: "xanh",
-  },
-  {
-    id: "004",
-    name: "red",
-    defi: "đỏ",
-  },
-];
+//Của các components
+import { CardItem } from "../components/flashcard/CardItem";
+import { CustomModal } from "../components/flashcard/CustomModal";
 
-const Item = ({ name, defi }) => (
-  <View style={styles.item}>
-    <View style={styles.content}>
-      <Text style={styles.name}>{name ? name : "lỗi"}</Text>
-      <Text style={styles.defi}>{defi ? defi : "lỗi"}</Text>
-    </View>
-    <View style={styles.btns}>
-      <Pressable style={styles.add_btn}>
-        <Text style={styles.btn_text}>THÊM THẺ</Text>
+//Của các thư viện
+import { MenuProvider } from "react-native-popup-menu";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
+
+export const FlashcardDetail = ({ navigation, route }) => {
+  //Các state
+  const [subjectArrState, setSubjetArrState] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  //database
+  const collectionRef = collection(db, "flashcard");
+
+  //Biến id của bộ
+  const subjectId = route.params.subjectId;
+  //lấy dữ liệu (các thẻ)
+  useEffect(
+    () =>
+      onSnapshot(collectionRef, (snapshot) => {
+        setSubjetArrState(
+          snapshot.docs
+            .map((doc) => ({ ...doc.data(), id: doc.id }))
+            .filter((item) => item.subject == subjectId)
+        );
+      }),
+    []
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* <Text>{route.params.subjectId}</Text> */}
+      <FlatList
+        data={subjectArrState}
+        renderItem={({ item }) => (
+          <CardItem
+            navigation={navigation}
+            style={styles.item}
+            name={item.name}
+            defi={item.defi}
+            id={item.id}
+            // subjectId={route.params.subjectId}
+          ></CardItem>
+        )}
+      />
+      <Pressable
+        style={styles.add_subject_btn}
+        onPress={() => setModalVisible(true)}
+      >
+        <View style={styles.add_btn_content}>
+          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
+          <Text style={styles.add_btn_text}>THÊM BỘ</Text>
+        </View>
       </Pressable>
-      <Pressable style={styles.add_btn}>
-        <Text style={styles.btn_text}>THÊM THẺ</Text>
-      </Pressable>
+      <CustomModal
+        modalType="add-card"
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        subjectIdToAdd={subjectId}
+      ></CustomModal>
     </View>
-  </View>
-);
-
-export const FlashcardDetail = ({ navigation }) => (
-  <View style={styles.container}>
-    <View style={styles.toolbar}>
-      <Text>Toolbar</Text>
-    </View>
-    <FlatList
-      data={DATA}
-      renderItem={({ item }) => (
-        <Item
-          navigation={navigation}
-          style={styles.item}
-          name={item.name}
-          defi={item.defi}
-        ></Item>
-      )}
-    />
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   //view
@@ -79,56 +88,59 @@ const styles = StyleSheet.create({
     backgroundColor: "#262626",
     color: "#FFF",
   },
-  toolbar: {},
-  item_list: {
-    flex: 1,
-  },
-  item: {
-    flex: 1,
-    backgroundColor: "#4d4d4d",
-    width: width,
-    marginTop: 5,
-    marginLeft: 5,
-    marginRight: 5,
-    marginBottom: 5,
-    paddingLeft: 15,
-    paddingTop: 15,
-    paddingBottom: 10,
-    borderRadius: 10,
-  },
-  action: {
-    position: "absolute",
-    right: 10,
-    top: 10,
-  },
-  btns: {
+  add_btn_content: {
     flexDirection: "row",
+    flex: 1,
+    alignItem: "center",
   },
-  //button
-  add_btn: {
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "#4d4d4d",
+    borderRadius: 10,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  add_subject_btn: {
     backgroundColor: "#5F9DF7",
     borderRadius: 50,
     paddingTop: 5,
-    paddingLeft: 30,
+    paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
     width: 130,
-    marginTop: 10,
-    marginBottom: 5,
-    marginRight: 10,
+    position: "absolute",
+    bottom: 15,
   },
-
+  //input
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  //icon
+  add_icon: {
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 3,
+  },
   //text
-  btn_text: {
+  add_btn_text: {
     color: "#FFF",
     fontWeight: "500",
-  },
-  name: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-  },
-  defi: {
-    fontSize: 12,
-    color: "#D8D9CF",
   },
 });

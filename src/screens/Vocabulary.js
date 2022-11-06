@@ -1,100 +1,130 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Pressablem,
+  Image,
+  Pressable,
+  FlatList,
+  Alert,
+} from "react-native";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Modal } from "react-native-paper";
+
+const DATA = [
+  {
+    id: "001",
+    name: "color",
+    symbol: "/ˈtʃɪk.ɪn/",
+  },
+  {
+    id: "002",
+    name: "animal",
+    symbol: "/ˈtʃɪk.ɪn/",
+  },
+  {
+    id: "003",
+    symbol: "/ˈtʃɪk.ɪn/",
+    name: "animal",
+  },
+  {
+    id: "004",
+    symbol: "/ˈtʃɪk.ɪn/",
+    name: "animal",
+  },
+  {
+    id: "005",
+    symbol: "/ˈtʃɪk.ɪn/",
+    name: "animal",
+  },
+  {
+    id: "006",
+    name: "color",
+    symbol: "/ˈtʃɪk.ɪn/",
+  },
+  {
+    id: "007",
+    name: "animal",
+    symbol: "/ˈtʃɪk.ɪn/",
+  },
+  {
+    id: "008",
+    symbol: "/ˈtʃɪk.ɪn/",
+    name: "animal",
+  },
+  {
+    id: "009",
+    symbol: "/ˈtʃɪk.ɪn/",
+    name: "animal",
+  },
+  {
+    id: "010",
+    symbol: "/ˈtʃɪk.ɪn/",
+    name: "animal",
+  },
+];
+
+const Item = ({ name, symbol, setModalVisible }) => (
+  <Pressable style={styles.item} onPress={() => setModalVisible(true)}>
+    <Entypo name="add-to-list" size={24} color="black" />
+    <View>
+      <Text style={styles.title}>{name}</Text>
+      <Text style={styles.symbol}>{symbol}</Text>
+    </View>
+    <Pressable style={styles.infor}>
+      <AntDesign name="arrowright" size={24} color="black" />
+    </Pressable>
+  </Pressable>
+);
 
 export const Vocabulary = ({ navigation, route }) => {
+  const [modalVisible, setModalVisible] = useState(true);
   return (
     <View style={styles.cover}>
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
+      <FlatList
+        data={DATA}
+        renderItem={({ item }) => (
+          <Item
+            navigation={navigation}
+            name={item.name}
+            symbol={item.symbol}
+            setModalVisible={() => setModalVisible(true)}
+          ></Item>
+        )}
+      />
 
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
+      <Modal
+        style={styles.modal}
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <Text style={styles.nameCard}> Chicken </Text>
+        <Text style={styles.ipa}> /ˈtʃɪk.ɪn/ </Text>
+        <Text style={styles.meanViet}> Con gà </Text>
+        <Text style={styles.meanEng}>
+          a type of bird kept on a farm for its eggs or its meat, or the meat of
+          this bird that is cooked and eaten
+        </Text>
+        <Image
+          source={{
+            uri: "https://i.pinimg.com/736x/f2/77/d2/f277d2162da9af687fa7182f8dd2ecca.jpg",
+          }}
+          style={styles.imageCard}
+        />
+        <Pressable
+          onPress={() => setModalVisible(false)}
+          style={[styles.button, styles.buttonOpen]}
+        >
+          <Text>x</Text>
         </Pressable>
-      </View>
-
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
-
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
-
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
-
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
-
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
-
-      <View style={styles.item}>
-        <Entypo name="add-to-list" size={24} color="black" />
-        <View>
-          <Text style={styles.title}>Chicken</Text>
-          <Text style={styles.symbol}>/ˈtʃɪk.ɪn/</Text>
-        </View>
-        <Pressable style={styles.infor}>
-          <AntDesign name="arrowright" size={24} color="black" />
-        </Pressable>
-      </View>
-
-      <View style={styles.modal}></View>
+      </Modal>
     </View>
   );
 };
@@ -104,7 +134,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#d7f8fa",
     alignItems: "center",
-    paddingTop: 40,
+    justifyContent: "center",
   },
   item: {
     width: "80%",
@@ -115,8 +145,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    elevation: 100,
     margin: 5,
+    marginLeft: 25,
   },
   title: {
     fontSize: 16,
@@ -135,5 +165,60 @@ const styles = StyleSheet.create({
     backgroundColor: "#e6f5f7",
     borderRadius: 50,
   },
-  modal: {},
+  modal: {
+    display: "flex",
+    backgroundColor: "#fcf9de",
+    position: "absolute",
+    marginTop: "30%",
+    marginLeft: "13%",
+    alignItems: "center",
+    borderRadius: 10,
+    height: "60%",
+    width: "70%",
+  },
+  nameCard: {
+    paddingTop: 20,
+    paddingBottom: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#f7c911",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  ipa: {
+    paddingTop: 0,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    color: "#8a8986",
+  },
+  meanViet: {
+    paddingTop: 0,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  meanEng: {
+    paddingTop: 0,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    fontStyle: "italic",
+    fontSize: 12,
+  },
+  imageCard: {
+    width: 200,
+    height: 200,
+    marginTop: 30,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
 });

@@ -8,24 +8,28 @@ import { Minigame } from "./src/screens/Minigame";
 import { FlashcardDetail } from "./src/screens/FlashcardDetail";
 import { Vocabulary } from "./src/screens/Vocabulary";
 
+import { MenuProvider } from "react-native-popup-menu";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: "Welcome" }}
-        />
-        <Stack.Screen name="Flashcard" component={Flashcard} />
-        <Stack.Screen name="LearnVoc" component={LearnVoc} />
-        <Stack.Screen name="Minigame" component={Minigame} />
-        <Stack.Screen name="FlashcardDetail" component={FlashcardDetail} />
-        <Stack.Screen name="Vocabulary" component={Vocabulary} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <MenuProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: "Welcome" }}
+          />
+          <Stack.Screen name="Flashcard" component={Flashcard} />
+          <Stack.Screen name="LearnVoc" component={LearnVoc} />
+          <Stack.Screen name="Minigame" component={Minigame} />
+          <Stack.Screen name="FlashcardDetail" component={FlashcardDetail} />
+          <Stack.Screen name="Vocabulary" component={Vocabulary} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </MenuProvider>
   );
 }
 

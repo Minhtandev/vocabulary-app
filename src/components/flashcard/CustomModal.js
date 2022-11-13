@@ -16,19 +16,35 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
+import { AntDesign } from "@expo/vector-icons";
 
 export const CustomModal = ({
+  //bắt buộc truyền
   modalType,
   modalVisible,
   setModalVisible,
+
+  //dối với bộ (thêm bộ thì không cần, sửa/xóa phải đủ 3 cái)
   idSubject,
+  nameSubject,
+  desc,
+
+  //đối với thẻ (thêm thẻ chỉ cần subjectIdToAdd, sửa/xóa thì 4 cái còn lại)
   idCard,
+  nameCard,
+  defi,
+  favo,
   subjectIdToAdd,
 }) => {
-  const [inputNameState, setInputNameState] = useState("");
-  const [inputDescState, setInputDescState] = useState("");
-  const [inputNameCardState, setInputNameCardState] = useState("");
-  const [inputDefiState, setInputDefiState] = useState("");
+  const [inputAddNameState, setInputAddNameState] = useState("");
+  const [inputAddDescState, setInputAddDescState] = useState("");
+  const [inputEditNameState, setInputEditNameState] = useState(nameSubject);
+  const [inputEditDescState, setInputEditDescState] = useState(desc);
+  const [inputAddNameCardState, setInputAddNameCardState] = useState("");
+  const [inputAddDefiState, setInputAddDefiState] = useState("");
+  const [inputEditNameCardState, setInputEditNameCardState] =
+    useState(nameCard);
+  const [inputEditDefiState, setInputEditDefiState] = useState(defi);
   //database
   const collectionRef_subject = collection(db, "flashcard_subject");
   const collectionRef_card = collection(db, "flashcard");
@@ -36,9 +52,11 @@ export const CustomModal = ({
   //hàm thêm bộ
   const addSubject = async () => {
     await addDoc(collectionRef_subject, {
-      name: inputNameState,
-      desc: inputDescState,
+      name: inputAddNameState,
+      desc: inputAddDescState,
     });
+    setInputAddNameState("");
+    setInputAddDescState("");
   };
 
   //hàm xóa bộ
@@ -57,35 +75,43 @@ export const CustomModal = ({
   const editSubject = async (id) => {
     const userDoc = doc(db, "flashcard_subject", id);
     const newFields = {
-      name: inputNameState,
-      desc: inputDescState,
+      name: inputEditNameState,
+      desc: inputEditDescState,
     };
     await updateDoc(userDoc, newFields);
+    setInputEditNameState("");
+    setInputEditDescState("");
   };
 
   //hàm thêm thẻ
   const addCard = async (subjectId) => {
     await addDoc(collectionRef_card, {
-      name: inputNameCardState,
-      defi: inputDefiState,
+      name: inputAddNameCardState,
+      defi: inputAddDefiState,
       subject: subjectId,
+      favo: false,
     });
+    setInputAddNameCardState("");
+    setInputAddDefiState("");
   };
 
-  //hàm xóa bộ
+  //hàm xóa thẻ
   const deleteCard = async (id) => {
     const userDoc = doc(db, "flashcard", id);
     await deleteDoc(userDoc);
   };
 
-  //hàm sửa bộ
+  //hàm sửa thẻ
   const editCard = async (id) => {
     const userDoc = doc(db, "flashcard", id);
     const newFields = {
-      name: inputNameCardState,
-      defi: inputDefiState,
+      name: inputEditNameCardState,
+      defi: inputEditDefiState,
+      favo: favo,
     };
     await updateDoc(userDoc, newFields);
+    setInputEditNameCardState("");
+    setInputEditDefiState("");
   };
 
   switch (modalType) {
@@ -93,7 +119,7 @@ export const CustomModal = ({
     case "add-subject":
       return (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -102,21 +128,30 @@ export const CustomModal = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <AntDesign
+                name="close"
+                size={20}
+                color="black"
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.close_icon}
+              />
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputNameState(newText);
+                  setInputAddNameState(newText);
                 }}
-                value={inputNameState}
-                placeholder="Nhập tên..."
+                value={inputAddNameState}
+                placeholder="Tên bộ..."
               ></TextInput>
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputDescState(newText);
+                  setInputAddDescState(newText);
                 }}
-                value={inputDescState}
-                placeholder="Nhập mô tả..."
+                value={inputAddDescState}
+                placeholder="Mô tả..."
               ></TextInput>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -125,7 +160,7 @@ export const CustomModal = ({
                   setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Thêm</Text>
               </Pressable>
             </View>
           </View>
@@ -135,7 +170,7 @@ export const CustomModal = ({
     case "delete-subject":
       return (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -144,6 +179,15 @@ export const CustomModal = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <AntDesign
+                name="close"
+                size={20}
+                color="black"
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.close_icon}
+              />
               <Text>Có chắc xóa hong???</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -152,7 +196,7 @@ export const CustomModal = ({
                   setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Xóa</Text>
               </Pressable>
             </View>
           </View>
@@ -160,11 +204,9 @@ export const CustomModal = ({
       );
     //TH sửa bộ
     case "edit-subject": {
-      // setInputNameState(nameSubject);
-      // setInputDescState(descSubject);
       return (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -173,21 +215,30 @@ export const CustomModal = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <AntDesign
+                name="close"
+                size={20}
+                color="black"
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.close_icon}
+              />
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputNameState(newText);
+                  setInputEditNameState(newText);
                 }}
-                value={inputNameState}
-                placeholder="Nhập tên..."
+                value={inputEditNameState}
+                placeholder="Tên bộ..."
               ></TextInput>
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputDescState(newText);
+                  setInputEditDescState(newText);
                 }}
-                value={inputDescState}
-                placeholder="Nhập mô tả..."
+                value={inputEditDescState}
+                placeholder="Mô tả..."
               ></TextInput>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -196,7 +247,7 @@ export const CustomModal = ({
                   setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Cập nhật</Text>
               </Pressable>
             </View>
           </View>
@@ -207,7 +258,7 @@ export const CustomModal = ({
     case "add-card":
       return (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -216,21 +267,30 @@ export const CustomModal = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <AntDesign
+                name="close"
+                size={20}
+                color="black"
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.close_icon}
+              />
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputNameCardState(newText);
+                  setInputAddNameCardState(newText);
                 }}
-                value={inputNameCardState}
-                placeholder="Nhập tên..."
+                value={inputAddNameCardState}
+                placeholder="Tên thẻ..."
               ></TextInput>
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputDefiState(newText);
+                  setInputAddDefiState(newText);
                 }}
-                value={inputDefiState}
-                placeholder="Nhập mô tả..."
+                value={inputAddDefiState}
+                placeholder="Định nghĩa..."
               ></TextInput>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -239,7 +299,7 @@ export const CustomModal = ({
                   setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Thêm</Text>
               </Pressable>
             </View>
           </View>
@@ -249,7 +309,7 @@ export const CustomModal = ({
     case "delete-card":
       return (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -258,6 +318,15 @@ export const CustomModal = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <AntDesign
+                name="close"
+                size={20}
+                color="black"
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.close_icon}
+              />
               <Text>Có chắc xóa hong???</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -266,7 +335,7 @@ export const CustomModal = ({
                   setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Xóa</Text>
               </Pressable>
             </View>
           </View>
@@ -278,7 +347,7 @@ export const CustomModal = ({
       // setInputDescState(descSubject);
       return (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -287,21 +356,30 @@ export const CustomModal = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <AntDesign
+                name="close"
+                size={20}
+                color="black"
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.close_icon}
+              />
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputNameCardState(newText);
+                  setInputEditNameCardState(newText);
                 }}
-                value={inputNameCardState}
-                placeholder="Nhập tên..."
+                value={inputEditNameCardState}
+                placeholder="Tên thẻ..."
               ></TextInput>
               <TextInput
                 style={styles.input}
                 onChangeText={(newText) => {
-                  setInputDefiState(newText);
+                  setInputEditDefiState(newText);
                 }}
-                value={inputDefiState}
-                placeholder="Nhập mô tả..."
+                value={inputEditDefiState}
+                placeholder="Định nghĩa..."
               ></TextInput>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -310,7 +388,7 @@ export const CustomModal = ({
                   setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Cập nhật</Text>
               </Pressable>
             </View>
           </View>
@@ -332,7 +410,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 35,
     alignItems: "center",
     shadowColor: "#000",
@@ -345,9 +423,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
+    width: 150,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    position: "relative",
+    top: 20,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
@@ -355,6 +436,24 @@ const styles = StyleSheet.create({
   buttonClose: {
     backgroundColor: "#2196F3",
   },
+
+  //input
+  input: {
+    borderWidth: 1,
+    borderColor: "#5F9DF7",
+    borderStyle: "solid",
+    borderRadius: 10,
+    paddingTop: 5,
+    paddingLeft: 15,
+    paddingBottom: 5,
+    paddingRight: 5,
+    width: 150,
+    marginTop: 5,
+    marginBottom: 5,
+    textAlign: "left",
+  },
+
+  //text
   textStyle: {
     color: "white",
     fontWeight: "bold",
@@ -363,5 +462,12 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+
+  //icon
+  close_icon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   },
 });

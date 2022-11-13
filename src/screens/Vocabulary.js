@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,6 +12,17 @@ import {
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Modal } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { db } from "../../config/firebase_config";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 
 const DATA = [
   {
@@ -67,12 +77,11 @@ const DATA = [
   },
 ];
 
-const Item = ({ name, symbol, setModalVisible }) => (
+const Item = ({ name, setModalVisible, route }) => (
   <Pressable style={styles.item} onPress={() => setModalVisible(true)}>
     <Entypo name="add-to-list" size={24} color="black" />
     <View>
       <Text style={styles.title}>{name}</Text>
-      <Text style={styles.symbol}>{symbol}</Text>
     </View>
     <Pressable style={styles.infor}>
       <AntDesign name="arrowright" size={24} color="black" />
@@ -81,16 +90,35 @@ const Item = ({ name, symbol, setModalVisible }) => (
 );
 
 export const Vocabulary = ({ navigation, route }) => {
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const collectionRef = collection(db, "card");
+  const [cardArrState, setCardArrState] = useState([]);
+
+  //Biến id của bộ
+  const subjectId = route.params.subjectId;
+
+  useEffect(
+    () =>
+      onSnapshot(collectionRef, (snapshot) => {
+        setCardArrState(
+          snapshot.docs
+            .map((doc) => ({ ...doc.data(), id: doc.id }))
+            .filter((item) => item.subject == subjectId)
+        );
+      }),
+    []
+  );
+
   return (
     <View style={styles.cover}>
       <FlatList
-        data={DATA}
+        data={cardArrState}
         renderItem={({ item }) => (
           <Item
-            navigation={navigation}
-            name={item.name}
-            symbol={item.symbol}
+            // navigation={navigation}
+            name={item.name_card}
+            // symbol={item.symbol}
             setModalVisible={() => setModalVisible(true)}
           ></Item>
         )}
@@ -152,6 +180,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#fff",
+    height: "200%",
+    marginTop: 15,
+    justifyContent: "center",
   },
   symbol: {
     color: "#3a464a",

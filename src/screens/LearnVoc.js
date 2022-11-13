@@ -1,34 +1,79 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Pressable,
+  FlatList,
+} from "react-native";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useEffect } from "react";
+import { db } from "../../config/firebase_config";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+
+const Item = ({ navigation, name, setModalVisible, index, id }) => (
+  <Pressable
+    style={styles.topic}
+    onPress={() => {
+      navigation.navigate("Vocabulary", {
+        name: "Vocabulary",
+        subjectId: id,
+      });
+    }}
+  >
+    <View style={styles.indexTopic}>
+      <Text style={TEXT}> {index}</Text>
+    </View>
+
+    <View style={styles.contentTopic}>
+      <Text style={styles.nameTopic}> {name} </Text>
+    </View>
+    <View style={styles.studied}>
+      <MaterialIcons name="done" size={24} color="black" />
+    </View>
+  </Pressable>
+);
 
 export const LearnVoc = ({ navigation, route }) => {
-  const [topicPress, setTopicPress] = useState(0);
+  // const [topicPress, setTopicPress] = useState(0);
+  // Lấy dữ liệu
+  const collectionRef = collection(db, "subject");
+  const [subjectArrState, setSubjetArrState] = useState([]);
+
+  // Lấy bộ
+  useEffect(
+    () =>
+      onSnapshot(collectionRef, (snapshot) => {
+        setSubjetArrState(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+      }),
+    []
+  );
   return (
     <View style={styles.body}>
       {/* <View style={TEXT}><FontAwesome5 name="bell" size={24} color="black" /></View> */}
       <View style={styles.cover}>
-        <Pressable
-          style={styles.topic}
-          onPress={() => {
-            navigation.navigate("Vocabulary");
-          }}
-        >
-          <View style={styles.indexTopic}>
-            <Text style={TEXT}> {topics[0].index}</Text>
-          </View>
-
-          <View style={styles.contentTopic}>
-            <Text style={styles.nameTopic}> {topics[0].content} </Text>
-            <Text style={styles.translate}> {topics[0].vietsub} </Text>
-          </View>
-          <View style={styles.studied}>
-            <MaterialIcons name="done" size={24} color="black" />
-          </View>
-        </Pressable>
-
-        <Text style={TEXT}>{topicPress}</Text>
+        <FlatList
+          data={subjectArrState}
+          renderItem={({ index, item }) => (
+            <Item
+              navigation={navigation}
+              name={item.name_subject}
+              id={item.id}
+              index={index + 1}
+            ></Item>
+          )}
+        />
       </View>
     </View>
   );

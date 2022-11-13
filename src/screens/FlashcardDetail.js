@@ -49,12 +49,15 @@ export const FlashcardDetail = ({ navigation, route }) => {
       {/* <Text>{route.params.subjectId}</Text> */}
       <FlatList
         data={subjectArrState}
+        // style={styles.cardlist}
+        horizontal={false}
+        numColumns={2}
         renderItem={({ item }) => (
           <CardItem
             navigation={navigation}
-            style={styles.item}
             name={item.name}
             defi={item.defi}
+            favo={item.favo}
             id={item.id}
             // subjectId={route.params.subjectId}
           ></CardItem>
@@ -66,7 +69,7 @@ export const FlashcardDetail = ({ navigation, route }) => {
       >
         <View style={styles.add_btn_content}>
           <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
-          <Text style={styles.add_btn_text}>THÊM BỘ</Text>
+          <Text style={styles.add_btn_text}>THÊM THẺ</Text>
         </View>
       </Pressable>
       <CustomModal
@@ -84,6 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
+    // paddingBottom: 10,
     alignItems: "center",
     backgroundColor: "#262626",
     color: "#FFF",
@@ -113,6 +117,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  cardlist: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   add_subject_btn: {
     backgroundColor: "#5F9DF7",

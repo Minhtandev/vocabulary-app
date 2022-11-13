@@ -1,6 +1,13 @@
 //Của react và react native
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Pressable,
+  Button,
+} from "react-native";
 
 //Của components khác
 import { CustomModal } from "./CustomModal";
@@ -26,6 +33,8 @@ export const Item = ({ navigation, name, desc, id }) => {
   // };
 
   //Các state
+  const [addModalVisible, setAddModalVisible] = useState(false);
+  const [addCardModalVisible, setAddCardModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -40,12 +49,40 @@ export const Item = ({ navigation, name, desc, id }) => {
       }
     >
       {/* <Text>{id}</Text> */}
+
+      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.small}>{desc}</Text>
+      <Pressable
+        style={styles.add_btn}
+        onPress={() => setAddCardModalVisible(true)}
+      >
+        <View style={styles.add_btn_content}>
+          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
+          <Text style={styles.add_btn_text}>THÊM THẺ</Text>
+        </View>
+      </Pressable>
       <Menu>
-        <MenuTrigger style={styles.dots}>
-          <Entypo name="dots-three-vertical" size={18} color="white" />
-        </MenuTrigger>
+        <MenuTrigger
+          // style={styles.dots}
+          customStyles={{
+            TriggerTouchableComponent: Pressable,
+            triggerTouchable: { title: "Select (Custom Touchables)" },
+            triggerOuterWrapper: styles.practice_btn,
+            triggerText: styles.practice_btn_text,
+            // triggerWrapper: styles.dots,
+          }}
+          // children={
+          // <Pressable onPress={() => {}} style={styles.dots_content}>
+          // <Entypo name="dots-three-vertical" size={18} color="white" />
+          // </Pressable>
+          // }
+          text="THAO TÁC"
+        />
         <MenuOptions style={styles.menu_container}>
-          <MenuOption onSelect={() => alert(`Thêm`)} style={styles.menu_option}>
+          <MenuOption
+            onSelect={() => setAddCardModalVisible(true)}
+            style={styles.menu_option}
+          >
             <Entypo
               name="plus"
               size={16}
@@ -54,59 +91,59 @@ export const Item = ({ navigation, name, desc, id }) => {
             />
             <Text style={styles.menu_text}>Thêm</Text>
           </MenuOption>
-          <MenuOption onSelect={() => alert(`Sửa`)} style={styles.menu_option}>
-            <Pressable
-              style={{ flexDirection: "row" }}
-              onPress={() => setEditModalVisible(true)}
-            >
-              <Entypo
-                name="edit"
-                size={16}
-                color="white"
-                style={styles.menu_edit_icon}
-              />
-              <Text style={styles.menu_text}>Chỉnh sửa</Text>
-            </Pressable>
+          <MenuOption
+            onSelect={() => setEditModalVisible(true)}
+            style={styles.menu_option}
+          >
+            <Entypo
+              name="edit"
+              size={16}
+              color="white"
+              style={styles.menu_edit_icon}
+            />
+            <Text style={styles.menu_text}>Chỉnh sửa</Text>
           </MenuOption>
-          <MenuOption onSelect={() => alert(`Xóa`)} style={styles.menu_option}>
-            <Pressable
-              style={{ flexDirection: "row" }}
-              onPress={() => setDeleteModalVisible(true)}
-            >
-              <MaterialIcons
-                name="delete"
-                size={16}
-                color="white"
-                style={styles.menu_delete_icon}
-              />
-              <Text style={styles.menu_text}>Xóa</Text>
-            </Pressable>
+          <MenuOption
+            onSelect={() => setDeleteModalVisible(true)}
+            style={styles.menu_option}
+          >
+            <MaterialIcons
+              name="delete"
+              size={16}
+              color="white"
+              style={styles.menu_delete_icon}
+            />
+            <Text style={styles.menu_text}>Xóa</Text>
           </MenuOption>
         </MenuOptions>
       </Menu>
-
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.small}>{desc}</Text>
-      <Pressable style={styles.add_btn}>
-        <View style={styles.add_btn_content}>
-          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
-          <Text style={styles.add_btn_text}>THÊM THẺ</Text>
-        </View>
-      </Pressable>
-      <Pressable style={styles.practice_btn}>
-        <Text style={styles.practice_btn_text}>THỰC HÀNH</Text>
-      </Pressable>
       <CustomModal
         modalType="delete-subject"
         modalVisible={deleteModalVisible}
         setModalVisible={setDeleteModalVisible}
         idSubject={id}
+        nameSubject={name}
+        desc={desc}
       ></CustomModal>
       <CustomModal
         modalType="edit-subject"
         modalVisible={editModalVisible}
         setModalVisible={setEditModalVisible}
         idSubject={id}
+        nameSubject={name}
+        desc={desc}
+      ></CustomModal>
+      <CustomModal
+        modalType="add-subject"
+        modalVisible={addModalVisible}
+        setModalVisible={setAddModalVisible}
+        idSubject={id}
+      ></CustomModal>
+      <CustomModal
+        modalType="add-card"
+        modalVisible={addCardModalVisible}
+        setModalVisible={setAddCardModalVisible}
+        subjectIdToAdd={id}
       ></CustomModal>
     </Pressable>
   );
@@ -118,8 +155,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#4d4d4d",
     width: width * 0.95,
     marginTop: 5,
-    // marginLeft: 0,
-    // marginRight: auto,
     marginBottom: 5,
     paddingLeft: 15,
     paddingTop: 15,
@@ -134,8 +169,8 @@ const styles = StyleSheet.create({
   menu_container: {
     width: 150,
     position: "absolute",
-    right: -140,
-    top: 50,
+    left: 140,
+    top: -90,
   },
 
   //button
@@ -164,14 +199,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     textAlign: "center",
-  },
-  dots: {
-    backgroundColor: "#FF0000",
-    position: "absolute",
-    right: 30,
-    top: 25,
-    width: 50,
-    height: 50,
   },
   menu_option: {
     backgroundColor: "#000000",

@@ -87,7 +87,7 @@ const HomeScreen = ({ navigation }) => {
         <Text
           style={{
             color: "white",
-            fontSize: "24",
+            // fontSize: "24",
             backgroundColor: "#2d2c45",
             paddingVertical: 14,
             paddingHorizontal: 20,
@@ -106,7 +106,7 @@ const HomeScreen = ({ navigation }) => {
         ></Image>
       </View>
       <View>
-        <Text style={{ color: "#B5E67B", fontSize: "30", fontWeight: "bold" }}>
+        <Text style={{ color: "#B5E67B", fontWeight: "bold" }}>
           Learn English
         </Text>
       </View>
@@ -157,11 +157,12 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1e1d2f",
+    // backgroundColor: "#1e1d2f",
+    backgroundColor: "#fff",
+
     alignItems: "center",
     justifyContent: "space-between",
     // paddingVertical: 100,
-    color: "#fff",
   },
   top: {
     alignItems: "flex-end",
@@ -183,13 +184,13 @@ const styles = StyleSheet.create({
     height: 160,
     padding: 10,
     borderRadius: 10,
-    shadowColor: "#abacce",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    // shadowColor: "#abacce",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
     elevation: 5,
   },
   btn: {

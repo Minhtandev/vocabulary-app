@@ -23,6 +23,10 @@ import CreateMinigame from "./src/screens/CreateMinigame";
 import Login from "./src/screens/Login";
 // logout use firebase
 import { getAuth, signOut } from "firebase/auth";
+import Register from "./src/screens/Register";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "./config/firebase_config";
 // save data of user
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -42,6 +46,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
           <Stack.Screen
             name="Home"
             component={HomeScreen}
@@ -59,76 +64,73 @@ export default function App() {
   );
 }
 
-const auth = getAuth();
-const user = auth.currentUser;
-if (user) {
-  // User is signed in, see docs for a list of available properties
-  // https://firebase.google.com/docs/reference/js/firebase.User
-  // ...
-} else {
-  // No user is signed in.
-}
-
 const HomeScreen = ({ navigation }) => {
-  // const getData = async () => {
-  //   try {
-  //     const jsonValue = await AsyncStorage.getItem("userData");
-  //     return jsonValue != null ? JSON.parse(jsonValue) : null;
-  //   } catch (e) {
-  //     // error reading value
+  const [currUser, setCurrUser] = useState({});
+
+  // const getCurrentDate = (type = false) => {
+  //   var date = new Date().getDate();
+  //   var month = new Date().getMonth() + 1;
+  //   var year = new Date().getFullYear();
+  //   var day_name = "Today";
+  //   switch (new Date().getDay()) {
+  //     case 0:
+  //       day_name = "Sun";
+  //       break;
+  //     case 1:
+  //       day_name = "Mon";
+  //       break;
+  //     case 2:
+  //       day_name = "Tue";
+  //       break;
+  //     case 3:
+  //       day_name = "Wed";
+  //       break;
+  //     case 4:
+  //       day_name = "Thur";
+  //       break;
+  //     case 5:
+  //       day_name = "Fri";
+  //       break;
+  //     case 6:
+  //       day_name = "Sat";
   //   }
+
+  //   if (type) return date + "/" + month + "/" + year; //format: d-m-y;
+  //   return day_name;
   // };
 
-  const getCurrentDate = (type = false) => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    var day_name = "Today";
-    switch (new Date().getDay()) {
-      case 0:
-        day_name = "Sun";
-        break;
-      case 1:
-        day_name = "Mon";
-        break;
-      case 2:
-        day_name = "Tue";
-        break;
-      case 3:
-        day_name = "Wed";
-        break;
-      case 4:
-        day_name = "Thur";
-        break;
-      case 5:
-        day_name = "Fri";
-        break;
-      case 6:
-        day_name = "Sat";
-    }
-
-    if (type) return date + "/" + month + "/" + year; //format: d-m-y;
-    return day_name;
-  };
   const handleLogOut = () => {
+    // Lấy người dùng hiện tại
+    const auth = getAuth();
     signOut(auth)
       .then(() => {
         navigation.replace("Login");
+        setCurrUser({});
         console.log("logged out");
-        // try {
-        //   await AsyncStorage.removeItem("data");
-        // } catch (e) {
-        //   // remove error
-        // }
       })
       .catch((error) => {
-        // An error happened.
         alert(error.message);
       });
   };
 
-  // const data = getData() || null;
-  // console.log("data", AsyncStorage.getItem("userData"));
+  //
+  const collectionRef_user = collection(db, "user");
+
+  // get user from database
+  useEffect(() => {
+    // Lấy người dùng hiện tại đang đăng nhập ra
+    const auth = getAuth();
+    const user = auth.currentUser;
+    // lấy được id của người dùng -> truyền nó vào db để lấy ra những nội dung cần thiết ....
+    if (user) {
+      onSnapshot(collectionRef_user, (snapshot) => {
+        const data = snapshot.docs
+          .map((doc) => ({ ...doc.data(), id: doc.id }))
+          .find((item) => item.userId === user?.uid);
+        setCurrUser(data);
+      });
+    }
+  }, []);
   return (
     <SafeAreaView style={{ ...styles.container, flex: 1 }}>
       <StatusBar hidden={true} />
@@ -136,7 +138,7 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity onPress={handleLogOut}>
           <Text style={{ color: "red" }}>Log out</Text>
         </TouchableOpacity>
-        <Text>Email: {user?.email}</Text>
+        {/* <Text>Hi, {currUser?.username}</Text> */}
         {/* <Text>UserId: {user?.uid}</Text> */}
         <Text
           style={{
@@ -149,8 +151,8 @@ const HomeScreen = ({ navigation }) => {
             overflow: "hidden",
           }}
         >
-          <Text style={{ color: "#B5E67B" }}>{getCurrentDate()},</Text>{" "}
-          {getCurrentDate(true)}
+          Hi,
+          <Text style={{ color: "#B5E67B" }}> {currUser?.username}</Text>
         </Text>
       </View>
       <View>

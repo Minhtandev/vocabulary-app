@@ -19,6 +19,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import GameCard from "../components/minigame/GameCard";
 import { compareAnswer, getIndexAnswer } from "../handle/getAnswer";
 
+import { LogBox } from "react-native";
+
 const COLOR = {
   success: "#4fd978",
   wrong: "#de3f44",
@@ -32,49 +34,56 @@ const RESULTS = {
   third: "Very good",
 };
 
-const gameData = [
-  {
-    id: "Q01",
-    cards: [
-      {
-        id: "Q01.1",
-        title: "dimension",
-        value: true,
-      },
-      { id: "Q01.2", title: "kích thước; chiều", value: true },
-      { id: "Q01.3", title: "quantity", value: false },
-      { id: "Q01.4", title: "chất lượng", value: false },
-    ],
-  },
-  {
-    id: "Q02",
-    cards: [
-      {
-        id: "Q02.1",
-        title: "happy",
-        value: false,
-      },
-      { id: "Q02.2", title: "fancy", value: true },
-      { id: "Q02.3", title: "buồn", value: false },
-      { id: "Q02.4", title: "sức tưởng tượng (n)", value: true },
-    ],
-  },
-  {
-    id: "Q03",
-    cards: [
-      {
-        id: "Q03.1",
-        title: "expire",
-        value: false,
-      },
-      { id: "Q03.2", title: "sự thao tác", value: true },
-      { id: "Q03.3", title: "manipulation", value: true },
-      { id: "Q03.4", title: "xuất khẩu", value: false },
-    ],
-  },
-];
+// const gameData = [
+//   {
+//     id: "Q01",
+//     cards: [
+//       {
+//         id: "Q01.1",
+//         title: "dimension",
+//         value: true,
+//       },
+//       { id: "Q01.2", title: "kích thước; chiều", value: true },
+//       { id: "Q01.3", title: "quantity", value: false },
+//       { id: "Q01.4", title: "chất lượng", value: false },
+//     ],
+//   },
+//   {
+//     id: "Q02",
+//     cards: [
+//       {
+//         id: "Q02.1",
+//         title: "happy",
+//         value: false,
+//       },
+//       { id: "Q02.2", title: "fancy", value: true },
+//       { id: "Q02.3", title: "buồn", value: false },
+//       { id: "Q02.4", title: "sức tưởng tượng (n)", value: true },
+//     ],
+//   },
+//   {
+//     id: "Q03",
+//     cards: [
+//       {
+//         id: "Q03.1",
+//         title: "expire",
+//         value: false,
+//       },
+//       { id: "Q03.2", title: "sự thao tác", value: true },
+//       { id: "Q03.3", title: "manipulation", value: true },
+//       { id: "Q03.4", title: "xuất khẩu", value: false },
+//     ],
+//   },
+// ];
 
 export const Minigame = ({ navigation, route }) => {
+  // data from create Game
+  const gameData = route.params?.gameData || [];
+  // const number = route.params?.number || 10;
+  // LogBox.ignoreLogs(["83", gameData]);
+
+  // gameData
+
   const [startGame, setStartGame] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -204,7 +213,7 @@ export const Minigame = ({ navigation, route }) => {
               transparent={true}
               visible={true}
               onRequestClose={() => {
-                Alert.alert("Cloesd.");
+                Alert.alert("Closed.");
                 setModalVisible(false);
               }}
             >
@@ -571,7 +580,7 @@ export const Minigame = ({ navigation, route }) => {
                             fontSize: 16,
                           }}
                         >
-                          Back to Topic
+                          Back to Setting
                         </Text>
                       </Pressable>
                     </View>

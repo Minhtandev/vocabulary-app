@@ -26,6 +26,8 @@ export const Flashcard = ({ navigation, route }) => {
   const [subjectArrState, setSubjetArrState] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
+  //nhạc nền
+
   //database
   const collectionRef = collection(db, "flashcard_subject");
 

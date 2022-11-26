@@ -8,12 +8,14 @@ import {
   Pressable,
   FlatList,
   Alert,
+  GestureFlipView,
 } from "react-native";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Modal } from "react-native-paper";
 import React, { useState, useEffect } from "react";
 import { db } from "../../config/firebase_config";
+import Carousel from "react-native-snap-carousel";
+import * as Speech from "expo-speech";
 import {
   collection,
   getDocs,
@@ -23,7 +25,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-
+// import { IMAGES } from "../../database/image_data";
 const DATA = [
   {
     id: "001",
@@ -77,24 +79,205 @@ const DATA = [
   },
 ];
 
-const Item = ({ name, setModalVisible, route }) => (
-  <Pressable style={styles.item} onPress={() => setModalVisible(true)}>
-    <Entypo name="add-to-list" size={24} color="black" />
-    <View>
-      <Text style={styles.title}>{name}</Text>
+// console.log(IMAGES);
+const IMAGES = {
+  "Crow.jpg": require("../../assets/images/Crow.jpg"),
+  "Dove.jpg": require("../../assets/images/Dove.jpg"),
+  "Eagle.jpg": require("../../assets/images/Eagle.jpg"),
+  "Falcon.jpg": require("../../assets/images/Falcon.jpg"),
+  "Flamingo.jpg": require("../../assets/images/Flamingo.jpg"),
+  "Goose.jpg": require("../../assets/images/Goose.jpg"),
+  "Owl.jpg": require("../../assets/images/Owl.jpg"),
+  "Parrot.jpg": require("../../assets/images/Parrot.jpg"),
+  "Sparrow.jpg": require("../../assets/images/Sparrow.jpg"),
+  "Swan.jpg": require("../../assets/images/Swan.jpg"),
+  "Turkey.jpg": require("../../assets/images/Turkey.jpg"),
+  "Bat.jpg": require("../../assets/images/Bat.jpg"),
+  "Bear.jpg": require("../../assets/images/Bear.jpg"),
+  "Buffalo.jpg": require("../../assets/images/Buffalo.jpg"),
+  "Camel.jpg": require("../../assets/images/Camel.jpg"),
+  "Elephant.jpg": require("../../assets/images/Elephant.jpg"),
+  "Fox.jpg": require("../../assets/images/Fox.jpg"),
+  "Goat.jpg": require("../../assets/images/Goat.jpg"),
+  "Shark.jpg": require("../../assets/images/Shark.jpg"),
+  "Whale.jpg": require("../../assets/images/Whale.jpg"),
+  "Doctor.jpg": require("../../assets/images/Doctor.jpg"),
+  "Dentist.jpg": require("../../assets/images/Dentist.jpg"),
+  "Cashier.jpg": require("../../assets/images/Cashier.jpg"),
+  "Builder.jpg": require("../../assets/images/Builder.jpg"),
+  "Reporter.jpg": require("../../assets/images/Reporter.jpg"),
+  "Cook.jpg": require("../../assets/images/Cook.jpg"),
+  "Magician.jpg": require("../../assets/images/Magician.jpg"),
+  "Singer.jpg": require("../../assets/images/Singer.jpg"),
+  "Tailor.jpg": require("../../assets/images/Tailor.jpg"),
+  "Teacher.jpg": require("../../assets/images/Teacher.jpg"),
+  "Baker.jpg": require("../../assets/images/Baker.jpg"),
+  "Artist.jpg": require("../../assets/images/Artist.jpg"),
+  "Waiter.jpg": require("../../assets/images/Waiter.jpg"),
+  "Carpenter.jpg": require("../../assets/images/Carpenter.jpg"),
+  "Actor.jpg": require("../../assets/images/Actor.jpg"),
+  "Nurse.jpg": require("../../assets/images/Nurse.jpg"),
+  "Secretary.jpg": require("../../assets/images/Secretary.jpg"),
+  "Gardener.jpg": require("../../assets/images/Gardener.jpg"),
+  "Businessman.jpg": require("../../assets/images/Businessman.jpg"),
+  "Seat.jpg": require("../../assets/images/Seat.jpg"),
+  "BusDriver.jpg": require("../../assets/images/BusDriver.jpg"),
+  "Car.jpg": require("../../assets/images/Car.jpg"),
+  "Bus.jpg": require("../../assets/images/Bus.jpg"),
+  "Bicycle.jpg": require("../../assets/images/Bicycle.jpg"),
+  "Motorbike.jpg": require("../../assets/images/Motorbike.jpg"),
+  "Train.jpg": require("../../assets/images/Train.jpg"),
+  "Sailboat.jpg": require("../../assets/images/Sailboat.jpg"),
+  "Airplane.jpg": require("../../assets/images/Airplane.jpg"),
+  "Coach.jpg": require("../../assets/images/Coach.jpg"),
+  "Ambulance.jpg": require("../../assets/images/Ambulance.jpg"),
+  "Ship.jpg": require("../../assets/images/Ship.jpg"),
+  "Taxi.jpg": require("../../assets/images/Taxi.jpg"),
+  "TrafficJam.jpg": require("../../assets/images/TrafficJam.jpg"),
+  "Railway.jpg": require("../../assets/images/Railway.jpg"),
+  "SlowDown.jpg": require("../../assets/images/SlowDown.jpg"),
+  "PetrolStation.jpg": require("../../assets/images/PetrolStation.jpg"),
+  "Sidewalk.jpg": require("../../assets/images/Sidewalk.jpg"),
+  "TrafficLight.jpg": require("../../assets/images/TrafficLight.jpg"),
+  "Transportation.jpg": require("../../assets/images/Transportation.jpg"),
+  "Passenger.jpg": require("../../assets/images/Passenger.jpg"),
+  "Ask.jpg": require("../../assets/images/Ask.jpg"),
+  "Begin.jpg": require("../../assets/images/Begin.jpg"),
+  "Call.jpg": require("../../assets/images/Call.jpg"),
+  "Come.jpg": require("../../assets/images/Come.jpg"),
+  "Do.jpg": require("../../assets/images/Do.jpg"),
+  "Find.jpg": require("../../assets/images/Find.jpg"),
+  "Get.jpg": require("../../assets/images/Get.jpg"),
+  "Give.jpg": require("../../assets/images/Give.jpg"),
+  "Go.jpg": require("../../assets/images/Go.jpg"),
+  "Hear.jpg": require("../../assets/images/Hear.jpg"),
+  "Help.jpg": require("../../assets/images/Help.jpg"),
+  "Keep.jpg": require("../../assets/images/Keep.jpg"),
+  "Know.jpg": require("../../assets/images/Know.jpg"),
+  "Leave.jpg": require("../../assets/images/Leave.jpg"),
+  "Let.jpg": require("../../assets/images/Let.jpg"),
+  "Like.jpg": require("../../assets/images/Like.jpg"),
+  "Live.jpg": require("../../assets/images/Live.jpg"),
+  "Look.jpg": require("../../assets/images/Look.jpg"),
+  "Make.jpg": require("../../assets/images/Make.jpg"),
+  "Move.jpg": require("../../assets/images/Move.jpg"),
+  "Need.jpg": require("../../assets/images/Need.jpg"),
+  "Play.jpg": require("../../assets/images/Play.jpg"),
+  "Put.jpg": require("../../assets/images/Put.jpg"),
+  "Run.jpg": require("../../assets/images/Run.jpg"),
+  "Say.jpg": require("../../assets/images/Say.jpg"),
+  "See.jpg": require("../../assets/images/See.jpg"),
+  "Show.jpg": require("../../assets/images/Show.jpg"),
+  "Start.jpg": require("../../assets/images/Start.jpg"),
+  "Take.jpg": require("../../assets/images/Take.jpg"),
+  "Talk.jpg": require("../../assets/images/Talk.jpg"),
+  "Tell.jpg": require("../../assets/images/Tell.jpg"),
+  "Think.jpg": require("../../assets/images/Think.jpg"),
+  "Try.jpg": require("../../assets/images/Try.jpg"),
+  "Turn.jpg": require("../../assets/images/Turn.jpg"),
+  "Use.jpg": require("../../assets/images/Use.jpg"),
+  "Want.jpg": require("../../assets/images/Want.jpg"),
+  "Work.jpg": require("../../assets/images/Work.jpg"),
+  "Gorgeous.jpg": require("../../assets/images/Gorgeous.jpg"),
+  "Magnificent.jpg": require("../../assets/images/Magnificent.jpg"),
+  "Breathtaking.jpg": require("../../assets/images/Breathtaking.jpg"),
+  "Intoxicate.jpg": require("../../assets/images/Intoxicate.jpg"),
+  "Idyllic.jpg": require("../../assets/images/Idyllic.jpg"),
+  "Stunning.jpg": require("../../assets/images/Stunning.jpg"),
+  "Wonderful.jpg": require("../../assets/images/Wonderful.jpg"),
+  "Ancient.jpg": require("../../assets/images/Ancient.jpg"),
+  "Attractive.jpg": require("../../assets/images/Attractive.jpg"),
+  "Bustling.jpg": require("../../assets/images/Bustling.jpg"),
+  "Cliff.jpg": require("../../assets/images/Cliff.jpg"),
+  "Coastline.jpg": require("../../assets/images/Coastline.jpg"),
+  "Bay.jpg": require("../../assets/images/Bay.jpg"),
+};
+
+// const Item = ({ name, setModalVisible, route, content, setModalContent }) => (
+//   <Pressable
+//     style={styles.item}
+//     onPress={() => {
+//       setModalContent(content);
+//       setModalVisible(true);
+//     }}
+//   >
+//     <Entypo name="add-to-list" size={24} color="black" />
+//     <View>
+//       <Text style={styles.title}>{name}</Text>
+//     </View>
+//     <Pressable style={styles.infor}>
+//       <AntDesign name="arrowright" size={24} color="black" />
+//     </Pressable>
+//   </Pressable>
+// );
+
+// const ModalItem = ({ modalVisible, setModalVisible, modalContent }) => (
+//   <Modal
+//     animationType="slide"
+//     visible={modalVisible}
+//     onRequestClose={() => {
+//       setModalVisible(!modalVisible);
+//     }}
+//   >
+//     <View style={styles.centeredView}>
+//       <View style={styles.modalView}>
+//         <AntDesign
+//           name="close"
+//           size={20}
+//           color="black"
+//           onPress={() => {
+//             setModalVisible(!modalVisible);
+//           }}
+//           style={styles.close_icon}
+//         />
+
+//         <Text style={styles.nameCard}>{modalContent.name_card}</Text>
+//         <Text style={styles.ipa}>{modalContent.ipa}</Text>
+//         <Text style={styles.meanViet}>{modalContent.mean_viet}</Text>
+//         <Text style={styles.meanEng}>{modalContent.mean_eng}</Text>
+//         <Image
+//           source={modalContent.image ? IMAGES[modalContent.image] : ""}
+//           style={styles.imageCard}
+//         />
+//       </View>
+//     </View>
+//   </Modal>
+// );
+
+const Item = ({ name_card, ipa, mean_eng, mean_viet, image }) => {
+  const voiceHandle = () => {
+    // console.log("hello");
+    Speech.speak(name_card, { language: "en" });
+  };
+  return (
+    <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+        <Text style={styles.nameCard}>{name_card}</Text>
+        <View style={styles.ipa_sound}>
+          <Text style={styles.ipa}>{ipa}</Text>
+          <AntDesign
+            name="sound"
+            size={18}
+            color="white"
+            onPress={voiceHandle}
+            style={styles.sound_icon}
+          />
+        </View>
+        <Text style={styles.meanViet}>{mean_viet}</Text>
+        <Text style={styles.meanEng}>{mean_eng}</Text>
+        <Image source={image ? IMAGES[image] : ""} style={styles.imageCard} />
+      </View>
     </View>
-    <Pressable style={styles.infor}>
-      <AntDesign name="arrowright" size={24} color="black" />
-    </Pressable>
-  </Pressable>
-);
+  );
+};
 
 export const Vocabulary = ({ navigation, route }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [modalContent, setModalContent] = useState({});
 
   const collectionRef = collection(db, "card");
   const [cardArrState, setCardArrState] = useState([]);
-
+  // const [image, setImage] = useState("");
   //Biến id của bộ
   const subjectId = route.params.subjectId;
 
@@ -110,49 +293,43 @@ export const Vocabulary = ({ navigation, route }) => {
     []
   );
 
+  let image = "../../assets/images/Run.jpg";
+
   return (
     <View style={styles.cover}>
-      <FlatList
+      {/* <FlatList
         data={cardArrState}
         renderItem={({ item }) => (
           <Item
             // navigation={navigation}
             name={item.name_card}
             // symbol={item.symbol}
+            content={item}
             setModalVisible={() => setModalVisible(true)}
+            setModalContent={(item) => setModalContent(item)}
           ></Item>
         )}
-      />
+      /> */}
 
-      <Modal
-        style={styles.modal}
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <Text style={styles.nameCard}> Chicken </Text>
-        <Text style={styles.ipa}> /ˈtʃɪk.ɪn/ </Text>
-        <Text style={styles.meanViet}> Con gà </Text>
-        <Text style={styles.meanEng}>
-          a type of bird kept on a farm for its eggs or its meat, or the meat of
-          this bird that is cooked and eaten
-        </Text>
-        <Image
-          source={{
-            uri: "https://i.pinimg.com/736x/f2/77/d2/f277d2162da9af687fa7182f8dd2ecca.jpg",
-          }}
-          style={styles.imageCard}
-        />
-        <Pressable
-          onPress={() => setModalVisible(false)}
-          style={[styles.button, styles.buttonOpen]}
-        >
-          <Text>x</Text>
-        </Pressable>
-      </Modal>
+      <Carousel
+        // ref={(c) => {
+        //   this._carousel = c;
+        // }}
+        layout={"stack"}
+        layoutCardOffset={18}
+        data={cardArrState}
+        renderItem={({ item }) => (
+          <Item
+            name_card={item.name_card}
+            image={item.image}
+            ipa={item.ipa}
+            mean_eng={item.mean_eng}
+            mean_viet={item.mean_viet}
+          />
+        )}
+        sliderWidth={700}
+        itemWidth={300}
+      />
     </View>
   );
 };
@@ -196,60 +373,98 @@ const styles = StyleSheet.create({
     backgroundColor: "#e6f5f7",
     borderRadius: 50,
   },
-  modal: {
-    display: "flex",
-    backgroundColor: "#fcf9de",
-    position: "absolute",
-    marginTop: "30%",
-    marginLeft: "13%",
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+    elevation: 5,
+  },
+  modalView: {
+    margin: 10,
     borderRadius: 10,
-    height: "60%",
-    width: "70%",
+    alignItems: "center",
+    elevation: 5,
+    // display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    // borderRadius: 10,
   },
   nameCard: {
-    paddingTop: 20,
-    paddingBottom: 0,
-    paddingLeft: 20,
-    paddingRight: 20,
+    backgroundColor: "#fcf9de",
     fontSize: 24,
     fontWeight: "bold",
     color: "#f7c911",
-    justifyContent: "center",
-    alignItems: "center",
+    width: 300,
+    height: 70,
+    marginTop: -45,
+    lineHeight: 60,
+    paddingTop: 10,
+    paddingBottom: 10,
+    textAlign: "center",
+    borderRadius: 10,
   },
   ipa: {
-    paddingTop: 0,
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
-    color: "#8a8986",
+    right: -10,
   },
   meanViet: {
-    paddingTop: 0,
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
+    color: "#8a8986",
+    backgroundColor: "#fcf9de",
+    fontSize: 14,
+    width: 300,
+    height: 30,
+    textAlign: "center",
+    lineHeight: 16,
   },
   meanEng: {
-    paddingTop: 0,
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontStyle: "italic",
-    fontSize: 12,
+    color: "#000",
+    backgroundColor: "#fcf9de",
+    fontSize: 14,
+    width: 300,
+    height: 400,
+    lineHeight: 16,
+    marginTop: -10,
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 10,
+    textAlign: "center",
   },
   imageCard: {
-    width: 200,
-    height: 200,
-    marginTop: 30,
+    width: 250,
+    height: 230,
+    resizeMode: "stretch",
+    paddingLeft: 15,
+    paddingRight: 15,
+    marginTop: -250,
+    borderRadius: 10,
+    backgroundColor: "#fcf9de",
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+  //icon
+  close_icon: {
+    zIndex: 10,
+    position: "absolute",
+    backgroundColor: "#fff",
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
+  sound_icon: {
+    color: "#60bfeb",
+    backgroundColor: "#fcf9de",
+    fontSize: 24,
+    height: 30,
+    textAlign: "center",
+    lineHeight: 30,
+    right: -24,
+  },
+  ipa_sound: {
+    flexDirection: "row",
+    color: "#8a8986",
+    backgroundColor: "#fcf9de",
+    fontSize: 14,
+    width: 300,
+    height: 40,
+    marginTop: -10,
+    paddingTop: 10,
+    textAlign: "center",
+    lineHeight: 24,
+    justifyContent: "center",
   },
 });

@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 
 export const CustomModal = ({
   //bắt buộc truyền
@@ -24,6 +25,7 @@ export const CustomModal = ({
   modalVisible,
   setModalVisible,
 
+  userId,
   //dối với bộ (thêm bộ thì không cần, sửa/xóa phải đủ 3 cái)
   idSubject,
   nameSubject,
@@ -49,11 +51,18 @@ export const CustomModal = ({
   const collectionRef_subject = collection(db, "flashcard_subject");
   const collectionRef_card = collection(db, "flashcard");
 
+  if (modalType == "add-subject") console.log("modal>>>>", modalType, userId);
   //hàm thêm bộ
   const addSubject = async () => {
     await addDoc(collectionRef_subject, {
       name: inputAddNameState,
       desc: inputAddDescState,
+      user: userId,
+    });
+    Toast.show({
+      type: "success",
+      text1: "Thêm thành công",
+      text2: "Bạn vừa thêm thành công bộ mới!!!👋",
     });
     setInputAddNameState("");
     setInputAddDescState("");
@@ -69,6 +78,11 @@ export const CustomModal = ({
         .filter((item) => item.subject == id)
         .forEach((item) => deleteCard(item.id));
     });
+    Toast.show({
+      type: "success",
+      text1: "Xóa thành công",
+      text2: "Bạn vừa xóa thành công!!! 👋",
+    });
   };
 
   //hàm sửa bộ
@@ -81,6 +95,11 @@ export const CustomModal = ({
     await updateDoc(userDoc, newFields);
     setInputEditNameState("");
     setInputEditDescState("");
+    Toast.show({
+      type: "success",
+      text1: "Cập nhật thành công",
+      text2: "Bạn vừa cập nhật thành công!!! 👋",
+    });
   };
 
   //hàm thêm thẻ
@@ -93,12 +112,22 @@ export const CustomModal = ({
     });
     setInputAddNameCardState("");
     setInputAddDefiState("");
+    Toast.show({
+      type: "success",
+      text1: "Thêm thành công",
+      text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
+    });
   };
 
   //hàm xóa thẻ
   const deleteCard = async (id) => {
     const userDoc = doc(db, "flashcard", id);
     await deleteDoc(userDoc);
+    Toast.show({
+      type: "success",
+      text1: "Xóa thành công",
+      text2: "Bạn vừa xóa thành công!!!👋",
+    });
   };
 
   //hàm sửa thẻ
@@ -112,6 +141,11 @@ export const CustomModal = ({
     await updateDoc(userDoc, newFields);
     setInputEditNameCardState("");
     setInputEditDefiState("");
+    Toast.show({
+      type: "success",
+      text1: "Cập nhật thành công",
+      text2: "Bạn vừa cập nhật thành công!!! 👋",
+    });
   };
 
   switch (modalType) {

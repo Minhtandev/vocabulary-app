@@ -64,52 +64,33 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
       <View style={styles.icons_bar}>
         <AntDesign
           name="sound"
-          size={18}
+          size={24}
           color="white"
           onPress={voiceHandle}
           style={styles.sound_icon}
         />
         {favo == true ? (
-          <AntDesign name="heart" size={18} color="red" onPress={changeFavo} />
+          <AntDesign name="heart" size={24} color="red" onPress={changeFavo} />
         ) : (
           <AntDesign
             name="hearto"
-            size={18}
+            size={22}
             color="white"
             onPress={changeFavo}
           />
         )}
       </View>
-      <Menu>
+      {/* <Menu>
         <MenuTrigger
-          // style={styles.dots}
           customStyles={{
             TriggerTouchableComponent: Pressable,
             triggerTouchable: { title: "Select (Custom Touchables)" },
             triggerOuterWrapper: styles.practice_btn,
             triggerText: styles.practice_btn_text,
-            // triggerWrapper: styles.dots,
           }}
-          // children={
-          // <Pressable onPress={() => {}} style={styles.dots_content}>
-          // <Entypo name="dots-three-vertical" size={18} color="white" />
-          // </Pressable>
-          // }
           text="THAO TÁC"
-        />
-        <MenuOptions style={styles.menu_container}>
-          {/* <MenuOption
-            onSelect={() => setAddCardModalVisible(true)}
-            style={styles.menu_option}
-          >
-            <Entypo
-              name="plus"
-              size={16}
-              color="white"
-              style={styles.menu_add_icon}
-            />
-            <Text style={styles.menu_text}>Thêm</Text>
-          </MenuOption> */}
+        /> */}
+      {/* <MenuOptions style={styles.menu_container}>
           <MenuOption
             onSelect={() => setEditModalVisible(true)}
             style={styles.menu_option}
@@ -135,7 +116,29 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
             <Text style={styles.menu_text}>Xóa</Text>
           </MenuOption>
         </MenuOptions>
-      </Menu>
+      </Menu> */}
+      <View style={styles.btns_container}>
+        <Pressable
+          style={styles.edit_btn}
+          onPress={() => setEditModalVisible(true)}
+        >
+          <Entypo
+            name="edit"
+            style={{ ...styles.menu_edit_icon, ...styles.edit_btn_text }}
+          />
+          <Text style={styles.edit_btn_text}>Chỉnh Sửa</Text>
+        </Pressable>
+        <Pressable
+          style={styles.delete_btn}
+          onPress={() => setDeleteModalVisible(true)}
+        >
+          <MaterialIcons
+            name="delete"
+            style={{ ...styles.menu_delete_icon, ...styles.delete_btn_text }}
+          />
+          <Text style={styles.delete_btn_text}>Xóa</Text>
+        </Pressable>
+      </View>
       <CustomModal
         modalType="delete-card"
         modalVisible={deleteModalVisible}
@@ -163,8 +166,8 @@ const styles = StyleSheet.create({
   item: {
     // flex: 1,
     backgroundColor: "#4d4d4d",
-    width: width * 0.45,
-    marginTop: 5,
+    width: width * 0.8,
+    marginTop: 200,
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 5,
@@ -188,6 +191,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  btns_container: {
+    // flexDirection: "row",
+  },
 
   //button
   add_btn: {
@@ -201,20 +207,39 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
   },
-  practice_btn: {
+  delete_btn: {
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#5F9DF7",
+    borderColor: "#ff0000",
     borderStyle: "solid",
     borderRadius: 50,
     paddingTop: 5,
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 130,
+    width: 100,
     marginTop: 5,
     marginBottom: 5,
     textAlign: "center",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  edit_btn: {
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#00cc66",
+    borderStyle: "solid",
+    borderRadius: 50,
+    paddingTop: 5,
+    paddingLeft: 5,
+    paddingBottom: 5,
+    paddingRight: 5,
+    width: 180,
+    marginTop: 5,
+    marginBottom: 5,
+    textAlign: "center",
+    flexDirection: "row",
+    alignItems: "center",
   },
   dots: {
     backgroundColor: "#FF0000",
@@ -250,37 +275,45 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   menu_edit_icon: {
-    marginLeft: 3,
-    marginRight: 5,
+    marginLeft: 8,
+    marginRight: 8,
     marginTop: 3,
   },
   menu_delete_icon: {
-    marginLeft: 3,
-    marginRight: 5,
+    marginLeft: 8,
+    marginRight: 8,
     marginTop: 3,
   },
   sound_icon: {
-    marginRight: 10,
+    marginRight: 15,
     marginTop: 5,
     marginBottom: 5,
   },
   //text
   small: {
-    fontSize: 12,
+    fontSize: 20,
     color: "#D8D9CF",
+    marginBottom: 40,
   },
   add_btn_text: {
     color: "#FFF",
     fontWeight: "500",
   },
-  practice_btn_text: {
-    color: "#5F9DF7",
+  delete_btn_text: {
+    color: "#ff0000",
     textAlign: "center",
     fontWeight: "500",
+    fontSize: 20,
+  },
+  edit_btn_text: {
+    color: "#00cc66",
+    textAlign: "center",
+    fontWeight: "500",
+    fontSize: 20,
   },
   name: {
     color: "#FFF",
-    fontSize: 16,
+    fontSize: 30,
     fontWeight: "700",
   },
   menu_text: {

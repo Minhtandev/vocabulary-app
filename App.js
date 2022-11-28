@@ -27,6 +27,8 @@ import Register from "./src/screens/Register";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./config/firebase_config";
+import { Audio } from "expo-av";
+import Toast from "react-native-toast-message";
 // save data of user
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -41,26 +43,57 @@ const COLOR = {
 };
 
 export default function App() {
+  //nhạc nền
+  const [sound, setSound] = useState();
+
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("./assets/sounds/happy_song.mp3"),
+      { isLooping: true }
+    );
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  // useEffect(() => {
+  //   playSound();
+  // }, []);
+
   return (
-    <MenuProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ title: "Welcome" }}
-          />
-          <Stack.Screen name="Flashcard" component={Flashcard} />
-          <Stack.Screen name="LearnVoc" component={LearnVoc} />
-          <Stack.Screen name="CreateMinigame" component={CreateMinigame} />
-          <Stack.Screen name="Minigame" component={Minigame} />
-          <Stack.Screen name="FlashcardDetail" component={FlashcardDetail} />
-          <Stack.Screen name="Vocabulary" component={Vocabulary} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </MenuProvider>
+    <>
+      <MenuProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ title: "Welcome" }}
+            />
+            <Stack.Screen name="Flashcard" component={Flashcard} />
+            <Stack.Screen name="LearnVoc" component={LearnVoc} />
+            <Stack.Screen name="CreateMinigame" component={CreateMinigame} />
+            <Stack.Screen name="Minigame" component={Minigame} />
+            <Stack.Screen name="FlashcardDetail" component={FlashcardDetail} />
+            <Stack.Screen name="Vocabulary" component={Vocabulary} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </MenuProvider>
+      <Toast />
+    </>
   );
 }
 
@@ -169,7 +202,10 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.groupBtn}>
         <Pressable
           onPress={() =>
-            navigation.navigate("Flashcard", { name: "Flashcard" })
+            navigation.navigate("Flashcard", {
+              name: "Flashcard",
+              userId: currUser.id,
+            })
           }
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >

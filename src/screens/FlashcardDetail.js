@@ -20,6 +20,7 @@ import { CustomModal } from "../components/flashcard/CustomModal";
 //Của các thư viện
 import { MenuProvider } from "react-native-popup-menu";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import Carousel from "react-native-snap-carousel";
 
 export const FlashcardDetail = ({ navigation, route }) => {
   //Các state
@@ -47,7 +48,7 @@ export const FlashcardDetail = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* <Text>{route.params.subjectId}</Text> */}
-      <FlatList
+      {/* <FlatList
         data={subjectArrState}
         // style={styles.cardlist}
         horizontal={false}
@@ -62,6 +63,26 @@ export const FlashcardDetail = ({ navigation, route }) => {
             // subjectId={route.params.subjectId}
           ></CardItem>
         )}
+      /> */}
+      <Carousel
+        // ref={(c) => {
+        //   this._carousel = c;
+        // }}
+        layout={"stack"}
+        layoutCardOffset={18}
+        data={subjectArrState}
+        renderItem={({ item }) => (
+          <CardItem
+            navigation={navigation}
+            name={item.name}
+            defi={item.defi}
+            favo={item.favo}
+            id={item.id}
+            // subjectId={route.params.subjectId}
+          ></CardItem>
+        )}
+        sliderWidth={700}
+        itemWidth={300}
       />
       <Pressable
         style={styles.add_subject_btn}
@@ -89,7 +110,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     // paddingBottom: 10,
     alignItems: "center",
-    backgroundColor: "#262626",
+    backgroundColor: "#FFFFFF",
     color: "#FFF",
   },
   add_btn_content: {

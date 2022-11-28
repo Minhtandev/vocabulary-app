@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   Pressable,
+  Button,
 } from "react-native";
 
 //Của các components
@@ -26,22 +27,35 @@ export const Flashcard = ({ navigation, route }) => {
   const [subjectArrState, setSubjetArrState] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  //nhạc nền
-
   //database
   const collectionRef = collection(db, "flashcard_subject");
 
+  //Biến id của user
+  const userId = route.params.userId;
+  console.log("flashcard >>>", userId);
   //lấy dữ liệu (các bộ)
   useEffect(
     () =>
       onSnapshot(collectionRef, (snapshot) => {
         setSubjetArrState(
-          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          snapshot.docs
+            .map((doc) => ({ ...doc.data(), id: doc.id }))
+            .filter((item) => item.user == userId)
         );
       }),
     []
   );
 
+  // useEffect(() => {
+  //   return sound
+  //     ? () => {
+  //         console.log("Unloading Sound");
+  //         sound.unloadAsync();
+  //       }
+  //     : undefined;
+  // }, [sound]);
+
+  // playSound();
   return (
     <View style={styles.container}>
       {/* Render các item */}
@@ -54,6 +68,7 @@ export const Flashcard = ({ navigation, route }) => {
             name={item.name}
             desc={item.desc}
             id={item.id}
+            userId={userId}
           ></Item>
         )}
       />
@@ -65,13 +80,16 @@ export const Flashcard = ({ navigation, route }) => {
         <View style={styles.add_btn_content}>
           <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
           <Text style={styles.add_btn_text}>THÊM BỘ</Text>
+          {/* <Text style={styles.add_btn_text}>{userId}</Text> */}
         </View>
       </Pressable>
+      {/* <Button title="Play Sound" onPress={playSound} /> */}
       {/* Modal thêm bộ */}
       <CustomModal
         modalType="add-subject"
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        userId={userId}
       ></CustomModal>
     </View>
   );

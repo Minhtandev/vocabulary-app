@@ -25,19 +25,14 @@ import { Entypo, MaterialIcons } from "@expo/vector-icons";
 //Lấy width của window
 var width = Dimensions.get("window").width;
 
-export const Item = ({ navigation, name, desc, id }) => {
-  // const voiceHandle = () => {
-  //   console.log("hello");
-  //   const thingToSay = "Hello";
-  //   Speech.speak(thingToSay);
-  // };
-
+export const Item = ({ navigation, name, desc, id, userId }) => {
   //Các state
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [addCardModalVisible, setAddCardModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
+  console.log("item >>>", userId);
   return (
     <Pressable
       style={styles.item}
@@ -69,13 +64,7 @@ export const Item = ({ navigation, name, desc, id }) => {
             triggerTouchable: { title: "Select (Custom Touchables)" },
             triggerOuterWrapper: styles.practice_btn,
             triggerText: styles.practice_btn_text,
-            // triggerWrapper: styles.dots,
           }}
-          // children={
-          // <Pressable onPress={() => {}} style={styles.dots_content}>
-          // <Entypo name="dots-three-vertical" size={18} color="white" />
-          // </Pressable>
-          // }
           text="THAO TÁC"
         />
         <MenuOptions style={styles.menu_container}>
@@ -124,6 +113,7 @@ export const Item = ({ navigation, name, desc, id }) => {
         idSubject={id}
         nameSubject={name}
         desc={desc}
+        userId={userId}
       ></CustomModal>
       <CustomModal
         modalType="edit-subject"
@@ -132,18 +122,20 @@ export const Item = ({ navigation, name, desc, id }) => {
         idSubject={id}
         nameSubject={name}
         desc={desc}
+        userId={userId}
       ></CustomModal>
       <CustomModal
         modalType="add-subject"
         modalVisible={addModalVisible}
         setModalVisible={setAddModalVisible}
-        idSubject={id}
+        userId={userId}
       ></CustomModal>
       <CustomModal
         modalType="add-card"
         modalVisible={addCardModalVisible}
         setModalVisible={setAddCardModalVisible}
         subjectIdToAdd={id}
+        userId={userId}
       ></CustomModal>
     </Pressable>
   );

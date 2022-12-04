@@ -1,15 +1,15 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
 import Octicons from "react-native-vector-icons/Octicons";
-// import { auth } from "../../config/firebase_config";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -21,6 +21,8 @@ import { LogBox } from "react-native";
 const Login = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPending, setIsPending] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth();
 
   useEffect(() => {
@@ -36,16 +38,39 @@ const Login = ({ navigation, route }) => {
     });
   }, []);
 
-  const handleSignIn = () => {
-    signInWithEmailAndPassword(auth, email, password)
+  const handleSignIn = (email, password) => {
+    setEmail((prev) => prev.trim());
+    setIsPending(true);
+    signInWithEmailAndPassword(auth, email.trim(), password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with: ", user.email);
-        // const data = { userId: user.uid };
-        // console.log(JSON.stringify(data));
-        // AsyncStorage.setItem("userData", JSON.stringify(data));
+        ToastAndroid.show("Login successfully!", ToastAndroid.LONG);
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        // console.log(error.code);
+        if (error.code === "auth/invalid-email") {
+          setErrorMessage("Please use a valid email address.");
+        } else if (error.code === "auth/wrong-password") {
+          setErrorMessage(
+            "The password you entered does not match to this user."
+          );
+        } else if (error.code === "auth/internal-error") {
+          setErrorMessage("Please enter your password.");
+        } else if (error.code === "auth/user-not-found") {
+          setErrorMessage("This account does not exist.");
+        } else if (error.code === "auth/too-many-requests") {
+          setErrorMessage(
+            "You've tried to sign in to many times for your protection, you can't sign in right now. Try again later or sign in from a different device"
+          );
+        } else {
+          setErrorMessage(error.message);
+        }
+        // alert(error.message);
+      })
+      .finally(() => {
+        setIsPending(false);
+      });
   };
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -67,7 +92,10 @@ const Login = ({ navigation, route }) => {
             placeholder="Email"
             value={email}
             style={styles.input}
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={(text) => {
+              setEmail(text);
+              setErrorMessage("");
+            }}
           ></TextInput>
         </View>
         <View style={styles.inputForm}>
@@ -85,13 +113,32 @@ const Login = ({ navigation, route }) => {
             value={password}
             style={styles.input}
             secureTextEntry={true}
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={(text) => {
+              setPassword(text);
+              setErrorMessage("");
+            }}
           ></TextInput>
         </View>
+        {errorMessage && (
+          <View style={{ marginVertical: 14 }}>
+            <Text style={{ color: "red" }}>{errorMessage}</Text>
+          </View>
+        )}
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleSignIn} style={styles.button}>
-          <Text style={{ color: "#fff", fontWeight: "700" }}>Login</Text>
+        <TouchableOpacity
+          onPress={() => handleSignIn(email, password)}
+          style={{
+            ...styles.button,
+            backgroundColor: isPending ? "#76a0ea" : "#2874f9",
+          }}
+          disabled={isPending}
+        >
+          {isPending ? (
+            <ActivityIndicator />
+          ) : (
+            <Text style={{ color: "#fff", fontWeight: "700" }}>Login</Text>
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.registerGroup}>
@@ -101,7 +148,13 @@ const Login = ({ navigation, route }) => {
           onPress={() => navigation.navigate("Register")}
           style={styles.register}
         >
-          <Text style={{ color: "#2874f9", fontWeight: "700", fontSize: 16 }}>
+          <Text
+            style={{
+              color: "#2874f9",
+              fontWeight: "700",
+              fontSize: 16,
+            }}
+          >
             Register
           </Text>
         </TouchableOpacity>

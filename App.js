@@ -8,10 +8,13 @@ import {
   Image,
   TouchableOpacity,
   LogBox,
+  Modal,
+  Button,
 } from "react-native";
+// import CheckBox from "expo-checkbox";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Flashcard } from "./src/screens/Flashcard";
 import { LearnVoc } from "./src/screens/LearnVoc";
 import { Minigame } from "./src/screens/Minigame";
@@ -29,6 +32,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./config/firebase_config";
 import { Audio } from "expo-av";
 import Toast from "react-native-toast-message";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 // save data of user
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -43,34 +47,6 @@ const COLOR = {
 };
 
 export default function App() {
-  //nhạc nền
-  const [sound, setSound] = useState();
-
-  async function playSound() {
-    console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync(
-      require("./assets/sounds/happy_song.mp3"),
-      { isLooping: true }
-    );
-    setSound(sound);
-
-    console.log("Playing Sound");
-    await sound.playAsync();
-  }
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          console.log("Unloading Sound");
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
-  // useEffect(() => {
-  //   playSound();
-  // }, []);
-
   return (
     <>
       <MenuProvider>
@@ -99,6 +75,34 @@ export default function App() {
 
 const HomeScreen = ({ navigation }) => {
   const [currUser, setCurrUser] = useState({});
+  //nhạc nền
+  const [sound, setSound] = useState();
+  const [playing, setPlaying] = useState(false);
+
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("./assets/sounds/audio.mp3"),
+      { isLooping: true }
+    );
+    setSound(sound);
+    console.log("Playing Sound");
+    await sound.playAsync();
+    setPlaying(true);
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  useEffect(() => {
+    playSound();
+  }, []);
 
   // const getCurrentDate = (type = false) => {
   //   var date = new Date().getDate();
@@ -171,6 +175,23 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity onPress={handleLogOut}>
           <Text style={{ color: "red" }}>Log out</Text>
         </TouchableOpacity>
+        <Pressable
+          onPress={() => {
+            if (playing == true) {
+              sound.pauseAsync();
+              setPlaying(!playing);
+            } else {
+              sound.playAsync();
+              setPlaying(!playing);
+            }
+          }}
+        >
+          {playing ? (
+            <MaterialCommunityIcons name="music" size={24} color="black" />
+          ) : (
+            <MaterialCommunityIcons name="music-off" size={24} color="black" />
+          )}
+        </Pressable>
         {/* <Text>Hi, {currUser?.username}</Text> */}
         {/* <Text>UserId: {user?.uid}</Text> */}
         <Text
@@ -201,12 +222,16 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={styles.groupBtn}>
         <Pressable
-          onPress={() =>
+          onPress={() => {
             navigation.navigate("Flashcard", {
               name: "Flashcard",
               userId: currUser.id,
-            })
-          }
+            });
+            if (playing == true) {
+              sound.pauseAsync();
+              setPlaying(!playing);
+            }
+          }}
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >
           <MaterialCommunityIcons
@@ -218,7 +243,13 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.text}>Flashcard</Text>
         </Pressable>
         <Pressable
-          onPress={() => navigation.navigate("LearnVoc", { name: "LearnVoc" })}
+          onPress={() => {
+            navigation.navigate("LearnVoc", { name: "LearnVoc" });
+            if (playing == true) {
+              sound.pauseAsync();
+              setPlaying(!playing);
+            }
+          }}
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >
           <MaterialCommunityIcons
@@ -230,9 +261,17 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.text}>LearnVoc</Text>
         </Pressable>
         <Pressable
-          onPress={() =>
-            navigation.navigate("CreateMinigame", { name: "CreateMinigame" })
-          }
+          onPress={() => {
+            navigation.navigate("CreateMinigame", {
+              name: "CreateMinigame",
+              sound: sound,
+              playing: playing,
+            });
+            if (playing == true) {
+              sound.pauseAsync();
+              setPlaying(!playing);
+            }
+          }}
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >
           <MaterialCommunityIcons
@@ -266,6 +305,27 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     marginTop: 20,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   image: {
     width: 200,

@@ -104,38 +104,6 @@ const HomeScreen = ({ navigation }) => {
     playSound();
   }, []);
 
-  // const getCurrentDate = (type = false) => {
-  //   var date = new Date().getDate();
-  //   var month = new Date().getMonth() + 1;
-  //   var year = new Date().getFullYear();
-  //   var day_name = "Today";
-  //   switch (new Date().getDay()) {
-  //     case 0:
-  //       day_name = "Sun";
-  //       break;
-  //     case 1:
-  //       day_name = "Mon";
-  //       break;
-  //     case 2:
-  //       day_name = "Tue";
-  //       break;
-  //     case 3:
-  //       day_name = "Wed";
-  //       break;
-  //     case 4:
-  //       day_name = "Thur";
-  //       break;
-  //     case 5:
-  //       day_name = "Fri";
-  //       break;
-  //     case 6:
-  //       day_name = "Sat";
-  //   }
-
-  //   if (type) return date + "/" + month + "/" + year; //format: d-m-y;
-  //   return day_name;
-  // };
-
   const handleLogOut = () => {
     // Lấy người dùng hiện tại
     const auth = getAuth();
@@ -290,7 +258,6 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#1e1d2f",
     backgroundColor: "#f2f2f2",
 
     alignItems: "center",
@@ -333,8 +300,6 @@ const styles = StyleSheet.create({
   },
   groupBtn: {
     width: "90%",
-    // backgroundColor: "#232236",
-    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 100,

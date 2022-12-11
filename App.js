@@ -33,6 +33,7 @@ import { db } from "./config/firebase_config";
 import { Audio } from "expo-av";
 import Toast from "react-native-toast-message";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import MyText from "./src/components/MyText";
 // save data of user
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -44,6 +45,9 @@ const COLOR = {
   two: "#B5E67B",
   three: "#B9E0FF",
   bg: "#fff",
+  primary: "#8469ff",
+  second: "#f0edff",
+  third: "#6e4fff",
 };
 
 export default function App() {
@@ -141,7 +145,8 @@ const HomeScreen = ({ navigation }) => {
       <StatusBar hidden={true} />
       <View style={styles.top}>
         <TouchableOpacity onPress={handleLogOut}>
-          <Text style={{ color: "red" }}>Log out</Text>
+          <MyText style={{ color: "red" }}>Log out</MyText>
+          {/* <Text style={{ color: "red" }}>Log out</Text> */}
         </TouchableOpacity>
         <Pressable
           onPress={() => {
@@ -162,7 +167,7 @@ const HomeScreen = ({ navigation }) => {
         </Pressable>
         {/* <Text>Hi, {currUser?.username}</Text> */}
         {/* <Text>UserId: {user?.uid}</Text> */}
-        <Text
+        <MyText
           style={{
             color: "white",
             // fontSize: "24",
@@ -174,8 +179,8 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           Hi,
-          <Text style={{ color: "#B5E67B" }}> {currUser?.username}</Text>
-        </Text>
+          <MyText style={{ color: "#B5E67B" }}> {currUser?.username}</MyText>
+        </MyText>
       </View>
       <View>
         <Image
@@ -184,9 +189,12 @@ const HomeScreen = ({ navigation }) => {
         ></Image>
       </View>
       <View>
-        <Text style={{ color: "#176ed2", fontSize: 24, fontWeight: "bold" }}>
+        {/* <Text style={{ color: "#176ed2", fontSize: 24, fontWeight: "bold" }}>
           Learn English
-        </Text>
+        </Text> */}
+        <MyText style={{ color: COLOR.third, fontSize: 24 }} weight={900}>
+          Learn English
+        </MyText>
       </View>
       <View style={styles.groupBtn}>
         <Pressable
@@ -208,7 +216,7 @@ const HomeScreen = ({ navigation }) => {
             color={COLOR.one}
             style={{ marginBottom: 10 }}
           />
-          <Text style={styles.text}>Flashcard</Text>
+          <MyText style={styles.text}>Flashcard</MyText>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -226,7 +234,7 @@ const HomeScreen = ({ navigation }) => {
             color={COLOR.two}
             style={{ marginBottom: 10 }}
           />
-          <Text style={styles.text}>LearnVoc</Text>
+          <MyText style={styles.text}>LearnVoc</MyText>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -248,7 +256,7 @@ const HomeScreen = ({ navigation }) => {
             color={COLOR.three}
             style={{ marginBottom: 10 }}
           />
-          <Text style={styles.text}>Minigame</Text>
+          <MyText style={styles.text}>Minigame</MyText>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -258,8 +266,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
-
+    backgroundColor: "#f0edff",
     alignItems: "center",
     justifyContent: "space-between",
     // paddingVertical: 100,
@@ -327,7 +334,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#2d2c45",
-    fontWeight: "700",
+    // fontWeight: "700",
     fontSize: 16,
   },
 });

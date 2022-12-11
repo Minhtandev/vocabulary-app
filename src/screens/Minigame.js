@@ -19,13 +19,16 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import GameCard from "../components/minigame/GameCard";
 import { compareAnswer, getIndexAnswer } from "../handle/getAnswer";
 
-import { LogBox } from "react-native";
+import MyText from "../components/MyText";
 
 const COLOR = {
-  success: "#4fd978",
-  wrong: "#de3f44",
-  progress: "#0897ef",
+  success: "#12d18e",
+  wrong: "#f75555",
+  progress: "#8368ff",
   button: "#34b1fd",
+  primary: "#8469ff",
+  second: "#f0edff",
+  third: "#6e4fff",
 };
 
 const RESULTS = {
@@ -195,10 +198,13 @@ export const Minigame = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle="light-content" backgroundColor="#b7dce5"></StatusBar>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={COLOR.second}
+      ></StatusBar>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../../assets/gameBackground.png")}
+          source={require("../../assets/gameBackground2.png")}
           resizeMode="cover"
           style={{
             flex: 1,
@@ -214,21 +220,21 @@ export const Minigame = ({ navigation, route }) => {
             <View
               style={{
                 flexDirection: "row",
-                backgroundColor: "#f4f9ec",
+                backgroundColor: COLOR.second,
                 paddingHorizontal: 10,
                 paddingVertical: 5,
                 borderRadius: 50,
               }}
             >
-              <Text style={styles.text}>{currentQuestionIndex + 1}</Text>
-              <Text style={styles.text}> / {gameData.length}</Text>
+              <MyText style={styles.text}>{currentQuestionIndex + 1}</MyText>
+              <MyText style={styles.text}> / {gameData.length}</MyText>
             </View>
             <View
               style={{
                 width: "60%",
                 height: 20,
                 borderRadius: 20,
-                backgroundColor: "#f4f9ec",
+                backgroundColor: COLOR.second,
               }}
             >
               <Animated.View
@@ -250,7 +256,7 @@ export const Minigame = ({ navigation, route }) => {
                 <Ionicons
                   name="close-circle-sharp"
                   size={40}
-                  color="#f4f9ec"
+                  color={COLOR.second}
                   style={{ marginRight: 5 }}
                 />
               </TouchableOpacity>
@@ -270,15 +276,15 @@ export const Minigame = ({ navigation, route }) => {
                 color={COLOR.success}
                 style={{ marginRight: 5 }}
               />
-              <Text
+              <MyText
                 style={{
                   fontSize: 30,
                   color: COLOR.success,
-                  fontWeight: "bold",
                 }}
+                weight={900}
               >
                 {score}
-              </Text>
+              </MyText>
             </View>
             <View
               style={{
@@ -292,15 +298,15 @@ export const Minigame = ({ navigation, route }) => {
                 color={COLOR.wrong}
                 style={{ marginRight: 5 }}
               />
-              <Text
+              <MyText
                 style={{
                   fontSize: 30,
                   color: COLOR.wrong,
-                  fontWeight: "bold",
                 }}
+                weight={900}
               >
                 {wrong}
-              </Text>
+              </MyText>
             </View>
           </View>
           {/*---- Game ----*/}
@@ -335,11 +341,11 @@ export const Minigame = ({ navigation, route }) => {
               onPress={handleNextQuestion}
               // disabled={currentQuestionIndex + 1 === gameData.length}
             >
-              <Text
+              <MyText
                 style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
               >
                 {showNextButton ? "Next" : "Close"}
-              </Text>
+              </MyText>
             </TouchableOpacity>
           </View>
           {/*------- MODAL -------*/}
@@ -348,15 +354,13 @@ export const Minigame = ({ navigation, route }) => {
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
-              Alert.alert("Cloesd.");
+              Alert.alert("Closed.");
               setModalVisible(!modalVisible);
             }}
           >
             <View
               style={{
                 flex: 1,
-                // width: "60%",
-                // height: "50%",
                 backgroundColor: "rgba(0, 0, 0, 0.7)",
                 alignItems: "center",
                 justifyContent: "center",
@@ -364,13 +368,12 @@ export const Minigame = ({ navigation, route }) => {
             >
               <View
                 style={{
-                  width: "80%",
+                  width: "90%",
                   height: "70%",
                   borderRadius: 10,
                   backgroundColor: "#fff",
                   padding: 30,
                   alignItems: "center",
-                  // justifyContent: "space-evenly",
                 }}
               >
                 <View
@@ -394,32 +397,36 @@ export const Minigame = ({ navigation, route }) => {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={{ marginBottom: 20 }}>
+                  <MyText style={{ marginBottom: 20 }}>
                     {score / gameData.length <= 0.4
                       ? RESULTS.first
                       : score / gameData.length <= 0.8
                       ? RESULTS.second
                       : RESULTS.third}
-                  </Text>
-                  <Text
+                  </MyText>
+                  <MyText
                     style={{
                       fontSize: 16,
-                      fontWeight: "bold",
                       marginBottom: 10,
                     }}
+                    weight={800}
                   >
                     Your score is:
-                  </Text>
-                  <Text
+                  </MyText>
+                  <MyText
                     style={{
                       color: "#ffbd14",
                       fontSize: 20,
-                      fontWeight: "bold",
                     }}
                   >
-                    <Text style={{ color: "#4fd978" }}>{score} CORRECT</Text>{" "}
-                    AND <Text style={{ color: "#ff7171" }}>{wrong} WRONG</Text>
-                  </Text>
+                    <MyText style={{ color: "#4fd978" }} weight={800}>
+                      {score} CORRECT
+                    </MyText>{" "}
+                    AND{" "}
+                    <MyText style={{ color: "#ff7171" }} weight={800}>
+                      {wrong} WRONG
+                    </MyText>
+                  </MyText>
                 </View>
                 <View
                   style={{
@@ -430,32 +437,35 @@ export const Minigame = ({ navigation, route }) => {
                   }}
                 >
                   <Pressable
-                    style={styles.buttonMini}
+                    style={{
+                      ...styles.buttonMini,
+                      backgroundColor: COLOR.second,
+                    }}
                     onPress={handleTestAgain}
                   >
-                    <Text
+                    <MyText
                       style={{
-                        fontWeight: "bold",
-                        color: "#fff",
+                        color: COLOR.primary,
                         fontSize: 16,
                       }}
+                      weight={700}
                     >
                       Test Again
-                    </Text>
+                    </MyText>
                   </Pressable>
                   <Pressable
                     style={styles.buttonMini}
                     onPress={() => navigation.goBack()}
                   >
-                    <Text
+                    <MyText
                       style={{
-                        fontWeight: "bold",
                         color: "#fff",
                         fontSize: 16,
                       }}
+                      weight={700}
                     >
                       Back to Setup
-                    </Text>
+                    </MyText>
                   </Pressable>
                 </View>
               </View>
@@ -500,13 +510,13 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
-    backgroundColor: COLOR.button,
+    backgroundColor: COLOR.primary,
     padding: 20,
     borderRadius: 5,
   },
   buttonMini: {
     width: "70%",
-    backgroundColor: "#34b1fd",
+    backgroundColor: COLOR.primary,
     padding: 20,
     marginVertical: 5,
     marginHorizontal: 10,

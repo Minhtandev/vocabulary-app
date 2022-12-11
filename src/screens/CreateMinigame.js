@@ -18,6 +18,7 @@ import {
 import Feather from "react-native-vector-icons/Feather";
 import Octicons from "react-native-vector-icons/Octicons";
 import { db } from "../../config/firebase_config";
+import MyText from "../components/MyText";
 import handleGameQuestion from "../handle/handleGameQuestion";
 
 // fakeDATA
@@ -64,10 +65,9 @@ import handleGameQuestion from "../handle/handleGameQuestion";
 // ];
 
 const COLOR = {
-  success: "#4fd978",
-  wrong: "#de3f44",
-  progress: "#0897ef",
-  button: "#34b1fd",
+  primary: "#8469ff",
+  second: "#f0edff",
+  third: "#6e4fff",
 };
 
 const CreateMinigame = ({ navigation }) => {
@@ -124,7 +124,9 @@ const CreateMinigame = ({ navigation }) => {
   const handleValidateNumberQuestion = (newText) => {
     if (arrVoc.length < Number(newText)) {
       setNumber(arrVoc.length);
-      setErrorMess(`Number of questions must be less than ${arrVoc.length}`);
+      setErrorMess(
+        `Number of questions must be not more than ${arrVoc.length}`
+      );
     } else {
       if (!newText) setNumber(10);
       else setNumber(newText);
@@ -147,18 +149,18 @@ const CreateMinigame = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.setUp}>
-        <Text style={styles.textTitle}>Setup game</Text>
+        <MyText style={styles.textTitle}>Setup game</MyText>
         <View>
           <View style={styles.row}>
             <Octicons
               name="apps"
               size={20}
-              color="#ff9f9f"
+              color={COLOR.primary}
               style={{ marginRight: 10 }}
             />
-            <Text style={{ marginRight: 10, fontSize: 16 }}>
+            <MyText style={{ marginRight: 10, fontSize: 16 }}>
               Choose subject
-            </Text>
+            </MyText>
             <Menu>
               <MenuTrigger
                 style={styles.menuTrigger}
@@ -166,7 +168,7 @@ const CreateMinigame = ({ navigation }) => {
                   triggerText: {
                     fontSize: 16,
                     width: 100,
-                    textShadowColor: "#95cf4c",
+                    textShadowColor: COLOR.primary,
                     textShadowOffset: { width: 5, height: 5 },
                     textShadowRadius: 10,
                   },
@@ -187,7 +189,9 @@ const CreateMinigame = ({ navigation }) => {
                       onSelect={() => handleSelectSubject(item)}
                       style={styles.menuOption}
                     >
-                      <Text style={styles.menuText}>{item.name_subject}</Text>
+                      <MyText style={styles.menuText}>
+                        {item.name_subject}
+                      </MyText>
                     </MenuOption>
                   ))}
               </MenuOptions>
@@ -197,10 +201,10 @@ const CreateMinigame = ({ navigation }) => {
             <Octicons
               name="number"
               size={20}
-              color="#ff9f9f"
+              color={COLOR.primary}
               style={{ marginRight: 10 }}
             />
-            <Text style={{ fontSize: 16 }}>The number of questions</Text>
+            <MyText style={{ fontSize: 16 }}>The number of questions</MyText>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -212,7 +216,9 @@ const CreateMinigame = ({ navigation }) => {
           </View>
           {errorMess && (
             <View style={styles.row}>
-              <Text style={{ fontSize: 14, color: "red" }}>{errorMess}</Text>
+              <MyText style={{ fontSize: 14, color: "red" }}>
+                {errorMess}
+              </MyText>
             </View>
           )}
         </View>
@@ -236,7 +242,7 @@ const CreateMinigame = ({ navigation }) => {
         }}
         onPress={() => setShowModal(true)}
       >
-        <Text style={{ color: "blue" }}>Introduction</Text>
+        <MyText style={{ color: "blue" }}>Introduction</MyText>
         <Feather
           name="info"
           size={20}
@@ -269,7 +275,7 @@ const CreateMinigame = ({ navigation }) => {
                 height: "60%",
                 borderRadius: 30,
                 marginTop: "auto",
-                backgroundColor: "#b5e67b",
+                backgroundColor: COLOR.primary,
                 justifyContent: "space-evenly",
                 alignItems: "baseline",
               }}
@@ -294,18 +300,18 @@ const CreateMinigame = ({ navigation }) => {
                     alignItems: "center",
                   }}
                 >
-                  <Text
+                  <MyText
                     style={{
                       fontSize: 16,
-                      fontWeight: "bold",
                       marginBottom: 10,
-                      textShadowColor: COLOR.success,
+                      textShadowColor: COLOR.primary,
                       textShadowOffset: { width: 0, height: 0 },
                       textShadowRadius: 20,
                     }}
+                    weight={900}
                   >
                     CONNECT WORD
-                  </Text>
+                  </MyText>
                 </View>
                 <View
                   style={{
@@ -333,14 +339,14 @@ const CreateMinigame = ({ navigation }) => {
                     borderRadius={10}
                     onPress={() => setLang(true)}
                   >
-                    <Text
+                    <MyText
                       style={{
-                        fontWeight: "bold",
                         fontSize: 16,
                       }}
+                      weight={900}
                     >
                       English
-                    </Text>
+                    </MyText>
                   </Pressable>
                   <Pressable
                     style={{
@@ -352,14 +358,14 @@ const CreateMinigame = ({ navigation }) => {
                     borderRadius={10}
                     onPress={() => setLang(false)}
                   >
-                    <Text
+                    <MyText
                       style={{
-                        fontWeight: "bold",
                         fontSize: 16,
                       }}
+                      weight={900}
                     >
                       Vietnamese
-                    </Text>
+                    </MyText>
                   </Pressable>
                 </View>
                 <View
@@ -369,7 +375,7 @@ const CreateMinigame = ({ navigation }) => {
                 >
                   {lang && (
                     <>
-                      <Text
+                      <MyText
                         style={{
                           fontSize: 16,
                           marginBottom: 10,
@@ -378,20 +384,20 @@ const CreateMinigame = ({ navigation }) => {
                         - Player choose 2 cards: 1 English card and 1 Vietnamese
                         card to make a correct vocabulary word with it's
                         definition.
-                      </Text>
-                      <Text
+                      </MyText>
+                      <MyText
                         style={{
                           fontSize: 16,
                           marginBottom: 10,
                         }}
                       >
                         - Click card twice in a row to deselect it.
-                      </Text>
+                      </MyText>
                     </>
                   )}
                   {!lang && (
                     <>
-                      <Text
+                      <MyText
                         style={{
                           fontSize: 16,
                           marginBottom: 10,
@@ -400,15 +406,15 @@ const CreateMinigame = ({ navigation }) => {
                         - Người chơi chọn 2 thẻ: 1 thẻ tiếng anh và 1 thẻ tiếng
                         việt để tạo thành một từ vựng tiếng anh với nghĩa đúng
                         của nó.
-                      </Text>
-                      <Text
+                      </MyText>
+                      <MyText
                         style={{
                           fontSize: 16,
                           marginBottom: 10,
                         }}
                       >
                         - Nhấn 2 lần liên tiếp vào 1 thẻ để bỏ chọn thẻ đó.
-                      </Text>
+                      </MyText>
                     </>
                   )}
                 </View>
@@ -426,21 +432,21 @@ const CreateMinigame = ({ navigation }) => {
                       ...styles.buttonMini,
                       width: "46%",
                       backgroundColor: "#fff",
-                      borderColor: COLOR.button,
+                      borderColor: COLOR.primary,
                       paddingVertical: 12,
                     }}
                     borderWidth={1}
                     onPress={() => setShowModal(false)}
                   >
-                    <Text
+                    <MyText
                       style={{
-                        fontWeight: "bold",
-                        color: COLOR.button,
+                        color: COLOR.primary,
                         fontSize: 16,
                       }}
+                      weight={900}
                     >
                       Close
-                    </Text>
+                    </MyText>
                   </Pressable>
                   <Pressable
                     style={{
@@ -450,15 +456,15 @@ const CreateMinigame = ({ navigation }) => {
                     }}
                     onPress={handleStartGame}
                   >
-                    <Text
+                    <MyText
                       style={{
-                        fontWeight: "bold",
                         color: "#fff",
                         fontSize: 16,
                       }}
+                      weight={900}
                     >
                       Start game
-                    </Text>
+                    </MyText>
                   </Pressable>
                 </View>
               </View>
@@ -472,12 +478,14 @@ const CreateMinigame = ({ navigation }) => {
           onPress={handleStartGame}
           style={{
             ...styles.btn,
-            backgroundColor: "#b6e17d",
+            backgroundColor: COLOR.primary,
             borderWidth: 1,
-            borderColor: "#FF9F9F",
+            borderColor: COLOR.second,
           }}
         >
-          <Text style={styles.textBtn}>Start game</Text>
+          <MyText style={{ ...styles.textBtn, color: "#fff" }} weight={900}>
+            Start game
+          </MyText>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -512,11 +520,9 @@ const styles = StyleSheet.create({
   },
   textBtn: {
     fontSize: 20,
-    fontWeight: "bold",
   },
   textTitle: {
     fontSize: 28,
-    fontWeight: "bold",
     marginBottom: 40,
   },
   text: {
@@ -529,7 +535,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
-    borderColor: "#76b42e",
+    borderColor: COLOR.primary,
   },
   menu: {},
   menuContainer: {
@@ -547,7 +553,7 @@ const styles = StyleSheet.create({
   // modal
   buttonMini: {
     width: "70%",
-    backgroundColor: "#34b1fd",
+    backgroundColor: COLOR.primary,
     padding: 20,
     marginVertical: 5,
     marginHorizontal: 10,

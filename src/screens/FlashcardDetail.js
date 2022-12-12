@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   Pressable,
+  ImageBackground,
 } from "react-native";
 
 //Của database
@@ -21,6 +22,7 @@ import { CustomModal } from "../components/flashcard/CustomModal";
 import { MenuProvider } from "react-native-popup-menu";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import Carousel from "react-native-snap-carousel";
+import image from "../../assets/flashcard_background.jpg";
 
 export const FlashcardDetail = ({ navigation, route }) => {
   //Các state
@@ -46,9 +48,10 @@ export const FlashcardDetail = ({ navigation, route }) => {
   );
 
   return (
-    <View style={styles.container}>
-      {/* <Text>{route.params.subjectId}</Text> */}
-      {/* <FlatList
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <View style={styles.container}>
+        {/* <Text>{route.params.subjectId}</Text> */}
+        {/* <FlatList
         data={subjectArrState}
         // style={styles.cardlist}
         horizontal={false}
@@ -64,42 +67,48 @@ export const FlashcardDetail = ({ navigation, route }) => {
           ></CardItem>
         )}
       /> */}
-      <Carousel
-        // ref={(c) => {
-        //   this._carousel = c;
-        // }}
-        layout={"stack"}
-        layoutCardOffset={18}
-        data={subjectArrState}
-        renderItem={({ item }) => (
-          <CardItem
-            navigation={navigation}
-            name={item.name}
-            defi={item.defi}
-            favo={item.favo}
-            id={item.id}
-            // subjectId={route.params.subjectId}
-          ></CardItem>
-        )}
-        sliderWidth={700}
-        itemWidth={300}
-      />
-      <Pressable
-        style={styles.add_subject_btn}
-        onPress={() => setModalVisible(true)}
-      >
-        <View style={styles.add_btn_content}>
-          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
-          <Text style={styles.add_btn_text}>THÊM THẺ</Text>
-        </View>
-      </Pressable>
-      <CustomModal
-        modalType="add-card"
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        subjectIdToAdd={subjectId}
-      ></CustomModal>
-    </View>
+        <Carousel
+          // ref={(c) => {
+          //   this._carousel = c;
+          // }}
+          layout={"stack"}
+          layoutCardOffset={18}
+          data={subjectArrState}
+          renderItem={({ item }) => (
+            <CardItem
+              navigation={navigation}
+              name={item.name}
+              defi={item.defi}
+              favo={item.favo}
+              id={item.id}
+              // subjectId={route.params.subjectId}
+            ></CardItem>
+          )}
+          sliderWidth={700}
+          itemWidth={300}
+        />
+        <Pressable
+          style={styles.add_subject_btn}
+          onPress={() => setModalVisible(true)}
+        >
+          <View style={styles.add_btn_content}>
+            <Entypo
+              name="plus"
+              size={16}
+              color="white"
+              style={styles.add_icon}
+            />
+            <Text style={styles.add_btn_text}>THÊM THẺ</Text>
+          </View>
+        </Pressable>
+        <CustomModal
+          modalType="add-card"
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          subjectIdToAdd={subjectId}
+        ></CustomModal>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -110,8 +119,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     // paddingBottom: 10,
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     color: "#FFF",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
   add_btn_content: {
     flexDirection: "row",
@@ -150,7 +163,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 130,
+    width: 110,
     position: "absolute",
     bottom: 15,
   },
@@ -164,8 +177,8 @@ const styles = StyleSheet.create({
   //icon
   add_icon: {
     marginLeft: 5,
-    marginRight: 5,
-    marginTop: 3,
+    marginRight: 2,
+    marginTop: 1,
   },
   //text
   add_btn_text: {

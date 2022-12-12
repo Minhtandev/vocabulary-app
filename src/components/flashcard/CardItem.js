@@ -1,6 +1,13 @@
 //Của react và react native
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Pressable,
+  ImageBackground,
+} from "react-native";
 
 //Của components
 import { CustomModal } from "./CustomModal";
@@ -18,6 +25,7 @@ import {
 import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import * as Speech from "expo-speech";
 var width = Dimensions.get("window").width;
+import image from "../../../assets/flashcard_item_bg.jpg";
 
 export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
   const voiceHandle = () => {
@@ -59,28 +67,33 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
         })
       }
     >
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.small}>{defi}</Text>
-      <View style={styles.icons_bar}>
-        <AntDesign
-          name="sound"
-          size={24}
-          color="white"
-          onPress={voiceHandle}
-          style={styles.sound_icon}
-        />
-        {favo == true ? (
-          <AntDesign name="heart" size={24} color="red" onPress={changeFavo} />
-        ) : (
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.small}>{defi}</Text>
+        <View style={styles.icons_bar}>
           <AntDesign
-            name="hearto"
-            size={22}
-            color="white"
-            onPress={changeFavo}
+            name="sound"
+            size={24}
+            onPress={voiceHandle}
+            style={styles.sound_icon}
           />
-        )}
-      </View>
-      {/* <Menu>
+          {favo == true ? (
+            <AntDesign
+              name="heart"
+              size={24}
+              color="red"
+              onPress={changeFavo}
+            />
+          ) : (
+            <AntDesign
+              name="hearto"
+              size={22}
+              color="#5F9DF7"
+              onPress={changeFavo}
+            />
+          )}
+        </View>
+        {/* <Menu>
         <MenuTrigger
           customStyles={{
             TriggerTouchableComponent: Pressable,
@@ -90,7 +103,7 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
           }}
           text="THAO TÁC"
         /> */}
-      {/* <MenuOptions style={styles.menu_container}>
+        {/* <MenuOptions style={styles.menu_container}>
           <MenuOption
             onSelect={() => setEditModalVisible(true)}
             style={styles.menu_option}
@@ -117,46 +130,47 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
           </MenuOption>
         </MenuOptions>
       </Menu> */}
-      <View style={styles.btns_container}>
-        <Pressable
-          style={styles.edit_btn}
-          onPress={() => setEditModalVisible(true)}
-        >
-          <Entypo
-            name="edit"
-            style={{ ...styles.menu_edit_icon, ...styles.edit_btn_text }}
-          />
-          <Text style={styles.edit_btn_text}>Chỉnh Sửa</Text>
-        </Pressable>
-        <Pressable
-          style={styles.delete_btn}
-          onPress={() => setDeleteModalVisible(true)}
-        >
-          <MaterialIcons
-            name="delete"
-            style={{ ...styles.menu_delete_icon, ...styles.delete_btn_text }}
-          />
-          <Text style={styles.delete_btn_text}>Xóa</Text>
-        </Pressable>
-      </View>
-      <CustomModal
-        modalType="delete-card"
-        modalVisible={deleteModalVisible}
-        setModalVisible={setDeleteModalVisible}
-        idCard={id}
-        nameCard={name}
-        defi={defi}
-        favo={favo}
-      ></CustomModal>
-      <CustomModal
-        modalType="edit-card"
-        modalVisible={editModalVisible}
-        setModalVisible={setEditModalVisible}
-        idCard={id}
-        nameCard={name}
-        defi={defi}
-        favo={favo}
-      ></CustomModal>
+        <View style={styles.btns_container}>
+          <Pressable
+            style={styles.edit_btn}
+            onPress={() => setEditModalVisible(true)}
+          >
+            <Entypo
+              name="edit"
+              style={{ ...styles.menu_edit_icon, ...styles.edit_btn_text }}
+            />
+            <Text style={styles.edit_btn_text}>Chỉnh Sửa</Text>
+          </Pressable>
+          <Pressable
+            style={styles.delete_btn}
+            onPress={() => setDeleteModalVisible(true)}
+          >
+            <MaterialIcons
+              name="delete"
+              style={{ ...styles.menu_delete_icon, ...styles.delete_btn_text }}
+            />
+            <Text style={styles.delete_btn_text}>Xóa</Text>
+          </Pressable>
+        </View>
+        <CustomModal
+          modalType="delete-card"
+          modalVisible={deleteModalVisible}
+          setModalVisible={setDeleteModalVisible}
+          idCard={id}
+          nameCard={name}
+          defi={defi}
+          favo={favo}
+        ></CustomModal>
+        <CustomModal
+          modalType="edit-card"
+          modalVisible={editModalVisible}
+          setModalVisible={setEditModalVisible}
+          idCard={id}
+          nameCard={name}
+          defi={defi}
+          favo={favo}
+        ></CustomModal>
+      </ImageBackground>
     </Pressable>
   );
 };
@@ -164,17 +178,25 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
 const styles = StyleSheet.create({
   //view
   item: {
-    // flex: 1,
-    backgroundColor: "#4d4d4d",
+    backgroundColor: "#faf4b7",
+    borderWidth: 2,
+    borderStyle: "solid",
+    borderColor: "#262626",
     width: width * 0.8,
     marginTop: 200,
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 5,
+    // paddingLeft: 15,
+    // paddingTop: 15,
+    // paddingBottom: 10,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  image: {
     paddingLeft: 15,
     paddingTop: 15,
     paddingBottom: 10,
-    borderRadius: 10,
   },
   add_btn_content: {
     flexDirection: "row",
@@ -210,36 +232,38 @@ const styles = StyleSheet.create({
   delete_btn: {
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#ff0000",
+    borderColor: "#5F9DF7",
     borderStyle: "solid",
     borderRadius: 50,
     paddingTop: 5,
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 100,
+    width: 90,
     marginTop: 5,
     marginBottom: 5,
     textAlign: "center",
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#5F9DF7",
   },
   edit_btn: {
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#00cc66",
+    borderColor: "#5F9DF7",
     borderStyle: "solid",
     borderRadius: 50,
     paddingTop: 5,
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 180,
+    width: 150,
     marginTop: 5,
     marginBottom: 5,
     textAlign: "center",
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#5F9DF7",
   },
   dots: {
     backgroundColor: "#FF0000",
@@ -285,6 +309,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   sound_icon: {
+    color: "#5F9DF7",
     marginRight: 15,
     marginTop: 5,
     marginBottom: 5,
@@ -292,31 +317,31 @@ const styles = StyleSheet.create({
   //text
   small: {
     fontSize: 20,
-    color: "#D8D9CF",
+    color: "#212121",
     marginBottom: 40,
   },
   add_btn_text: {
-    color: "#FFF",
+    color: "#5F9DF7",
     fontWeight: "500",
   },
   delete_btn_text: {
-    color: "#ff0000",
+    color: "#FFFFFF",
     textAlign: "center",
     fontWeight: "500",
     fontSize: 20,
   },
   edit_btn_text: {
-    color: "#00cc66",
+    color: "#FFFFFF",
     textAlign: "center",
     fontWeight: "500",
     fontSize: 20,
   },
   name: {
-    color: "#FFF",
+    color: "#212121",
     fontSize: 30,
     fontWeight: "700",
   },
   menu_text: {
-    color: "#FFF",
+    color: "#212121",
   },
 });

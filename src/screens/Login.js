@@ -10,17 +10,27 @@ import {
   View,
 } from "react-native";
 import Octicons from "react-native-vector-icons/Octicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
 
-import { LogBox } from "react-native";
+const COLOR = {
+  success: "#12d18e",
+  wrong: "#f75555",
+  progress: "#8368ff",
+  button: "#34b1fd",
+  primary: "#8469ff",
+  second: "#f0edff",
+  third: "#6e4fff",
+};
 
 const Login = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordSecure, setIsPasswordSecure] = useState(true);
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth();
@@ -82,7 +92,7 @@ const Login = ({ navigation, route }) => {
           <Octicons
             name="mention"
             size={20}
-            color="#176ed2"
+            color={COLOR.primary}
             style={{
               paddingHorizontal: 15,
               paddingLeft: 15,
@@ -102,7 +112,7 @@ const Login = ({ navigation, route }) => {
           <Octicons
             name="lock"
             size={20}
-            color="#176ed2"
+            color={COLOR.primary}
             style={{
               paddingHorizontal: 15,
               paddingLeft: 15,
@@ -110,14 +120,28 @@ const Login = ({ navigation, route }) => {
           />
           <TextInput
             placeholder="Password"
+            secureTextEntry={isPasswordSecure}
             value={password}
             style={styles.input}
-            secureTextEntry={true}
             onChangeText={(text) => {
               setPassword(text);
               setErrorMessage("");
             }}
           ></TextInput>
+          <TouchableOpacity
+            onPress={() => {
+              isPasswordSecure
+                ? setIsPasswordSecure(false)
+                : setIsPasswordSecure(true);
+            }}
+            style={{ position: "absolute", right: 12 }}
+          >
+            <MaterialCommunityIcons
+              name={isPasswordSecure ? "eye-off" : "eye"}
+              size={20}
+              color={COLOR.primary}
+            />
+          </TouchableOpacity>
         </View>
         {errorMessage && (
           <View style={{ marginVertical: 14 }}>
@@ -130,7 +154,7 @@ const Login = ({ navigation, route }) => {
           onPress={() => handleSignIn(email, password)}
           style={{
             ...styles.button,
-            backgroundColor: isPending ? "#76a0ea" : "#2874f9",
+            backgroundColor: isPending ? COLOR.second : COLOR.third,
           }}
           disabled={isPending}
         >
@@ -150,7 +174,7 @@ const Login = ({ navigation, route }) => {
         >
           <Text
             style={{
-              color: "#2874f9",
+              color: COLOR.primary,
               fontWeight: "700",
               fontSize: 16,
             }}

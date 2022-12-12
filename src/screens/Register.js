@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import Octicons from "react-native-vector-icons/Octicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import {
   getAuth,
@@ -34,6 +35,7 @@ const Register = ({ navigation, route }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordSecure, setIsPasswordSecure] = useState(true);
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth();
@@ -171,12 +173,26 @@ const Register = ({ navigation, route }) => {
             placeholder="Password"
             value={password}
             style={styles.input}
-            secureTextEntry={true}
+            secureTextEntry={isPasswordSecure}
             onChangeText={(text) => {
               setPassword(text);
               setErrorMessage("");
             }}
           ></TextInput>
+          <TouchableOpacity
+            onPress={() => {
+              isPasswordSecure
+                ? setIsPasswordSecure(false)
+                : setIsPasswordSecure(true);
+            }}
+            style={{ position: "absolute", right: 12 }}
+          >
+            <MaterialCommunityIcons
+              name={isPasswordSecure ? "eye-off" : "eye"}
+              size={20}
+              color={COLOR.primary}
+            />
+          </TouchableOpacity>
         </View>
         {errorMessage && (
           <View style={{ marginVertical: 14 }}>

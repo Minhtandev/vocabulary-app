@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import MyText from "../MyText";
 
 const GameCard = ({
   style,
@@ -14,7 +15,7 @@ const GameCard = ({
   const handlePress = (index) => {
     setCount(count + 1);
     onPress(index);
-    setBgColor("#e7f1d6");
+    setBgColor("#e2ddff");
     if (count % 2 === 1) {
       setBgColor("#fff");
     }
@@ -31,12 +32,12 @@ const GameCard = ({
         flexGrow: 1,
         marginBottom: 15,
         borderWidth: 1,
-        borderColor: "#f3ef60",
+        borderColor: "#8469ff",
         borderRadius: 8,
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-        shadowColor: "#2196f3",
+        shadowColor: "#8469ff",
         shadowOffset: {
           width: 0,
           height: 1,
@@ -50,7 +51,7 @@ const GameCard = ({
       onPress={() => handlePress(index)}
       disabled={disabled}
     >
-      <Text style={{ fontSize: 16, color: textColor }}>{title}</Text>
+      <MyText style={{ fontSize: 16, color: textColor }}>{title}</MyText>
     </TouchableOpacity>
   );
 };

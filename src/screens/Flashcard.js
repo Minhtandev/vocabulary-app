@@ -8,12 +8,13 @@ import {
   Dimensions,
   Pressable,
   Button,
+  ImageBackground,
 } from "react-native";
 
 //Của các components
 import { Item } from "../components/flashcard/Item";
 import { CustomModal } from "../components/flashcard/CustomModal";
-
+import image from "../../assets/flashcard_background.jpg";
 //Của database
 import { db } from "../../config/firebase_config";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
@@ -57,41 +58,48 @@ export const Flashcard = ({ navigation, route }) => {
 
   // playSound();
   return (
-    <View style={styles.container}>
-      {/* Render các item */}
-      <FlatList
-        data={subjectArrState}
-        renderItem={({ item }) => (
-          <Item
-            navigation={navigation}
-            style={styles.item}
-            name={item.name}
-            desc={item.desc}
-            id={item.id}
-            userId={userId}
-          ></Item>
-        )}
-      />
-      {/* Nút thêm bộ */}
-      <Pressable
-        style={styles.add_subject_btn}
-        onPress={() => setModalVisible(true)}
-      >
-        <View style={styles.add_btn_content}>
-          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
-          <Text style={styles.add_btn_text}>THÊM BỘ</Text>
-          {/* <Text style={styles.add_btn_text}>{userId}</Text> */}
-        </View>
-      </Pressable>
-      {/* <Button title="Play Sound" onPress={playSound} /> */}
-      {/* Modal thêm bộ */}
-      <CustomModal
-        modalType="add-subject"
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        userId={userId}
-      ></CustomModal>
-    </View>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <View style={styles.container}>
+        {/* Render các item */}
+        <FlatList
+          data={subjectArrState}
+          renderItem={({ item }) => (
+            <Item
+              navigation={navigation}
+              style={styles.item}
+              name={item.name}
+              desc={item.desc}
+              id={item.id}
+              userId={userId}
+            ></Item>
+          )}
+        />
+        {/* Nút thêm bộ */}
+        <Pressable
+          style={styles.add_subject_btn}
+          onPress={() => setModalVisible(true)}
+        >
+          <View style={styles.add_btn_content}>
+            <Entypo
+              name="plus"
+              size={16}
+              color="white"
+              style={styles.add_icon}
+            />
+            <Text style={styles.add_btn_text}>THÊM BỘ</Text>
+            {/* <Text style={styles.add_btn_text}>{userId}</Text> */}
+          </View>
+        </Pressable>
+        {/* <Button title="Play Sound" onPress={playSound} /> */}
+        {/* Modal thêm bộ */}
+        <CustomModal
+          modalType="add-subject"
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          userId={userId}
+        ></CustomModal>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -102,8 +110,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     // paddingBottom: 0,
     alignItems: "center",
-    backgroundColor: "#262626",
-    color: "#FFF",
+    // backgroundColor: "#FFFFFF",
+    // color: "#FFF",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
   add_btn_content: {
     flexDirection: "row",
@@ -118,7 +130,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#4d4d4d",
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
     padding: 35,
     alignItems: "center",
@@ -138,7 +150,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 130,
+    width: 110,
     position: "absolute",
     bottom: 15,
   },
@@ -154,8 +166,8 @@ const styles = StyleSheet.create({
   //icon
   add_icon: {
     marginLeft: 5,
-    marginRight: 5,
-    marginTop: 3,
+    marginRight: 2,
+    marginTop: 1,
   },
 
   //text

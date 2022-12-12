@@ -7,6 +7,7 @@ import {
   Dimensions,
   Pressable,
   Button,
+  ImageBackground,
 } from "react-native";
 
 //Của components khác
@@ -21,10 +22,10 @@ import {
 } from "react-native-popup-menu";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 // import * as Speech from "expo-speech";
+import image from "../../../assets/flashcard_item_bg.jpg";
 
 //Lấy width của window
 var width = Dimensions.get("window").width;
-
 export const Item = ({ navigation, name, desc, id, userId }) => {
   //Các state
   const [addModalVisible, setAddModalVisible] = useState(false);
@@ -43,100 +44,106 @@ export const Item = ({ navigation, name, desc, id, userId }) => {
         })
       }
     >
-      {/* <Text>{id}</Text> */}
-
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.small}>{desc}</Text>
-      <Pressable
-        style={styles.add_btn}
-        onPress={() => setAddCardModalVisible(true)}
-      >
-        <View style={styles.add_btn_content}>
-          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
-          <Text style={styles.add_btn_text}>THÊM THẺ</Text>
-        </View>
-      </Pressable>
-      <Menu>
-        <MenuTrigger
-          // style={styles.dots}
-          customStyles={{
-            TriggerTouchableComponent: Pressable,
-            triggerTouchable: { title: "Select (Custom Touchables)" },
-            triggerOuterWrapper: styles.practice_btn,
-            triggerText: styles.practice_btn_text,
-          }}
-          text="THAO TÁC"
-        />
-        <MenuOptions style={styles.menu_container}>
-          <MenuOption
-            onSelect={() => setAddCardModalVisible(true)}
-            style={styles.menu_option}
-          >
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        {/* <Text>{id}</Text> */}
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.small}>{desc}</Text>
+        <Pressable
+          style={styles.add_btn}
+          onPress={() => setAddCardModalVisible(true)}
+        >
+          <View style={styles.add_btn_content}>
             <Entypo
               name="plus"
               size={16}
               color="white"
-              style={styles.menu_add_icon}
+              style={styles.add_icon}
             />
-            <Text style={styles.menu_text}>Thêm</Text>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => setEditModalVisible(true)}
-            style={styles.menu_option}
-          >
-            <Entypo
-              name="edit"
-              size={16}
-              color="white"
-              style={styles.menu_edit_icon}
-            />
-            <Text style={styles.menu_text}>Chỉnh sửa</Text>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => setDeleteModalVisible(true)}
-            style={styles.menu_option}
-          >
-            <MaterialIcons
-              name="delete"
-              size={16}
-              color="white"
-              style={styles.menu_delete_icon}
-            />
-            <Text style={styles.menu_text}>Xóa</Text>
-          </MenuOption>
-        </MenuOptions>
-      </Menu>
-      <CustomModal
-        modalType="delete-subject"
-        modalVisible={deleteModalVisible}
-        setModalVisible={setDeleteModalVisible}
-        idSubject={id}
-        nameSubject={name}
-        desc={desc}
-        userId={userId}
-      ></CustomModal>
-      <CustomModal
-        modalType="edit-subject"
-        modalVisible={editModalVisible}
-        setModalVisible={setEditModalVisible}
-        idSubject={id}
-        nameSubject={name}
-        desc={desc}
-        userId={userId}
-      ></CustomModal>
-      <CustomModal
-        modalType="add-subject"
-        modalVisible={addModalVisible}
-        setModalVisible={setAddModalVisible}
-        userId={userId}
-      ></CustomModal>
-      <CustomModal
-        modalType="add-card"
-        modalVisible={addCardModalVisible}
-        setModalVisible={setAddCardModalVisible}
-        subjectIdToAdd={id}
-        userId={userId}
-      ></CustomModal>
+            <Text style={styles.add_btn_text}>THÊM THẺ</Text>
+          </View>
+        </Pressable>
+        <Menu>
+          <MenuTrigger
+            // style={styles.dots}
+            customStyles={{
+              TriggerTouchableComponent: Pressable,
+              triggerTouchable: { title: "Select (Custom Touchables)" },
+              triggerOuterWrapper: styles.practice_btn,
+              triggerText: styles.practice_btn_text,
+            }}
+            text="THAO TÁC"
+          />
+          <MenuOptions style={styles.menu_container}>
+            <MenuOption
+              onSelect={() => setAddCardModalVisible(true)}
+              style={styles.menu_option}
+            >
+              <Entypo
+                name="plus"
+                size={16}
+                color="white"
+                style={styles.menu_add_icon}
+              />
+              <Text style={styles.menu_text}>Thêm</Text>
+            </MenuOption>
+            <MenuOption
+              onSelect={() => setEditModalVisible(true)}
+              style={styles.menu_option}
+            >
+              <Entypo
+                name="edit"
+                size={16}
+                color="white"
+                style={styles.menu_edit_icon}
+              />
+              <Text style={styles.menu_text}>Chỉnh sửa</Text>
+            </MenuOption>
+            <MenuOption
+              onSelect={() => setDeleteModalVisible(true)}
+              style={styles.menu_option}
+            >
+              <MaterialIcons
+                name="delete"
+                size={16}
+                color="white"
+                style={styles.menu_delete_icon}
+              />
+              <Text style={styles.menu_text}>Xóa</Text>
+            </MenuOption>
+          </MenuOptions>
+        </Menu>
+        <CustomModal
+          modalType="delete-subject"
+          modalVisible={deleteModalVisible}
+          setModalVisible={setDeleteModalVisible}
+          idSubject={id}
+          nameSubject={name}
+          desc={desc}
+          userId={userId}
+        ></CustomModal>
+        <CustomModal
+          modalType="edit-subject"
+          modalVisible={editModalVisible}
+          setModalVisible={setEditModalVisible}
+          idSubject={id}
+          nameSubject={name}
+          desc={desc}
+          userId={userId}
+        ></CustomModal>
+        <CustomModal
+          modalType="add-subject"
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          userId={userId}
+        ></CustomModal>
+        <CustomModal
+          modalType="add-card"
+          modalVisible={addCardModalVisible}
+          setModalVisible={setAddCardModalVisible}
+          subjectIdToAdd={id}
+          userId={userId}
+        ></CustomModal>
+      </ImageBackground>
     </Pressable>
   );
 };
@@ -144,14 +151,24 @@ export const Item = ({ navigation, name, desc, id, userId }) => {
 const styles = StyleSheet.create({
   //view
   item: {
-    backgroundColor: "#4d4d4d",
+    // backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: "#262626",
+    borderStyle: "solid",
     width: width * 0.95,
     marginTop: 5,
     marginBottom: 5,
+    // paddingLeft: 15,
+    // paddingTop: 15,
+    // paddingBottom: 10,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+
+  image: {
     paddingLeft: 15,
     paddingTop: 15,
     paddingBottom: 10,
-    borderRadius: 10,
   },
   add_btn_content: {
     flexDirection: "row",
@@ -173,9 +190,9 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 130,
+    width: 110,
     marginTop: 10,
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   practice_btn: {
     borderRadius: 50,
@@ -187,7 +204,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 130,
+    width: 110,
     marginTop: 5,
     marginBottom: 5,
     textAlign: "center",
@@ -209,8 +226,8 @@ const styles = StyleSheet.create({
   //icon
   add_icon: {
     marginLeft: 5,
-    marginRight: 5,
-    marginTop: 3,
+    marginRight: 2,
+    marginTop: 1,
   },
   menu_add_icon: {
     marginLeft: 3,
@@ -230,10 +247,10 @@ const styles = StyleSheet.create({
   //text
   small: {
     fontSize: 12,
-    color: "#D8D9CF",
+    color: "#303030",
   },
   add_btn_text: {
-    color: "#FFF",
+    color: "#FFFFFF",
     fontWeight: "500",
   },
   practice_btn_text: {
@@ -242,11 +259,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   name: {
-    color: "#FFF",
+    color: "#303030",
     fontSize: 20,
     fontWeight: "700",
   },
   menu_text: {
-    color: "#FFF",
+    color: "#FFFFFF",
   },
 });

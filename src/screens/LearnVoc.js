@@ -5,9 +5,9 @@ import {
   Button,
   Pressable,
   FlatList,
+  ImageBackground,
 } from "react-native";
-import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import image from "../../assets/backgroundVoc.jpg";
 import React, { useState, useEffect } from "react";
 import { db } from "../../config/firebase_config";
 import {
@@ -31,14 +31,11 @@ const Item = ({ navigation, name, setModalVisible, index, id }) => (
     }}
   >
     <View style={styles.indexTopic}>
-      <Text style={TEXT}> {index}</Text>
+      <Text style={{ color: "#000", fontWeight: "700" }}>{index}</Text>
     </View>
 
     <View style={styles.contentTopic}>
       <Text style={styles.nameTopic}> {name} </Text>
-    </View>
-    <View style={styles.studied}>
-      <MaterialIcons name="done" size={24} color="black" />
     </View>
   </Pressable>
 );
@@ -60,22 +57,27 @@ export const LearnVoc = ({ navigation, route }) => {
     []
   );
   return (
-    <View style={styles.body}>
-      {/* <View style={TEXT}><FontAwesome5 name="bell" size={24} color="black" /></View> */}
-      <View style={styles.cover}>
-        <FlatList
-          data={subjectArrState}
-          renderItem={({ index, item }) => (
-            <Item
-              navigation={navigation}
-              name={item.name_subject}
-              id={item.id}
-              index={index + 1}
-            ></Item>
-          )}
-        />
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <View style={styles.body}>
+        {/* <View style={TEXT}><FontAwesome5 name="bell" size={24} color="black" /></View> */}
+        <View style={styles.cover}>
+          <FlatList
+            numColumns={2}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            horizontal={false}
+            data={subjectArrState}
+            renderItem={({ index, item }) => (
+              <Item
+                navigation={navigation}
+                name={item.name_subject}
+                id={item.id}
+                index={index + 1}
+              ></Item>
+            )}
+          />
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -124,11 +126,10 @@ const topics = [
   },
 ];
 const TEXT = {
-  color: "#fff",
+  color: "#1E5128",
 };
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: "#999",
     height: "100%",
     top: 0,
     margin: 0,
@@ -139,44 +140,48 @@ const styles = StyleSheet.create({
   },
   cover: {
     height: "100%",
-    backgroundColor: "#666",
-    margin: 0,
+    marginLeft: "15%",
+    marginRight: "15%",
+  },
+  flatlist: {
+    justifyContent: "space-between",
   },
   topic: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#444",
+    backgroundColor: "#D2DAFF",
+    borderColor: "#000",
+    borderWidth: 2,
+    borderStyle: "solid",
     height: 100,
-    width: "100%",
-    marginBottom: 2,
-    marginTop: 2,
+    width: "45%",
+    marginTop: 10,
     borderRadius: 16,
     justifyContent: "flex-start",
   },
   indexTopic: {
-    backgroundColor: "#209647",
-    width: 50,
+    backgroundColor: "#b6e0f8",
+    width: 26,
+    height: 26,
     alignItems: "center",
-    left: -10,
-    borderRadius: 5,
+    justifyContent: "center",
+    borderRadius: 13,
+    marginLeft: 5,
+    marginTop: -60,
+    borderColor: "#000",
+    borderWidth: 2,
+    borderStyle: "solid",
   },
   contentTopic: {
-    margin: 30,
-    height: "70%",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "space-around",
   },
-  studied: {
-    position: "absolute",
-    right: 10,
-    padding: 10,
-    ...TEXT,
-    backgroundColor: "#999",
-    borderRadius: 50,
-  },
   nameTopic: {
     ...TEXT,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "700",
   },
   translate: {

@@ -19,7 +19,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-
+import MyText from "../components/MyText";
 const Item = ({ navigation, name, setModalVisible, index, id }) => (
   <Pressable
     style={styles.topic}
@@ -31,11 +31,16 @@ const Item = ({ navigation, name, setModalVisible, index, id }) => (
     }}
   >
     <View style={styles.indexTopic}>
-      <Text style={{ color: "#000", fontWeight: "700" }}>{index}</Text>
+      <MyText weight={700} style={{ color: "#000" }}>
+        {index}
+      </MyText>
     </View>
 
     <View style={styles.contentTopic}>
-      <Text style={styles.nameTopic}> {name} </Text>
+      <MyText weight={700} style={styles.nameTopic}>
+        {" "}
+        {name}{" "}
+      </MyText>
     </View>
   </Pressable>
 );
@@ -62,9 +67,9 @@ export const LearnVoc = ({ navigation, route }) => {
         {/* <View style={TEXT}><FontAwesome5 name="bell" size={24} color="black" /></View> */}
         <View style={styles.cover}>
           <FlatList
-            numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between" }}
-            horizontal={false}
+            // numColumns={2}
+            // columnWrapperStyle={{ justifyContent: "space-between" }}
+            // horizontal={false}
             data={subjectArrState}
             renderItem={({ index, item }) => (
               <Item
@@ -126,14 +131,15 @@ const topics = [
   },
 ];
 const TEXT = {
-  color: "#1E5128",
+  color: "#000",
 };
 const styles = StyleSheet.create({
   body: {
     height: "100%",
-    top: 0,
     margin: 0,
     padding: 0,
+    paddingTop: 30,
+    backgroundColor: "rgba(132, 105, 255, 0.3)",
   },
   header: {
     alignItems: "flex-end",
@@ -143,19 +149,16 @@ const styles = StyleSheet.create({
     marginLeft: "15%",
     marginRight: "15%",
   },
-  flatlist: {
-    justifyContent: "space-between",
-  },
   topic: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#D2DAFF",
+    backgroundColor: "#f0edff",
     borderColor: "#000",
     borderWidth: 2,
     borderStyle: "solid",
     height: 100,
-    width: "45%",
-    marginTop: 10,
+    width: "100%",
+    marginTop: 20,
     borderRadius: 16,
     justifyContent: "flex-start",
   },
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
   nameTopic: {
     ...TEXT,
     fontSize: 20,
-    fontWeight: "700",
+    // fontWeight: "700",
   },
   translate: {
     color: "#aaa",

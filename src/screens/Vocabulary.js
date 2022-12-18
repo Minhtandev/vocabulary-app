@@ -337,7 +337,7 @@ export const Vocabulary = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   cover: {
     height: "100%",
-    backgroundColor: "#d7f8fa",
+    backgroundColor: "#f0edff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     width: 30,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e6f5f7",
+    backgroundColor: "#000",
     borderRadius: 50,
   },
   centeredView: {

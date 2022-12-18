@@ -10,7 +10,7 @@ import {
   Button,
   ImageBackground,
 } from "react-native";
-
+import MyText from "../components/MyText";
 //Của các components
 import { Item } from "../components/flashcard/Item";
 import { CustomModal } from "../components/flashcard/CustomModal";
@@ -60,6 +60,9 @@ export const Flashcard = ({ navigation, route }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <View style={styles.container}>
+        <MyText weight={700} style={styles.title}>
+          CÁC BỘ FLASHCARD
+        </MyText>
         {/* Render các item */}
         <FlatList
           data={subjectArrState}
@@ -86,8 +89,10 @@ export const Flashcard = ({ navigation, route }) => {
               color="white"
               style={styles.add_icon}
             />
-            <Text style={styles.add_btn_text}>THÊM BỘ</Text>
-            {/* <Text style={styles.add_btn_text}>{userId}</Text> */}
+            <MyText weight={500} style={styles.add_btn_text}>
+              THÊM BỘ
+            </MyText>
+            {/* <MyText style={styles.add_btn_text}>{userId}</MyText> */}
           </View>
         </Pressable>
         {/* <Button title="Play Sound" onPress={playSound} /> */}
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     // paddingBottom: 0,
     alignItems: "center",
-    // backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(132, 105, 255, 0.3)",
     // color: "#FFF",
   },
   image: {
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   add_subject_btn: {
-    backgroundColor: "#5F9DF7",
+    backgroundColor: "#8469ff",
     borderRadius: 50,
     paddingTop: 5,
     paddingLeft: 5,
@@ -171,8 +176,12 @@ const styles = StyleSheet.create({
   },
 
   //text
+  title: {
+    color: "#000000",
+    fontSize: 20,
+  },
   add_btn_text: {
     color: "#FFF",
-    fontWeight: "500",
+    // fontWeight: "500",
   },
 });

@@ -9,7 +9,7 @@ import {
   Pressable,
   ImageBackground,
 } from "react-native";
-
+import MyText from "../components/MyText";
 //Của database
 import { db } from "../../config/firebase_config";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
@@ -32,8 +32,9 @@ export const FlashcardDetail = ({ navigation, route }) => {
   //database
   const collectionRef = collection(db, "flashcard");
 
-  //Biến id của bộ
+  //Biến truyền Item bộ
   const subjectId = route.params.subjectId;
+  const subjectName = route.params.subjectName;
   //lấy dữ liệu (các thẻ)
   useEffect(
     () =>
@@ -50,7 +51,9 @@ export const FlashcardDetail = ({ navigation, route }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <View style={styles.container}>
-        {/* <Text>{route.params.subjectId}</Text> */}
+        <MyText weight={700} style={styles.title}>
+          CÁC THẺ CỦA BỘ {subjectName}
+        </MyText>
         {/* <FlatList
         data={subjectArrState}
         // style={styles.cardlist}
@@ -98,7 +101,9 @@ export const FlashcardDetail = ({ navigation, route }) => {
               color="white"
               style={styles.add_icon}
             />
-            <Text style={styles.add_btn_text}>THÊM THẺ</Text>
+            <MyText weight={500} style={styles.add_btn_text}>
+              THÊM THẺ
+            </MyText>
           </View>
         </Pressable>
         <CustomModal
@@ -120,6 +125,8 @@ const styles = StyleSheet.create({
     // paddingBottom: 10,
     alignItems: "center",
     // backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(132, 105, 255, 0.3)",
+
     color: "#FFF",
   },
   image: {
@@ -157,7 +164,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   add_subject_btn: {
-    backgroundColor: "#5F9DF7",
+    backgroundColor: "#8469ff",
     borderRadius: 50,
     paddingTop: 5,
     paddingLeft: 5,
@@ -181,8 +188,16 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   //text
+  title: {
+    color: "#000000",
+    fontSize: 20,
+    // marginTop: 15,
+    position: "relative",
+    top: 100,
+    textTransform: "uppercase",
+  },
   add_btn_text: {
     color: "#FFF",
-    fontWeight: "500",
+    // fontWeight: "500",
   },
 });

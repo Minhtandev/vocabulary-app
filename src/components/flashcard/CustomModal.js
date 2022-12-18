@@ -465,16 +465,16 @@ const styles = StyleSheet.create({
     top: 20,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#8469ff",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#8469ff",
   },
 
   //input
   input: {
     borderWidth: 1,
-    borderColor: "#5F9DF7",
+    borderColor: "#8469ff",
     borderStyle: "solid",
     borderRadius: 10,
     paddingTop: 5,

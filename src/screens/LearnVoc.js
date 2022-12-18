@@ -27,6 +27,7 @@ const Item = ({ navigation, name, setModalVisible, index, id }) => (
       navigation.navigate("Vocabulary", {
         name: "Vocabulary",
         subjectId: id,
+        subjectName: name,
       });
     }}
   >

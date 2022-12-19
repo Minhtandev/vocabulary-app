@@ -9,7 +9,7 @@ import {
   Button,
   ImageBackground,
 } from "react-native";
-
+import MyText from "../MyText";
 //Của components khác
 import { CustomModal } from "./CustomModal";
 
@@ -39,111 +39,111 @@ export const Item = ({ navigation, name, desc, id, userId }) => {
       style={styles.item}
       onPress={() =>
         navigation.navigate("FlashcardDetail", {
-          name: "FlashcardDetail",
+          name: name,
           subjectId: id,
+          subjectName: name,
         })
       }
     >
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        {/* <Text>{id}</Text> */}
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.small}>{desc}</Text>
-        <Pressable
-          style={styles.add_btn}
-          onPress={() => setAddCardModalVisible(true)}
-        >
-          <View style={styles.add_btn_content}>
+      {/* <ImageBackground source={image} resizeMode="cover" style={styles.image}> */}
+      {/* <MyText>{id}</MyText> */}
+      <MyText weight={700} style={styles.name}>
+        {name}
+      </MyText>
+      <MyText style={styles.small}>{desc}</MyText>
+      <Pressable
+        style={styles.add_btn}
+        onPress={() => setAddCardModalVisible(true)}
+      >
+        <View style={styles.add_btn_content}>
+          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
+          <MyText weight={500} style={styles.add_btn_text}>
+            THÊM THẺ
+          </MyText>
+        </View>
+      </Pressable>
+      <Menu>
+        <MenuTrigger
+          // style={styles.dots}
+          customStyles={{
+            TriggerTouchableComponent: Pressable,
+            triggerTouchable: { title: "Select (Custom Touchables)" },
+            triggerOuterWrapper: styles.practice_btn,
+            triggerText: styles.practice_btn_text,
+          }}
+          text="THAO TÁC"
+        />
+        <MenuOptions style={styles.menu_container}>
+          <MenuOption
+            onSelect={() => setAddCardModalVisible(true)}
+            style={styles.menu_option}
+          >
             <Entypo
               name="plus"
               size={16}
-              color="white"
-              style={styles.add_icon}
+              color="#8469ff"
+              style={styles.menu_add_icon}
             />
-            <Text style={styles.add_btn_text}>THÊM THẺ</Text>
-          </View>
-        </Pressable>
-        <Menu>
-          <MenuTrigger
-            // style={styles.dots}
-            customStyles={{
-              TriggerTouchableComponent: Pressable,
-              triggerTouchable: { title: "Select (Custom Touchables)" },
-              triggerOuterWrapper: styles.practice_btn,
-              triggerText: styles.practice_btn_text,
-            }}
-            text="THAO TÁC"
-          />
-          <MenuOptions style={styles.menu_container}>
-            <MenuOption
-              onSelect={() => setAddCardModalVisible(true)}
-              style={styles.menu_option}
-            >
-              <Entypo
-                name="plus"
-                size={16}
-                color="white"
-                style={styles.menu_add_icon}
-              />
-              <Text style={styles.menu_text}>Thêm</Text>
-            </MenuOption>
-            <MenuOption
-              onSelect={() => setEditModalVisible(true)}
-              style={styles.menu_option}
-            >
-              <Entypo
-                name="edit"
-                size={16}
-                color="white"
-                style={styles.menu_edit_icon}
-              />
-              <Text style={styles.menu_text}>Chỉnh sửa</Text>
-            </MenuOption>
-            <MenuOption
-              onSelect={() => setDeleteModalVisible(true)}
-              style={styles.menu_option}
-            >
-              <MaterialIcons
-                name="delete"
-                size={16}
-                color="white"
-                style={styles.menu_delete_icon}
-              />
-              <Text style={styles.menu_text}>Xóa</Text>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-        <CustomModal
-          modalType="delete-subject"
-          modalVisible={deleteModalVisible}
-          setModalVisible={setDeleteModalVisible}
-          idSubject={id}
-          nameSubject={name}
-          desc={desc}
-          userId={userId}
-        ></CustomModal>
-        <CustomModal
-          modalType="edit-subject"
-          modalVisible={editModalVisible}
-          setModalVisible={setEditModalVisible}
-          idSubject={id}
-          nameSubject={name}
-          desc={desc}
-          userId={userId}
-        ></CustomModal>
-        <CustomModal
-          modalType="add-subject"
-          modalVisible={addModalVisible}
-          setModalVisible={setAddModalVisible}
-          userId={userId}
-        ></CustomModal>
-        <CustomModal
-          modalType="add-card"
-          modalVisible={addCardModalVisible}
-          setModalVisible={setAddCardModalVisible}
-          subjectIdToAdd={id}
-          userId={userId}
-        ></CustomModal>
-      </ImageBackground>
+            <MyText style={styles.menu_text}>Thêm</MyText>
+          </MenuOption>
+          <MenuOption
+            onSelect={() => setEditModalVisible(true)}
+            style={styles.menu_option}
+          >
+            <Entypo
+              name="edit"
+              size={16}
+              color="#8469ff"
+              style={styles.menu_edit_icon}
+            />
+            <MyText style={styles.menu_text}>Chỉnh sửa</MyText>
+          </MenuOption>
+          <MenuOption
+            onSelect={() => setDeleteModalVisible(true)}
+            style={styles.menu_option}
+          >
+            <MaterialIcons
+              name="delete"
+              size={16}
+              color="#8469ff"
+              style={styles.menu_delete_icon}
+            />
+            <MyText style={styles.menu_text}>Xóa</MyText>
+          </MenuOption>
+        </MenuOptions>
+      </Menu>
+      <CustomModal
+        modalType="delete-subject"
+        modalVisible={deleteModalVisible}
+        setModalVisible={setDeleteModalVisible}
+        idSubject={id}
+        nameSubject={name}
+        desc={desc}
+        userId={userId}
+      ></CustomModal>
+      <CustomModal
+        modalType="edit-subject"
+        modalVisible={editModalVisible}
+        setModalVisible={setEditModalVisible}
+        idSubject={id}
+        nameSubject={name}
+        desc={desc}
+        userId={userId}
+      ></CustomModal>
+      <CustomModal
+        modalType="add-subject"
+        modalVisible={addModalVisible}
+        setModalVisible={setAddModalVisible}
+        userId={userId}
+      ></CustomModal>
+      <CustomModal
+        modalType="add-card"
+        modalVisible={addCardModalVisible}
+        setModalVisible={setAddCardModalVisible}
+        subjectIdToAdd={id}
+        userId={userId}
+      ></CustomModal>
+      {/* </ImageBackground> */}
     </Pressable>
   );
 };
@@ -152,23 +152,24 @@ const styles = StyleSheet.create({
   //view
   item: {
     // backgroundColor: "#FFFFFF",
+    backgroundColor: "#f0edff",
     borderWidth: 2,
-    borderColor: "#262626",
+    borderColor: "#8469ff",
     borderStyle: "solid",
     width: width * 0.95,
     marginTop: 5,
     marginBottom: 5,
-    // paddingLeft: 15,
-    // paddingTop: 15,
-    // paddingBottom: 10,
+    paddingLeft: 15,
+    paddingTop: 15,
+    paddingBottom: 10,
     borderRadius: 10,
     overflow: "hidden",
   },
 
   image: {
-    paddingLeft: 15,
-    paddingTop: 15,
-    paddingBottom: 10,
+    // paddingLeft: 15,
+    // paddingTop: 15,
+    // paddingBottom: 10,
   },
   add_btn_content: {
     flexDirection: "row",
@@ -180,11 +181,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 140,
     top: -90,
+    borderWidth: 2,
+    borderColor: "#8469ff",
+    borderStyle: "solid",
+    borderRadius: 10,
+    overflow: "hidden",
   },
 
   //button
   add_btn: {
-    backgroundColor: "#5F9DF7",
+    backgroundColor: "#8469ff",
     borderRadius: 50,
     paddingTop: 5,
     paddingLeft: 5,
@@ -197,7 +203,7 @@ const styles = StyleSheet.create({
   practice_btn: {
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#5F9DF7",
+    borderColor: "#8469ff",
     borderStyle: "solid",
     borderRadius: 50,
     paddingTop: 5,
@@ -210,8 +216,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   menu_option: {
-    backgroundColor: "#000000",
+    backgroundColor: "#f0edff",
     flexDirection: "row",
+
     height: 40,
     lineHeight: 40,
   },
@@ -251,19 +258,19 @@ const styles = StyleSheet.create({
   },
   add_btn_text: {
     color: "#FFFFFF",
-    fontWeight: "500",
+    // fontWeight: "500",
   },
   practice_btn_text: {
-    color: "#5F9DF7",
+    color: "#8469ff",
     textAlign: "center",
-    fontWeight: "500",
+    // fontWeight: "500",
   },
   name: {
     color: "#303030",
     fontSize: 20,
-    fontWeight: "700",
+    // fontWeight: "700",
   },
   menu_text: {
-    color: "#FFFFFF",
+    color: "#8469ff",
   },
 });

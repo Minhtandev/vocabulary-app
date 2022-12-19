@@ -55,20 +55,79 @@ export default function App() {
     <>
       <MenuProvider>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator screenOptions={{ headerShown: true }}>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{ title: "Welcome" }}
+              options={{
+                title: "Màn hình chính",
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              }}
             />
-            <Stack.Screen name="Flashcard" component={Flashcard} />
-            <Stack.Screen name="LearnVoc" component={LearnVoc} />
-            <Stack.Screen name="CreateMinigame" component={CreateMinigame} />
-            <Stack.Screen name="Minigame" component={Minigame} />
-            <Stack.Screen name="FlashcardDetail" component={FlashcardDetail} />
-            <Stack.Screen name="Vocabulary" component={Vocabulary} />
+            <Stack.Screen
+              name="Flashcard"
+              component={Flashcard}
+              options={{
+                title: "Flashcard",
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="LearnVoc"
+              component={LearnVoc}
+              options={{
+                title: "Các bộ từ vựng",
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="CreateMinigame"
+              component={CreateMinigame}
+              options={{
+                title: "Tạo minigame",
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="Minigame"
+              component={Minigame}
+              options={{
+                title: "Minigame",
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="FlashcardDetail"
+              component={FlashcardDetail}
+              options={({ route }) => ({
+                title: route.params.subjectName,
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              })}
+            />
+            <Stack.Screen
+              name="Vocabulary"
+              component={Vocabulary}
+              options={({ route }) => ({
+                title: route.params.subjectName,
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              })}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </MenuProvider>

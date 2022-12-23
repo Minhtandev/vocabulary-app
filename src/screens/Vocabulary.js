@@ -15,6 +15,7 @@ import { Modal } from "react-native-paper";
 import React, { useState, useEffect } from "react";
 import { db } from "../../config/firebase_config";
 import Carousel from "react-native-snap-carousel";
+import MyText from "../components/MyText";
 import * as Speech from "expo-speech";
 import {
   collection,
@@ -25,7 +26,6 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-// import { IMAGES } from "../../database/image_data";
 const DATA = [
   {
     id: "001",
@@ -252,9 +252,9 @@ const Item = ({ name_card, ipa, mean_eng, mean_viet, image }) => {
   return (
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
-        <Text style={styles.nameCard}>{name_card}</Text>
+        <MyText style={styles.nameCard}>{name_card}</MyText>
         <View style={styles.ipa_sound}>
-          <Text style={styles.ipa}>{ipa}</Text>
+          <MyText style={styles.ipa}>{ipa}</MyText>
           <AntDesign
             name="sound"
             size={18}
@@ -263,8 +263,8 @@ const Item = ({ name_card, ipa, mean_eng, mean_viet, image }) => {
             style={styles.sound_icon}
           />
         </View>
-        <Text style={styles.meanViet}>{mean_viet}</Text>
-        <Text style={styles.meanEng}>{mean_eng}</Text>
+        <MyText style={styles.meanViet}>{mean_viet}</MyText>
+        <MyText style={styles.meanEng}>{mean_eng}</MyText>
         <Image source={image ? IMAGES[image] : ""} style={styles.imageCard} />
       </View>
     </View>
@@ -297,6 +297,8 @@ export const Vocabulary = ({ navigation, route }) => {
 
   return (
     <View style={styles.cover}>
+      {/* <Image source={require("../../assets/study.gif")} style={styles.gif} /> */}
+
       {/* <FlatList
         data={cardArrState}
         renderItem={({ item }) => (
@@ -372,6 +374,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#000",
     borderRadius: 50,
+  },
+  gif: {
+    width: 100,
+    height: 100,
+    position: "absolute",
+    top: 0,
+    right: 0,
   },
   centeredView: {
     flex: 1,

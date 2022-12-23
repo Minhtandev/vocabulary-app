@@ -26,6 +26,7 @@ import { Entypo, MaterialIcons } from "@expo/vector-icons";
 export const Flashcard = ({ navigation, route }) => {
   //Các state
   const [subjectArrState, setSubjetArrState] = useState([]);
+  // const [favourite, setFavourite] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   //database
@@ -38,10 +39,20 @@ export const Flashcard = ({ navigation, route }) => {
   useEffect(
     () =>
       onSnapshot(collectionRef, (snapshot) => {
+        const favourite = {
+          id: "favourite",
+          name: "Yêu thích",
+          desc: "Các Flashcard bạn yêu thích",
+          user: userId,
+        };
         setSubjetArrState(
-          snapshot.docs
-            .map((doc) => ({ ...doc.data(), id: doc.id }))
-            .filter((item) => item.user == userId)
+          [
+            favourite,
+            ...snapshot.docs
+              .map((doc) => ({ ...doc.data(), id: doc.id }))
+              .filter((item) => item.user == userId),
+          ]
+          // .push(favourite)
         );
       }),
     []
@@ -60,10 +71,18 @@ export const Flashcard = ({ navigation, route }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <View style={styles.container}>
-        <MyText weight={700} style={styles.title}>
+        {/* <MyText weight={700} style={styles.title}>
           CÁC BỘ FLASHCARD
-        </MyText>
+        </MyText> */}
         {/* Render các item */}
+        {/* <Item
+          navigation={navigation}
+          style={styles.item}
+          name={"Yêu thích"}
+          desc={"Các Flashcard bạn yêu thích"}
+          userId={userId}
+          id={"favourite"}
+        ></Item> */}
         <FlatList
           data={subjectArrState}
           renderItem={({ item }) => (
@@ -113,7 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
-    // paddingBottom: 0,
+    // paddingBottom: 10,
     alignItems: "center",
     backgroundColor: "rgba(132, 105, 255, 0.3)",
     // color: "#FFF",
@@ -172,7 +191,7 @@ const styles = StyleSheet.create({
   add_icon: {
     marginLeft: 5,
     marginRight: 2,
-    marginTop: 1,
+    marginTop: 2,
   },
 
   //text
@@ -182,6 +201,6 @@ const styles = StyleSheet.create({
   },
   add_btn_text: {
     color: "#FFF",
-    // fontWeight: "500",
+    fontSize: 18,
   },
 });

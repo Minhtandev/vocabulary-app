@@ -26,7 +26,7 @@ import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import * as Speech from "expo-speech";
 var width = Dimensions.get("window").width;
 import image from "../../../assets/flashcard_item_bg.jpg";
-
+import Toast from "react-native-toast-message";
 export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
   const voiceHandle = () => {
     // console.log("hello");
@@ -41,6 +41,19 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
       favo: !favo,
     };
     await updateDoc(userDoc, newFields);
+    if (favo == false) {
+      Toast.show({
+        type: "success",
+        text1: "Thêm thành công",
+        text2: "Đã thêm vào bộ yêu thích!!!👋",
+      });
+    } else {
+      Toast.show({
+        type: "success",
+        text1: "Xóa thành công",
+        text2: "Đã xóa khỏi bộ yêu thích!!!",
+      });
+    }
     setFavoState(!favo);
   };
 
@@ -58,15 +71,7 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
   const [favoState, setFavoState] = useState(favo);
 
   return (
-    <Pressable
-      style={styles.item}
-      onPress={() =>
-        navigation.navigate("FlashcardDetail", {
-          name: "FlashcardDetail",
-          subjectId: id,
-        })
-      }
-    >
+    <Pressable style={styles.item}>
       {/* <ImageBackground source={image} resizeMode="cover" style={styles.image}> */}
       <MyText weight={700} style={styles.name}>
         {name}
@@ -303,12 +308,12 @@ const styles = StyleSheet.create({
   menu_edit_icon: {
     marginLeft: 8,
     marginRight: 8,
-    marginTop: 3,
+    marginTop: 2,
   },
   menu_delete_icon: {
     marginLeft: 8,
     marginRight: 8,
-    marginTop: 3,
+    marginTop: 2,
   },
   sound_icon: {
     color: "#8469ff",

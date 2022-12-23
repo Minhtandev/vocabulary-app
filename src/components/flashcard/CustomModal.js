@@ -222,7 +222,7 @@ export const CustomModal = ({
                 }}
                 style={styles.close_icon}
               />
-              <Text>Có chắc xóa hong???</Text>
+              <Text>Bạn có chắc xóa hong??? &#128533;</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => {
@@ -361,7 +361,7 @@ export const CustomModal = ({
                 }}
                 style={styles.close_icon}
               />
-              <Text>Có chắc xóa hong???</Text>
+              <Text>Bạn có chắc xóa hong??? &#128533; </Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => {

@@ -72,7 +72,7 @@ export default function App() {
               name="Flashcard"
               component={Flashcard}
               options={{
-                title: "Flashcard",
+                title: "Các bộ Flashcard",
                 headerStyle: {
                   backgroundColor: "#f0edff",
                 },

@@ -35,15 +35,24 @@ export const FlashcardDetail = ({ navigation, route }) => {
   //Biến truyền Item bộ
   const subjectId = route.params.subjectId;
   const subjectName = route.params.subjectName;
+
   //lấy dữ liệu (các thẻ)
   useEffect(
     () =>
       onSnapshot(collectionRef, (snapshot) => {
-        setSubjetArrState(
-          snapshot.docs
-            .map((doc) => ({ ...doc.data(), id: doc.id }))
-            .filter((item) => item.subject == subjectId)
-        );
+        if (subjectId != "favourite") {
+          setSubjetArrState(
+            snapshot.docs
+              .map((doc) => ({ ...doc.data(), id: doc.id }))
+              .filter((item) => item.subject == subjectId)
+          );
+        } else {
+          setSubjetArrState(
+            snapshot.docs
+              .map((doc) => ({ ...doc.data(), id: doc.id }))
+              .filter((item) => item.favo == true)
+          );
+        }
       }),
     []
   );
@@ -51,45 +60,28 @@ export const FlashcardDetail = ({ navigation, route }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <View style={styles.container}>
-        <MyText weight={700} style={styles.title}>
-          CÁC THẺ CỦA BỘ {subjectName}
-        </MyText>
-        {/* <FlatList
-        data={subjectArrState}
-        // style={styles.cardlist}
-        horizontal={false}
-        numColumns={2}
-        renderItem={({ item }) => (
-          <CardItem
-            navigation={navigation}
-            name={item.name}
-            defi={item.defi}
-            favo={item.favo}
-            id={item.id}
-            // subjectId={route.params.subjectId}
-          ></CardItem>
+        {subjectArrState.length > 0 ? (
+          <Carousel
+            layout={"stack"}
+            layoutCardOffset={18}
+            data={subjectArrState}
+            renderItem={({ item }) => (
+              <CardItem
+                navigation={navigation}
+                name={item.name}
+                defi={item.defi}
+                favo={item.favo}
+                id={item.id}
+              ></CardItem>
+            )}
+            sliderWidth={700}
+            itemWidth={300}
+          />
+        ) : (
+          <MyText weight={500} style={styles.exception_text}>
+            Chưa có thẻ nào hết bạn ơi &#128517;
+          </MyText>
         )}
-      /> */}
-        <Carousel
-          // ref={(c) => {
-          //   this._carousel = c;
-          // }}
-          layout={"stack"}
-          layoutCardOffset={18}
-          data={subjectArrState}
-          renderItem={({ item }) => (
-            <CardItem
-              navigation={navigation}
-              name={item.name}
-              defi={item.defi}
-              favo={item.favo}
-              id={item.id}
-              // subjectId={route.params.subjectId}
-            ></CardItem>
-          )}
-          sliderWidth={700}
-          itemWidth={300}
-        />
         <Pressable
           style={styles.add_subject_btn}
           onPress={() => setModalVisible(true)}
@@ -170,7 +162,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 110,
+    width: 115,
     position: "absolute",
     bottom: 15,
   },
@@ -185,7 +177,7 @@ const styles = StyleSheet.create({
   add_icon: {
     marginLeft: 5,
     marginRight: 2,
-    marginTop: 1,
+    marginTop: 2,
   },
   //text
   title: {
@@ -198,6 +190,11 @@ const styles = StyleSheet.create({
   },
   add_btn_text: {
     color: "#FFF",
+    fontSize: 18,
     // fontWeight: "500",
+  },
+  exception_text: {
+    fontSize: 20,
+    marginTop: 250,
   },
 });

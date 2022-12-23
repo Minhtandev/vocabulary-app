@@ -51,67 +51,94 @@ export const Item = ({ navigation, name, desc, id, userId }) => {
         {name}
       </MyText>
       <MyText style={styles.small}>{desc}</MyText>
-      <Pressable
-        style={styles.add_btn}
-        onPress={() => setAddCardModalVisible(true)}
-      >
-        <View style={styles.add_btn_content}>
-          <Entypo name="plus" size={16} color="white" style={styles.add_icon} />
-          <MyText weight={500} style={styles.add_btn_text}>
-            THÊM THẺ
-          </MyText>
-        </View>
-      </Pressable>
-      <Menu>
-        <MenuTrigger
-          // style={styles.dots}
-          customStyles={{
-            TriggerTouchableComponent: Pressable,
-            triggerTouchable: { title: "Select (Custom Touchables)" },
-            triggerOuterWrapper: styles.practice_btn,
-            triggerText: styles.practice_btn_text,
-          }}
-          text="THAO TÁC"
-        />
-        <MenuOptions style={styles.menu_container}>
-          <MenuOption
-            onSelect={() => setAddCardModalVisible(true)}
-            style={styles.menu_option}
+      {id == "favourite" ? (
+        <>
+          <Pressable
+            style={styles.practice_btn}
+            onPress={() =>
+              navigation.navigate("FlashcardDetail", {
+                name: name,
+                subjectId: id,
+                subjectName: name,
+              })
+            }
           >
-            <Entypo
-              name="plus"
-              size={16}
-              color="#8469ff"
-              style={styles.menu_add_icon}
-            />
-            <MyText style={styles.menu_text}>Thêm</MyText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => setEditModalVisible(true)}
-            style={styles.menu_option}
+            <MyText weight={500} style={styles.practice_btn_text}>
+              XEM
+            </MyText>
+          </Pressable>
+        </>
+      ) : (
+        <>
+          <Pressable
+            style={styles.add_btn}
+            onPress={() => setAddCardModalVisible(true)}
           >
-            <Entypo
-              name="edit"
-              size={16}
-              color="#8469ff"
-              style={styles.menu_edit_icon}
+            <View style={styles.add_btn_content}>
+              <Entypo
+                name="plus"
+                size={16}
+                color="white"
+                style={styles.add_icon}
+              />
+              <MyText weight={500} style={styles.add_btn_text}>
+                THÊM THẺ
+              </MyText>
+            </View>
+          </Pressable>
+          <Menu>
+            <MenuTrigger
+              // style={styles.dots}
+              customStyles={{
+                TriggerTouchableComponent: Pressable,
+                triggerTouchable: { title: "Select (Custom Touchables)" },
+                triggerOuterWrapper: styles.practice_btn,
+                triggerText: styles.practice_btn_text,
+              }}
+              text="THAO TÁC"
             />
-            <MyText style={styles.menu_text}>Chỉnh sửa</MyText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => setDeleteModalVisible(true)}
-            style={styles.menu_option}
-          >
-            <MaterialIcons
-              name="delete"
-              size={16}
-              color="#8469ff"
-              style={styles.menu_delete_icon}
-            />
-            <MyText style={styles.menu_text}>Xóa</MyText>
-          </MenuOption>
-        </MenuOptions>
-      </Menu>
+            <MenuOptions style={styles.menu_container}>
+              <MenuOption
+                onSelect={() => setAddCardModalVisible(true)}
+                style={styles.menu_option}
+              >
+                <Entypo
+                  name="plus"
+                  size={16}
+                  color="#8469ff"
+                  style={styles.menu_add_icon}
+                />
+                <MyText style={styles.menu_text}>Thêm</MyText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => setEditModalVisible(true)}
+                style={styles.menu_option}
+              >
+                <Entypo
+                  name="edit"
+                  size={16}
+                  color="#8469ff"
+                  style={styles.menu_edit_icon}
+                />
+                <MyText style={styles.menu_text}>Chỉnh sửa</MyText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => setDeleteModalVisible(true)}
+                style={styles.menu_option}
+              >
+                <MaterialIcons
+                  name="delete"
+                  size={16}
+                  color="#8469ff"
+                  style={styles.menu_delete_icon}
+                />
+                <MyText style={styles.menu_text}>Xóa</MyText>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
+        </>
+      )}
+
       <CustomModal
         modalType="delete-subject"
         modalVisible={deleteModalVisible}
@@ -218,7 +245,6 @@ const styles = StyleSheet.create({
   menu_option: {
     backgroundColor: "#f0edff",
     flexDirection: "row",
-
     height: 40,
     lineHeight: 40,
   },
@@ -234,12 +260,12 @@ const styles = StyleSheet.create({
   add_icon: {
     marginLeft: 5,
     marginRight: 2,
-    marginTop: 1,
+    marginTop: -1,
   },
   menu_add_icon: {
     marginLeft: 3,
     marginRight: 5,
-    marginTop: 3,
+    marginTop: 2,
   },
   menu_edit_icon: {
     marginLeft: 3,
@@ -253,7 +279,7 @@ const styles = StyleSheet.create({
   },
   //text
   small: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#303030",
   },
   add_btn_text: {
@@ -272,5 +298,6 @@ const styles = StyleSheet.create({
   },
   menu_text: {
     color: "#8469ff",
+    fontSize: 18,
   },
 });

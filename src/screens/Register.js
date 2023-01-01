@@ -22,6 +22,7 @@ import {
 import { LogBox } from "react-native";
 import { db } from "../../config/firebase_config";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useUser } from "../context/userContext";
 
 const COLOR = {
   primary: "#19ce30",
@@ -40,12 +41,20 @@ const Register = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth();
 
+  //
+  const userContext = useUser();
+  //
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // const uid = user.uid;
-        navigation.navigate("Home");
+        // navigation.navigate("Home");
         // ...
+        userContext.updateProfile({
+          userId: user.userId,
+          username: user.username,
+        });
       } else {
         // User is signed out
         // ...

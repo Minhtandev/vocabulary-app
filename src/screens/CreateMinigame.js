@@ -137,7 +137,7 @@ const CreateMinigame = ({ navigation }) => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
+  // xử lý bắt đầu game
   const handleStartGame = () => {
     gameQuestion = handleGameQuestion(arrVoc, number);
     navigation.navigate("Minigame", {

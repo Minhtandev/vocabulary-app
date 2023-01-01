@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
+  LogBox,
   StyleSheet,
   Text,
   TextInput,
@@ -16,6 +17,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useUser } from "../context/userContext";
 
 const COLOR = {
   success: "#12d18e",
@@ -28,6 +30,7 @@ const COLOR = {
 };
 
 const Login = ({ navigation, route }) => {
+  //
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
@@ -35,15 +38,25 @@ const Login = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth();
 
+  //
+  const userContext = useUser();
+
+  LogBox.ignoreLogs([
+    "AsyncStorage has been extracted from react-native core and will be removed in a future release",
+  ]);
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // const uid = user.uid;
-        navigation.navigate("Home");
         // ...
+        userContext.updateProfile({
+          userId: user.userId,
+          username: user.username,
+        });
       } else {
         // User is signed out
         // ...
+        // setUserLog(null);
       }
     });
   }, []);

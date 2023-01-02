@@ -20,6 +20,7 @@ import { LearnVoc } from "./src/screens/LearnVoc";
 import { Minigame } from "./src/screens/Minigame";
 import { FlashcardDetail } from "./src/screens/FlashcardDetail";
 import { Vocabulary } from "./src/screens/Vocabulary";
+import { Translate } from "./src/screens/Translate";
 
 import { MenuProvider } from "react-native-popup-menu";
 import CreateMinigame from "./src/screens/CreateMinigame";
@@ -32,7 +33,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./config/firebase_config";
 import { Audio } from "expo-av";
 import Toast from "react-native-toast-message";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import MyText from "./src/components/MyText";
 // save data of user
 // import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -113,6 +114,16 @@ export default function App() {
               component={FlashcardDetail}
               options={({ route }) => ({
                 title: route.params.subjectName,
+                headerStyle: {
+                  backgroundColor: "#f0edff",
+                },
+              })}
+            />
+            <Stack.Screen
+              name="Translate"
+              component={Translate}
+              options={({ route }) => ({
+                title: "Cửa sổ dịch nhanh",
                 headerStyle: {
                   backgroundColor: "#f0edff",
                 },
@@ -317,6 +328,22 @@ const HomeScreen = ({ navigation }) => {
           />
           <MyText style={styles.text}>Minigame</MyText>
         </Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Translate", {
+              name: "Translate",
+            });
+          }}
+          style={{ ...styles.btnTranslate, backgroundColor: COLOR.bg }}
+        >
+          <MyText style={styles.text}>Translate</MyText>
+          <MaterialIcons
+            name="g-translate"
+            size={30}
+            color={COLOR.third}
+            style={{ marginBottom: 0, padding: 5 }}
+          />
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -390,6 +417,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     elevation: 5,
+  },
+  btnTranslate: {
+    flexDirection: "row",
+    width: "100%",
+    backgroundColor: "#a9d675",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    elevation: 5,
+    position: "absolute",
+    top: -50,
   },
   text: {
     color: "#2d2c45",

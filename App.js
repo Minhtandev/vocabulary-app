@@ -103,6 +103,17 @@ function HomeStack() {
               },
             })}
           />
+
+          <Stack.Screen
+            name="Translate"
+            component={Translate}
+            options={({ route }) => ({
+              title: "Cửa sổ dịch nhanh",
+              headerStyle: {
+                backgroundColor: "#f0edff",
+              },
+            })}
+          />
         </>
       )}
     </Stack.Navigator>
@@ -185,17 +196,6 @@ function GameStack() {
             backgroundColor: "#f0edff",
           },
         }}
-      />
-
-      <Stack.Screen
-        name="Translate"
-        component={Translate}
-        options={({ route }) => ({
-          title: "Cửa sổ dịch nhanh",
-          headerStyle: {
-            backgroundColor: "#f0edff",
-          },
-        })}
       />
     </Stack.Navigator>
   );

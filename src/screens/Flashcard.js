@@ -37,7 +37,7 @@ export const Flashcard = ({ navigation, route }) => {
   const userContext = useUser();
   //Biến id của user
   const userId = userContext.user?.userId;
-  console.log("flashcard >>>", userId);
+  // console.log("flashcard >>>", userId);
   //lấy dữ liệu (các bộ)
   useEffect(
     () =>

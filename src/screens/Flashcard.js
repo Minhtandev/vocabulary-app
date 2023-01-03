@@ -22,6 +22,7 @@ import { collection, getDocs, onSnapshot } from "firebase/firestore";
 //Các thư viện
 import { MenuProvider } from "react-native-popup-menu";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { useUser } from "../context/userContext";
 
 export const Flashcard = ({ navigation, route }) => {
   //Các state
@@ -32,8 +33,10 @@ export const Flashcard = ({ navigation, route }) => {
   //database
   const collectionRef = collection(db, "flashcard_subject");
 
+  //
+  const userContext = useUser();
   //Biến id của user
-  const userId = route.params.userId;
+  const userId = userContext.user?.userId;
   console.log("flashcard >>>", userId);
   //lấy dữ liệu (các bộ)
   useEffect(

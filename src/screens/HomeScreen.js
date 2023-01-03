@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 
 import { Audio } from "expo-av";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { db } from "../../config/firebase_config";
 import MyText from "../components/MyText";
 import { useUser } from "../context/userContext";
@@ -207,6 +207,22 @@ export const HomeScreen = ({ navigation }) => {
           />
           <MyText style={styles.text}>Minigame</MyText>
         </Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Translate", {
+              name: "Translate",
+            });
+          }}
+          style={{ ...styles.btnTranslate, backgroundColor: COLOR.bg }}
+        >
+          <MyText style={styles.text}>Translate</MyText>
+          <MaterialIcons
+            name="g-translate"
+            size={30}
+            color={COLOR.third}
+            style={{ marginBottom: 0, padding: 5 }}
+          />
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -285,5 +301,16 @@ const styles = StyleSheet.create({
     color: "#2d2c45",
     // fontWeight: "700",
     fontSize: 16,
+  },
+  btnTranslate: {
+    flexDirection: "row",
+    width: "100%",
+    backgroundColor: "#a9d675",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    elevation: 5,
+    position: "absolute",
+    top: -50,
   },
 });

@@ -7,6 +7,7 @@ import { LearnVoc } from "./src/screens/LearnVoc";
 import { Minigame } from "./src/screens/Minigame";
 import { FlashcardDetail } from "./src/screens/FlashcardDetail";
 import { Vocabulary } from "./src/screens/Vocabulary";
+import { Translate } from "./src/screens/Translate";
 
 import { MenuProvider } from "react-native-popup-menu";
 import CreateMinigame from "./src/screens/CreateMinigame";
@@ -14,7 +15,11 @@ import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 
 import Toast from "react-native-toast-message";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import MyText from "./src/components/MyText";
+// save data of user
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { UserProvider, useUser } from "./src/context/userContext";
 
 const Stack = createNativeStackNavigator();
@@ -93,6 +98,17 @@ function HomeStack() {
             component={Vocabulary}
             options={({ route }) => ({
               title: route.params.subjectName,
+              headerStyle: {
+                backgroundColor: "#f0edff",
+              },
+            })}
+          />
+
+          <Stack.Screen
+            name="Translate"
+            component={Translate}
+            options={({ route }) => ({
+              title: "Cửa sổ dịch nhanh",
               headerStyle: {
                 backgroundColor: "#f0edff",
               },

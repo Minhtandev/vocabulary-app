@@ -150,8 +150,9 @@ const styles = StyleSheet.create({
   },
   add_btn_content: {
     flexDirection: "row",
-    flex: 1,
-    alignItem: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 5,
   },
   centeredView: {
     flex: 1,
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 5,
     paddingRight: 5,
-    width: 110,
+    // width: 110,
     position: "absolute",
     bottom: 15,
   },
@@ -196,9 +197,7 @@ const styles = StyleSheet.create({
 
   //icon
   add_icon: {
-    marginLeft: 5,
     marginRight: 2,
-    marginTop: 2,
   },
 
   //text

@@ -303,7 +303,7 @@ const GameResult = ({ navigation, route }) => {
                   }}
                   weight={700}
                 >
-                  View flashcards
+                  Flashcards
                 </MyText>
               </Pressable>
             </View>

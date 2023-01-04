@@ -193,7 +193,7 @@ const CreateMinigame = ({ navigation }) => {
             )}
           </View>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginTop: 20 }}>
           <Pressable
             onPress={handleStartGame}
             style={{
@@ -254,7 +254,7 @@ const CreateMinigame = ({ navigation }) => {
               }}
               onPress={handleCloseModal}
             >
-              <View
+              <Pressable
                 style={{
                   width: "100%",
                   height: "60%",
@@ -453,7 +453,7 @@ const CreateMinigame = ({ navigation }) => {
                     </Pressable>
                   </View>
                 </View>
-              </View>
+              </Pressable>
             </Pressable>
           </Modal>
         )}

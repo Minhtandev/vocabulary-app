@@ -222,7 +222,7 @@ export const HomeScreen = ({ navigation }) => {
       <View style={{ flex: 2 }}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <MyText style={{ fontSize: 24, marginLeft: 10 }} weight={700}>
-            Tính n
+            Tính năng
           </MyText>
           {/* <Image
             style={{ width: 24, height: 24 }}
@@ -287,8 +287,8 @@ export const HomeScreen = ({ navigation }) => {
           </Pressable>
           <Pressable
             onPress={() => {
-              navigation.navigate("CreateMinigame", {
-                name: "CreateMinigame",
+              navigation.navigate("Translate", {
+                name: "Translate",
                 // sound: sound,
                 // playing: playing,
               });
@@ -303,7 +303,7 @@ export const HomeScreen = ({ navigation }) => {
               style={{ width: 40, height: 40 }}
               source={require("../../assets/icons/dictionary.png")}
             />
-            <MyText style={styles.text}>Search</MyText>
+            <MyText style={styles.text}>Translate</MyText>
           </Pressable>
         </View>
       </View>
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     // elevation: 5,
     borderWidth: 2,
-    borderColor: COLOR.primary,
+    borderColor: "#b6a6ff",
     flexBasis: "40%",
     flexGrow: 1,
   },

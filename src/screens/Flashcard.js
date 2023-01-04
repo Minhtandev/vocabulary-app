@@ -88,6 +88,8 @@ export const Flashcard = ({ navigation, route }) => {
           id={"favourite"}
         ></Item> */}
         <FlatList
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           data={subjectArrState.sort((a, b) => a.name.localeCompare(b.name))}
           renderItem={({ item }) => (
             <Item

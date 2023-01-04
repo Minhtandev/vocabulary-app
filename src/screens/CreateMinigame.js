@@ -1,6 +1,8 @@
 import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
+  Image,
+  ImageBackground,
   Modal,
   Pressable,
   SafeAreaView,
@@ -16,53 +18,11 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import Feather from "react-native-vector-icons/Feather";
-import Octicons from "react-native-vector-icons/Octicons";
 import { db } from "../../config/firebase_config";
 import MyText from "../components/MyText";
 import handleGameQuestion from "../handle/handleGameQuestion";
 
-// fakeDATA
-// const gameData = [
-//   {
-//     id: "Q01",
-//     cards: [
-//       {
-//         id: "Q01.1",
-//         title: "dimension",
-//         value: true,
-//       },
-//       { id: "Q01.2", title: "kích thước; chiều", value: true },
-//       { id: "Q01.3", title: "quantity", value: false },
-//       { id: "Q01.4", title: "chất lượng", value: false },
-//     ],
-//   },
-//   {
-//     id: "Q02",
-//     cards: [
-//       {
-//         id: "Q02.1",
-//         title: "happy",
-//         value: false,
-//       },
-//       { id: "Q02.2", title: "fancy", value: true },
-//       { id: "Q02.3", title: "buồn", value: false },
-//       { id: "Q02.4", title: "sức tưởng tượng (n)", value: true },
-//     ],
-//   },
-//   {
-//     id: "Q03",
-//     cards: [
-//       {
-//         id: "Q03.1",
-//         title: "expire",
-//         value: false,
-//       },
-//       { id: "Q03.2", title: "sự thao tác", value: true },
-//       { id: "Q03.3", title: "manipulation", value: true },
-//       { id: "Q03.4", title: "xuất khẩu", value: false },
-//     ],
-//   },
-// ];
+import image from "../../assets/gameBg1.jpg";
 
 const COLOR = {
   primary: "#8469ff",
@@ -114,7 +74,6 @@ const CreateMinigame = ({ navigation }) => {
   }, [selectedSubjectId]);
 
   // xử lý chọn bộ từ vựng
-
   const handleSelectSubject = (subject) => {
     setSelectedSubject(subject.name_subject);
     setSelectedSubjectId(subject.id);
@@ -147,347 +106,359 @@ const CreateMinigame = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.setUp}>
-        <MyText style={styles.textTitle}>Setup game</MyText>
-        <View>
-          <View style={styles.row}>
-            <Octicons
-              name="apps"
-              size={20}
-              color={COLOR.primary}
-              style={{ marginRight: 10 }}
-            />
-            <MyText style={{ marginRight: 10, fontSize: 16 }}>
-              Choose subject
-            </MyText>
-            <Menu>
-              <MenuTrigger
-                style={styles.menuTrigger}
-                customStyles={{
-                  triggerText: {
-                    fontSize: 16,
-                    width: 100,
-                    textShadowColor: COLOR.primary,
-                    textShadowOffset: { width: 5, height: 5 },
-                    textShadowRadius: 10,
-                  },
-                  triggerWrapper: {
-                    padding: 5,
-                    border: 1,
-                    // backgroundColor: "blue",
-                  },
-                  triggerTouchable: { title: "Select (Custom Touchables)" },
-                }}
-                text={selectedSubject}
-              />
-              <MenuOptions style={styles.menuContainer}>
-                {subjectArrState.length > 0 &&
-                  subjectArrState.map((item, index) => (
-                    <MenuOption
-                      key={index}
-                      onSelect={() => handleSelectSubject(item)}
-                      style={styles.menuOption}
-                    >
-                      <MyText style={styles.menuText}>
-                        {item.name_subject}
-                      </MyText>
-                    </MenuOption>
-                  ))}
-              </MenuOptions>
-            </Menu>
-          </View>
-          <View style={styles.row}>
-            <Octicons
-              name="number"
-              size={20}
-              color={COLOR.primary}
-              style={{ marginRight: 10 }}
-            />
-            <MyText style={{ fontSize: 16 }}>The number of questions</MyText>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              maxLength={10}
-              onChangeText={(newText) => handleValidateNumberQuestion(newText)}
-              value={number}
-              placeholder="10"
-            ></TextInput>
-          </View>
-          {errorMess && (
-            <View style={styles.row}>
-              <MyText style={{ fontSize: 14, color: "red" }}>
-                {errorMess}
-              </MyText>
-            </View>
-          )}
-        </View>
-      </View>
-      {/* huong dan */}
-      <Pressable
-        style={{
-          width: "32%",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 30,
-          position: "absolute",
-          bottom: 0,
-          right: 20,
-          backgroundColor: "#fff",
-          borderRadius: 20,
-          paddingVertical: 10,
-          paddingHorizontal: 20,
-          elevation: 5,
-        }}
-        onPress={() => setShowModal(true)}
+    <SafeAreaView style={{ width: "100%", height: "100%" }}>
+      <ImageBackground
+        source={image}
+        resizeMode="cover"
+        style={styles.container}
       >
-        <MyText style={{ color: "blue" }}>Introduction</MyText>
-        <Feather
-          name="info"
-          size={20}
-          color="blue"
-          style={{ marginLeft: 10 }}
-        />
-      </Pressable>
-      {showModal && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={true}
-          onRequestClose={() => {
-            Alert.alert("Closed.");
-            setModalVisible(false);
-          }}
-        >
+        <View style={styles.setUp}>
+          <MyText style={styles.textTitle}>Setup game</MyText>
+          <View>
+            <View style={styles.group}>
+              <View style={styles.row}>
+                <Image
+                  style={{ width: 30, height: 30, marginRight: 10 }}
+                  source={require("../../assets/icons/menu.png")}
+                />
+                <MyText style={{ marginRight: 10, fontSize: 16 }}>
+                  Choose subject
+                </MyText>
+              </View>
+              <View>
+                <Menu>
+                  <MenuTrigger
+                    style={styles.menuTrigger}
+                    customStyles={{
+                      triggerText: {
+                        fontSize: 16,
+                        width: 100,
+                        textShadowColor: COLOR.primary,
+                        textShadowOffset: { width: 5, height: 5 },
+                        textShadowRadius: 10,
+                      },
+                      triggerWrapper: {
+                        padding: 5,
+                        border: 1,
+                        // backgroundColor: "blue",
+                      },
+                      triggerTouchable: { title: "Select (Custom Touchables)" },
+                    }}
+                    text={selectedSubject}
+                  />
+                  <MenuOptions style={styles.menuContainer}>
+                    {subjectArrState.length > 0 &&
+                      subjectArrState.map((item, index) => (
+                        <MenuOption
+                          key={index}
+                          onSelect={() => handleSelectSubject(item)}
+                          style={styles.menuOption}
+                        >
+                          <MyText style={styles.menuText}>
+                            {item.name_subject}
+                          </MyText>
+                        </MenuOption>
+                      ))}
+                  </MenuOptions>
+                </Menu>
+              </View>
+            </View>
+            <View style={styles.group}>
+              <View style={styles.row}>
+                <Image
+                  style={{ width: 30, height: 30, marginRight: 10 }}
+                  source={require("../../assets/icons/numbers.png")}
+                />
+                <MyText style={{ fontSize: 16 }}>
+                  The number of questions
+                </MyText>
+              </View>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                maxLength={10}
+                onChangeText={(newText) =>
+                  handleValidateNumberQuestion(newText)
+                }
+                value={number}
+                placeholder="10"
+              ></TextInput>
+            </View>
+            {errorMess && (
+              <View style={styles.row}>
+                <MyText style={{ fontSize: 14, color: "red" }}>
+                  {errorMess}
+                </MyText>
+              </View>
+            )}
+          </View>
+        </View>
+        <View style={{ flex: 1 }}>
           <Pressable
+            onPress={handleStartGame}
             style={{
-              flex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
-              alignItems: "center",
-              justifyContent: "center",
+              ...styles.btn,
+              backgroundColor: COLOR.primary,
+              borderWidth: 1,
+              borderColor: COLOR.second,
             }}
-            onPress={handleCloseModal}
           >
-            <View
+            <MyText style={{ ...styles.textBtn, color: "#fff" }} weight={900}>
+              Start game
+            </MyText>
+          </Pressable>
+        </View>
+        {/* huong dan */}
+        <Pressable
+          style={{
+            width: "32%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 30,
+            position: "absolute",
+            bottom: 0,
+            right: 20,
+            backgroundColor: "#fff",
+            borderRadius: 20,
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            elevation: 5,
+          }}
+          onPress={() => setShowModal(true)}
+        >
+          <MyText style={{ color: "blue" }}>Introduction</MyText>
+          <Feather
+            name="info"
+            size={20}
+            color="blue"
+            style={{ marginLeft: 10 }}
+          />
+        </Pressable>
+        {showModal && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={true}
+            onRequestClose={() => {
+              Alert.alert("Closed.");
+              setModalVisible(false);
+            }}
+          >
+            <Pressable
               style={{
-                width: "100%",
-                height: "60%",
-                borderRadius: 30,
-                marginTop: "auto",
-                backgroundColor: COLOR.primary,
-                justifyContent: "space-evenly",
-                alignItems: "baseline",
+                flex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                alignItems: "center",
+                justifyContent: "center",
               }}
+              onPress={handleCloseModal}
             >
               <View
                 style={{
                   width: "100%",
-                  height: "100%",
-                  borderTopLeftRadius: 30,
-                  borderTopRightRadius: 30,
-                  marginTop: 10,
-                  backgroundColor: "#fff",
-                  padding: 30,
+                  height: "60%",
+                  borderRadius: 30,
+                  marginTop: "auto",
+                  backgroundColor: COLOR.primary,
                   justifyContent: "space-evenly",
                   alignItems: "baseline",
                 }}
               >
                 <View
                   style={{
-                    flex: 1,
                     width: "100%",
-                    alignItems: "center",
+                    height: "100%",
+                    borderTopLeftRadius: 30,
+                    borderTopRightRadius: 30,
+                    marginTop: 10,
+                    backgroundColor: "#fff",
+                    padding: 30,
+                    justifyContent: "space-evenly",
+                    alignItems: "baseline",
                   }}
                 >
-                  <MyText
-                    style={{
-                      fontSize: 16,
-                      marginBottom: 10,
-                      textShadowColor: COLOR.primary,
-                      textShadowOffset: { width: 0, height: 0 },
-                      textShadowRadius: 20,
-                    }}
-                    weight={900}
-                  >
-                    CONNECT WORD
-                  </MyText>
-                </View>
-                <View
-                  style={{
-                    width: "100%",
-                    // height: 50,
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    borderColor: "#ededed",
-                    backgroundColor: "#efefef",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: 4,
-                    marginTop: 0,
-                    marginBottom: 30,
-                  }}
-                >
-                  <Pressable
+                  <View
                     style={{
                       flex: 1,
-                      backgroundColor: lang ? "#fff" : "transparent",
+                      width: "100%",
                       alignItems: "center",
-                      paddingVertical: 10,
                     }}
-                    borderRadius={10}
-                    onPress={() => setLang(true)}
                   >
                     <MyText
                       style={{
                         fontSize: 16,
+                        marginBottom: 10,
+                        textShadowColor: COLOR.primary,
+                        textShadowOffset: { width: 0, height: 0 },
+                        textShadowRadius: 20,
                       }}
                       weight={900}
                     >
-                      English
+                      CONNECT WORD
                     </MyText>
-                  </Pressable>
-                  <Pressable
+                  </View>
+                  <View
+                    style={{
+                      width: "100%",
+                      // height: 50,
+                      borderWidth: 1,
+                      borderRadius: 10,
+                      borderColor: "#ededed",
+                      backgroundColor: "#efefef",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 4,
+                      marginTop: 0,
+                      marginBottom: 30,
+                    }}
+                  >
+                    <Pressable
+                      style={{
+                        flex: 1,
+                        backgroundColor: lang ? "#fff" : "transparent",
+                        alignItems: "center",
+                        paddingVertical: 10,
+                      }}
+                      borderRadius={10}
+                      onPress={() => setLang(true)}
+                    >
+                      <MyText
+                        style={{
+                          fontSize: 16,
+                        }}
+                        weight={900}
+                      >
+                        English
+                      </MyText>
+                    </Pressable>
+                    <Pressable
+                      style={{
+                        flex: 1,
+                        backgroundColor: !lang ? "#fff" : "transparent",
+                        alignItems: "center",
+                        paddingVertical: 10,
+                      }}
+                      borderRadius={10}
+                      onPress={() => setLang(false)}
+                    >
+                      <MyText
+                        style={{
+                          fontSize: 16,
+                        }}
+                        weight={900}
+                      >
+                        Vietnamese
+                      </MyText>
+                    </Pressable>
+                  </View>
+                  <View
+                    style={{
+                      flex: 2,
+                    }}
+                  >
+                    {lang && (
+                      <>
+                        <MyText
+                          style={{
+                            fontSize: 16,
+                            marginBottom: 10,
+                          }}
+                        >
+                          - Player chooses 2 cards: 1 English card and 1
+                          Vietnamese card to make a correct vocabulary word with
+                          it's definition.
+                        </MyText>
+                        <MyText
+                          style={{
+                            fontSize: 16,
+                            marginBottom: 10,
+                          }}
+                        >
+                          - Click card twice in a row to remove the selection.
+                        </MyText>
+                      </>
+                    )}
+                    {!lang && (
+                      <>
+                        <MyText
+                          style={{
+                            fontSize: 16,
+                            marginBottom: 10,
+                          }}
+                        >
+                          - Người chơi chọn 2 thẻ: 1 thẻ tiếng anh và 1 thẻ
+                          tiếng việt để tạo thành một từ vựng tiếng anh với
+                          nghĩa đúng của nó.
+                        </MyText>
+                        <MyText
+                          style={{
+                            fontSize: 16,
+                            marginBottom: 10,
+                          }}
+                        >
+                          - Nhấn 2 lần liên tiếp vào 1 thẻ để bỏ chọn thẻ đó.
+                        </MyText>
+                      </>
+                    )}
+                  </View>
+                  <View
                     style={{
                       flex: 1,
-                      backgroundColor: !lang ? "#fff" : "transparent",
+                      width: "100%",
+                      flexDirection: "row",
+                      justifyContent: "center",
                       alignItems: "center",
-                      paddingVertical: 10,
                     }}
-                    borderRadius={10}
-                    onPress={() => setLang(false)}
                   >
-                    <MyText
+                    <Pressable
                       style={{
-                        fontSize: 16,
+                        ...styles.buttonMini,
+                        width: "46%",
+                        backgroundColor: "#fff",
+                        borderColor: COLOR.primary,
+                        paddingVertical: 12,
                       }}
-                      weight={900}
+                      borderWidth={1}
+                      onPress={() => setShowModal(false)}
                     >
-                      Vietnamese
-                    </MyText>
-                  </Pressable>
-                </View>
-                <View
-                  style={{
-                    flex: 2,
-                  }}
-                >
-                  {lang && (
-                    <>
                       <MyText
                         style={{
+                          color: COLOR.primary,
                           fontSize: 16,
-                          marginBottom: 10,
                         }}
+                        weight={900}
                       >
-                        - Player choose 2 cards: 1 English card and 1 Vietnamese
-                        card to make a correct vocabulary word with it's
-                        definition.
+                        Close
                       </MyText>
-                      <MyText
-                        style={{
-                          fontSize: 16,
-                          marginBottom: 10,
-                        }}
-                      >
-                        - Click card twice in a row to deselect it.
-                      </MyText>
-                    </>
-                  )}
-                  {!lang && (
-                    <>
-                      <MyText
-                        style={{
-                          fontSize: 16,
-                          marginBottom: 10,
-                        }}
-                      >
-                        - Người chơi chọn 2 thẻ: 1 thẻ tiếng anh và 1 thẻ tiếng
-                        việt để tạo thành một từ vựng tiếng anh với nghĩa đúng
-                        của nó.
-                      </MyText>
-                      <MyText
-                        style={{
-                          fontSize: 16,
-                          marginBottom: 10,
-                        }}
-                      >
-                        - Nhấn 2 lần liên tiếp vào 1 thẻ để bỏ chọn thẻ đó.
-                      </MyText>
-                    </>
-                  )}
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    width: "100%",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Pressable
-                    style={{
-                      ...styles.buttonMini,
-                      width: "46%",
-                      backgroundColor: "#fff",
-                      borderColor: COLOR.primary,
-                      paddingVertical: 12,
-                    }}
-                    borderWidth={1}
-                    onPress={() => setShowModal(false)}
-                  >
-                    <MyText
+                    </Pressable>
+                    <Pressable
                       style={{
-                        color: COLOR.primary,
-                        fontSize: 16,
+                        ...styles.buttonMini,
+                        width: "46%",
+                        paddingVertical: 12,
                       }}
-                      weight={900}
+                      onPress={handleStartGame}
                     >
-                      Close
-                    </MyText>
-                  </Pressable>
-                  <Pressable
-                    style={{
-                      ...styles.buttonMini,
-                      width: "46%",
-                      paddingVertical: 12,
-                    }}
-                    onPress={handleStartGame}
-                  >
-                    <MyText
-                      style={{
-                        color: "#fff",
-                        fontSize: 16,
-                      }}
-                      weight={900}
-                    >
-                      Start game
-                    </MyText>
-                  </Pressable>
+                      <MyText
+                        style={{
+                          color: "#fff",
+                          fontSize: 16,
+                        }}
+                        weight={900}
+                      >
+                        Start game
+                      </MyText>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
-            </View>
-          </Pressable>
-        </Modal>
-      )}
-      {/* --- end modal */}
-      <View style={{ flex: 1 }}>
-        <Pressable
-          onPress={handleStartGame}
-          style={{
-            ...styles.btn,
-            backgroundColor: COLOR.primary,
-            borderWidth: 1,
-            borderColor: COLOR.second,
-          }}
-        >
-          <MyText style={{ ...styles.textBtn, color: "#fff" }} weight={900}>
-            Start game
-          </MyText>
-        </Pressable>
-      </View>
+            </Pressable>
+          </Modal>
+        )}
+        {/* --- end modal */}
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -504,14 +475,20 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   setUp: {
-    flex: 1,
+    flex: 2,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  group: {
+    flexDirection: "row",
+    marginBottom: 10,
     alignItems: "center",
   },
   row: {
     flexDirection: "row",
-    marginBottom: 10,
     alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
   btn: {
     paddingVertical: 10,
@@ -529,15 +506,26 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input: {
+    fontSize: 16,
     width: 100,
-    height: 40,
+    height: 44,
     margin: 12,
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
     borderColor: COLOR.primary,
+    backgroundColor: COLOR.second,
   },
   menu: {},
+  menuTrigger: {
+    borderWidth: 1,
+    padding: 10,
+    justifyContent: "center",
+    borderRadius: 8,
+    backgroundColor: COLOR.second,
+    borderColor: COLOR.primary,
+    marginLeft: 50,
+  },
   menuContainer: {
     width: "100%",
     flex: 1,

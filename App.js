@@ -24,6 +24,7 @@ import { useState, createContext, useContext, useEffect } from "react";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { UserProvider, useUser } from "./src/context/userContext";
+import GameResult from "./src/screens/GameResult";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,8 +37,16 @@ function HomeStack() {
     <Stack.Navigator screenOptions={{ headerShown: true }}>
       {!userContext.user ? (
         <>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <>
@@ -78,13 +87,13 @@ function HomeStack() {
           />
           <Stack.Screen
             name="Minigame"
+            options={{ headerShown: false }}
             component={Minigame}
-            options={{
-              title: "Minigame",
-              headerStyle: {
-                backgroundColor: "#f0edff",
-              },
-            }}
+          />
+          <Stack.Screen
+            name="GameResult"
+            options={{ headerShown: false }}
+            component={GameResult}
           />
           <Stack.Screen
             name="FlashcardDetail"
@@ -193,12 +202,32 @@ function GameStack() {
       <Stack.Screen
         name="Minigame"
         component={Minigame}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="GameResult"
+        options={{ headerShown: false }}
+        component={GameResult}
+      />
+      <Stack.Screen
+        name="Flashcard"
+        component={Flashcard}
         options={{
-          title: "Minigame",
+          title: "Các bộ Flashcard",
           headerStyle: {
             backgroundColor: "#f0edff",
           },
         }}
+      />
+      <Stack.Screen
+        name="FlashcardDetail"
+        component={FlashcardDetail}
+        options={({ route }) => ({
+          title: route.params.subjectName,
+          headerStyle: {
+            backgroundColor: "#f0edff",
+          },
+        })}
       />
     </Stack.Navigator>
   );
@@ -215,14 +244,17 @@ function App() {
           ) : (
             <Tab.Navigator
               initialRouteName="Feed"
+              activeColor="#6e4fff"
               screenOptions={{
+                tabBarOptions: {
+                  activeTintColor: "#e91e63",
+                },
                 headerStyle: {
                   height: 0,
                 },
-                title: "",
                 showLabel: false,
-                activeTintColor: "tomato",
-                inactiveTintColor: "gray",
+                tabBarActiveTintColor: "#6e4fff",
+                tabBarInactiveTintColor: "gray",
               }}
             >
               <Tab.Screen

@@ -35,7 +35,7 @@ export const FlashcardDetail = ({ navigation, route }) => {
   //Biến truyền Item bộ
   const subjectId = route.params.subjectId;
   const subjectName = route.params.subjectName;
-
+  const subjectIdArr = route.params.subjectArr.map((item) => item.id);
   //lấy dữ liệu (các thẻ)
   useEffect(
     () =>
@@ -51,6 +51,7 @@ export const FlashcardDetail = ({ navigation, route }) => {
             snapshot.docs
               .map((doc) => ({ ...doc.data(), id: doc.id }))
               .filter((item) => item.favo == true)
+              .filter((item) => subjectIdArr.includes(item.subject))
           );
         }
       }),
@@ -64,7 +65,7 @@ export const FlashcardDetail = ({ navigation, route }) => {
           <Carousel
             layout={"stack"}
             layoutCardOffset={18}
-            data={subjectArrState}
+            data={subjectArrState.sort((a, b) => a.name.localeCompare(b.name))}
             renderItem={({ item }) => (
               <CardItem
                 navigation={navigation}

@@ -18,6 +18,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
+import { Audio } from "expo-av";
 
 export const CustomModal = ({
   //bắt buộc truyền
@@ -51,7 +52,26 @@ export const CustomModal = ({
   const collectionRef_subject = collection(db, "flashcard_subject");
   const collectionRef_card = collection(db, "flashcard");
 
-  if (modalType == "add-subject") console.log("modal>>>>", modalType, userId);
+  //âm thanh khi thêm thành công
+  const [sound, setSound] = useState();
+  async function playSoundTrue() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../assets/correct-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  // if (modalType == "add-subject") console.log("modal>>>>", modalType, userId);
   //hàm thêm bộ
   const addSubject = async () => {
     await addDoc(collectionRef_subject, {
@@ -64,6 +84,8 @@ export const CustomModal = ({
       text1: "Thêm thành công",
       text2: "Bạn vừa thêm thành công bộ mới!!!👋",
     });
+    playSoundTrue();
+
     setInputAddNameState("");
     setInputAddDescState("");
   };
@@ -83,6 +105,7 @@ export const CustomModal = ({
       text1: "Xóa thành công",
       text2: "Bạn vừa xóa thành công!!! 👋",
     });
+    playSoundTrue();
   };
 
   //hàm sửa bộ
@@ -93,13 +116,14 @@ export const CustomModal = ({
       desc: inputEditDescState,
     };
     await updateDoc(userDoc, newFields);
-    setInputEditNameState("");
-    setInputEditDescState("");
+    // setInputEditNameState("");
+    // setInputEditDescState("");
     Toast.show({
       type: "success",
       text1: "Cập nhật thành công",
       text2: "Bạn vừa cập nhật thành công!!! 👋",
     });
+    playSoundTrue();
   };
 
   //hàm thêm thẻ
@@ -117,6 +141,7 @@ export const CustomModal = ({
       text1: "Thêm thành công",
       text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
     });
+    playSoundTrue();
   };
 
   //hàm xóa thẻ
@@ -128,6 +153,7 @@ export const CustomModal = ({
       text1: "Xóa thành công",
       text2: "Bạn vừa xóa thành công!!!👋",
     });
+    playSoundTrue();
   };
 
   //hàm sửa thẻ
@@ -139,13 +165,14 @@ export const CustomModal = ({
       favo: favo,
     };
     await updateDoc(userDoc, newFields);
-    setInputEditNameCardState("");
-    setInputEditDefiState("");
+    // setInputEditNameCardState("");
+    // setInputEditDefiState("");
     Toast.show({
       type: "success",
       text1: "Cập nhật thành công",
       text2: "Bạn vừa cập nhật thành công!!! 👋",
     });
+    playSoundTrue();
   };
 
   switch (modalType) {

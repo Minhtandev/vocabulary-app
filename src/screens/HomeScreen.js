@@ -11,7 +11,7 @@ import {
 
 // logout use firebase
 import { getAuth, signOut } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 
 import { Audio } from "expo-av";
@@ -19,7 +19,6 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { db } from "../../config/firebase_config";
 import MyText from "../components/MyText";
 import { useUser } from "../context/userContext";
-
 const COLOR = {
   icon: "#2d2c45",
   one: "#FF9F9F",
@@ -42,8 +41,8 @@ export const HomeScreen = ({ navigation }) => {
   async function playSound() {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/sounds/audio.mp3"),
-      { isLooping: true }
+      require("../../assets/sounds/game_song.mp3"),
+      { isLooping: true, volume: 0.1 }
     );
     setSound(sound);
     console.log("Playing Sound");
@@ -61,6 +60,7 @@ export const HomeScreen = ({ navigation }) => {
   }, [sound]);
 
   useEffect(() => {
+    console.log(sound);
     playSound();
   }, []);
 
@@ -152,10 +152,10 @@ export const HomeScreen = ({ navigation }) => {
               name: "Flashcard",
               userId: userContext.user?.userId,
             });
-            if (playing == true) {
-              sound.pauseAsync();
-              setPlaying(!playing);
-            }
+            // if (playing == true) {
+            //   sound.pauseAsync();
+            //   setPlaying(!playing);
+            // }
           }}
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >
@@ -170,10 +170,10 @@ export const HomeScreen = ({ navigation }) => {
         <Pressable
           onPress={() => {
             navigation.navigate("LearnVoc", { name: "LearnVoc" });
-            if (playing == true) {
-              sound.pauseAsync();
-              setPlaying(!playing);
-            }
+            // if (playing == true) {
+            //   sound.pauseAsync();
+            //   setPlaying(!playing);
+            // }
           }}
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >
@@ -192,10 +192,10 @@ export const HomeScreen = ({ navigation }) => {
               // sound: sound,
               // playing: playing,
             });
-            if (playing == true) {
-              sound.pauseAsync();
-              setPlaying(!playing);
-            }
+            // if (playing == true) {
+            //   sound.pauseAsync();
+            //   setPlaying(!playing);
+            // }
           }}
           style={{ ...styles.btn, backgroundColor: COLOR.bg }}
         >
@@ -212,6 +212,10 @@ export const HomeScreen = ({ navigation }) => {
             navigation.navigate("Translate", {
               name: "Translate",
             });
+            if (playing == true) {
+              sound.pauseAsync();
+              setPlaying(!playing);
+            }
           }}
           style={{ ...styles.btnTranslate, backgroundColor: COLOR.bg }}
         >

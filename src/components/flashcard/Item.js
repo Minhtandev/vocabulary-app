@@ -26,7 +26,7 @@ import image from "../../../assets/flashcard_item_bg.jpg";
 
 //Lấy width của window
 var width = Dimensions.get("window").width;
-export const Item = ({ navigation, name, desc, id, userId }) => {
+export const Item = ({ navigation, name, desc, id, userId, subjectArr }) => {
   //Các state
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [addCardModalVisible, setAddCardModalVisible] = useState(false);
@@ -42,6 +42,7 @@ export const Item = ({ navigation, name, desc, id, userId }) => {
           name: name,
           subjectId: id,
           subjectName: name,
+          subjectArr: subjectArr,
         })
       }
     >

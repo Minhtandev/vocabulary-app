@@ -222,7 +222,7 @@ export const HomeScreen = ({ navigation }) => {
       <View style={{ flex: 2 }}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <MyText style={{ fontSize: 24, marginLeft: 10 }} weight={700}>
-            Tính năng
+            Tính n
           </MyText>
           {/* <Image
             style={{ width: 24, height: 24 }}
@@ -406,5 +406,16 @@ const styles = StyleSheet.create({
     borderColor: COLOR.primary,
     flexBasis: "40%",
     flexGrow: 1,
+  },
+  btnTranslate: {
+    flexDirection: "row",
+    width: "100%",
+    backgroundColor: "#a9d675",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    elevation: 5,
+    position: "absolute",
+    top: -50,
   },
 });

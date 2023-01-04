@@ -9,14 +9,18 @@ import {
   FlatList,
   Alert,
   GestureFlipView,
+  Modal,
 } from "react-native";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import { Modal } from "react-native-paper";
+// import { Modal } from "react-native-paper";
 import React, { useState, useEffect } from "react";
 import { db } from "../../config/firebase_config";
 import Carousel from "react-native-snap-carousel";
 import MyText from "../components/MyText";
+import { CustomModal } from "../components/flashcard/CustomModal";
 import * as Speech from "expo-speech";
+import Toast from "react-native-toast-message";
+import { useUser } from "../context/userContext";
 import {
   collection,
   getDocs,
@@ -244,7 +248,16 @@ const IMAGES = {
 //   </Modal>
 // );
 
-const Item = ({ name_card, ipa, mean_eng, mean_viet, image }) => {
+const Item = ({
+  name_card,
+  ipa,
+  mean_eng,
+  mean_viet,
+  image,
+  setModalVisible,
+  setCardName,
+  setCardDefi,
+}) => {
   const voiceHandle = () => {
     // console.log("hello");
     Speech.speak(name_card, { language: "en" });
@@ -263,6 +276,29 @@ const Item = ({ name_card, ipa, mean_eng, mean_viet, image }) => {
             style={styles.sound_icon}
           />
         </View>
+
+        <Pressable
+          style={styles.add_subject_btn}
+          onPress={() => {
+            setCardName(name_card);
+            setCardDefi(mean_viet);
+            setModalVisible(true);
+          }}
+        >
+          <View style={styles.add_btn_content}>
+            <Entypo
+              name="plus"
+              size={16}
+              color="white"
+              style={styles.add_icon}
+            />
+            <MyText weight={500} style={styles.add_btn_text}>
+              THÊM BỘ
+            </MyText>
+            {/* <MyText style={styles.add_btn_text}>{userId}</MyText> */}
+          </View>
+        </Pressable>
+
         <MyText style={styles.meanViet}>{mean_viet}</MyText>
         <MyText style={styles.meanEng}>{mean_eng}</MyText>
         <Image source={image ? IMAGES[image] : ""} style={styles.imageCard} />
@@ -274,12 +310,36 @@ const Item = ({ name_card, ipa, mean_eng, mean_viet, image }) => {
 export const Vocabulary = ({ navigation, route }) => {
   // const [modalVisible, setModalVisible] = useState(false);
   // const [modalContent, setModalContent] = useState({});
+  const [subjectArrState, setSubjetArrState] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const userContext = useUser();
+  //Biến id của user
+  const userId = userContext.user?.userId;
 
   const collectionRef = collection(db, "card");
+  const collectionFCRef = collection(db, "flashcard_subject");
+  const collectionRef_card = collection(db, "flashcard");
   const [cardArrState, setCardArrState] = useState([]);
+  const [cardName, setCardName] = useState("");
+  const [cardDefi, setCardDefi] = useState("");
   // const [image, setImage] = useState("");
   //Biến id của bộ
   const subjectId = route.params.subjectId;
+
+  const addToFC = async (id) => {
+    await addDoc(collectionRef_card, {
+      name: cardName,
+      defi: cardDefi,
+      subject: id,
+      favo: false,
+    });
+    Toast.show({
+      type: "success",
+      text1: "Thêm thành công",
+      text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
+    });
+  };
 
   useEffect(
     () =>
@@ -288,6 +348,21 @@ export const Vocabulary = ({ navigation, route }) => {
           snapshot.docs
             .map((doc) => ({ ...doc.data(), id: doc.id }))
             .filter((item) => item.subject == subjectId)
+        );
+        setSubjetArrState(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          // .filter((item) => item.user == userId)
+        );
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(collectionFCRef, (snapshot) => {
+        setSubjetArrState(
+          snapshot.docs
+            .map((doc) => ({ ...doc.data(), id: doc.id }))
+            .filter((item) => item.user == userId)
         );
       }),
     []
@@ -312,7 +387,8 @@ export const Vocabulary = ({ navigation, route }) => {
           ></Item>
         )}
       /> */}
-
+      {/* <Text>{subjectArrState.length}</Text>
+      <Text>{userId}</Text> */}
       <Carousel
         // ref={(c) => {
         //   this._carousel = c;
@@ -327,16 +403,107 @@ export const Vocabulary = ({ navigation, route }) => {
             ipa={item.ipa}
             mean_eng={item.mean_eng}
             mean_viet={item.mean_viet}
+            setModalVisible={setModalVisible}
+            setCardName={setCardName}
+            setCardDefi={setCardDefi}
           />
         )}
         sliderWidth={700}
         itemWidth={300}
       />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <AntDesign
+              name="close"
+              size={20}
+              color="black"
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+              style={styles.close_icon}
+            />
+            {subjectArrState.length > 0 ? (
+              subjectArrState.map((item, i) => (
+                <View key={i}>
+                  <Text>{item.name}</Text>
+                  <Pressable onPress={() => addToFC(item.id)}>
+                    <Text>Thêm</Text>
+                  </Pressable>
+                </View>
+              ))
+            ) : (
+              <Text>Chưa có bộ nào</Text>
+            )}
+            <Text>{cardName + " " + cardDefi}</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    width: 150,
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    position: "relative",
+    top: 20,
+  },
+  buttonOpen: {
+    backgroundColor: "#8469ff",
+  },
+  buttonClose: {
+    backgroundColor: "#8469ff",
+  },
+  //text
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+
+  //icon
+  close_icon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+
   cover: {
     height: "100%",
     backgroundColor: "#f0edff",

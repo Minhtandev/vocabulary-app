@@ -113,7 +113,8 @@ export const Minigame = ({ navigation, route }) => {
   }
   async function playSoundFalse() {
     const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/incorrect-answer.mp3")
+      require("../../assets/incorrect-answer.mp3"),
+      { volume: 0.4 }
     );
     setSound(sound);
     await sound.playAsync();

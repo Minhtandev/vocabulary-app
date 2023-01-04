@@ -115,7 +115,6 @@ function HomeStack() {
               },
             })}
           />
-
           <Stack.Screen
             name="Translate"
             component={Translate}

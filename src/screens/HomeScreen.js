@@ -287,8 +287,8 @@ export const HomeScreen = ({ navigation }) => {
           </Pressable>
           <Pressable
             onPress={() => {
-              navigation.navigate("CreateMinigame", {
-                name: "CreateMinigame",
+              navigation.navigate("Translate", {
+                name: "Translate",
                 // sound: sound,
                 // playing: playing,
               });
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     // elevation: 5,
     borderWidth: 2,
-    borderColor: COLOR.primary,
+    borderColor: "#b6a6ff",
     flexBasis: "40%",
     flexGrow: 1,
   },

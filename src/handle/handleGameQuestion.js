@@ -1,5 +1,3 @@
-import { LogBox } from "react-native";
-
 function getMultipleRandom(arr, num) {
   // xáo trộn mảng ngẫu nhiên
   const shuffled = [...arr]?.sort(() => 0.5 - Math.random()) || [];

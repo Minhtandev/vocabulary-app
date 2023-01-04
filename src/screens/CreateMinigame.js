@@ -114,7 +114,7 @@ const CreateMinigame = ({ navigation }) => {
       >
         <View style={styles.setUp}>
           <MyText style={styles.textTitle}>Setup game</MyText>
-          <View>
+          <View style={{ flex: 1 }}>
             <View style={styles.group}>
               <View style={styles.row}>
                 <Image
@@ -125,43 +125,41 @@ const CreateMinigame = ({ navigation }) => {
                   Choose subject
                 </MyText>
               </View>
-              <View>
-                <Menu>
-                  <MenuTrigger
-                    style={styles.menuTrigger}
-                    customStyles={{
-                      triggerText: {
-                        fontSize: 16,
-                        width: 100,
-                        textShadowColor: COLOR.primary,
-                        textShadowOffset: { width: 5, height: 5 },
-                        textShadowRadius: 10,
-                      },
-                      triggerWrapper: {
-                        padding: 5,
-                        border: 1,
-                        // backgroundColor: "blue",
-                      },
-                      triggerTouchable: { title: "Select (Custom Touchables)" },
-                    }}
-                    text={selectedSubject}
-                  />
-                  <MenuOptions style={styles.menuContainer}>
-                    {subjectArrState.length > 0 &&
-                      subjectArrState.map((item, index) => (
-                        <MenuOption
-                          key={index}
-                          onSelect={() => handleSelectSubject(item)}
-                          style={styles.menuOption}
-                        >
-                          <MyText style={styles.menuText}>
-                            {item.name_subject}
-                          </MyText>
-                        </MenuOption>
-                      ))}
-                  </MenuOptions>
-                </Menu>
-              </View>
+              <Menu>
+                <MenuTrigger
+                  style={styles.menuTrigger}
+                  customStyles={{
+                    triggerText: {
+                      fontSize: 16,
+                      width: 100,
+                      textShadowColor: COLOR.primary,
+                      textShadowOffset: { width: 5, height: 5 },
+                      textShadowRadius: 10,
+                    },
+                    triggerWrapper: {
+                      padding: 5,
+                      border: 1,
+                      // backgroundColor: "blue",
+                    },
+                    triggerTouchable: { title: "Select (Custom Touchables)" },
+                  }}
+                  text={selectedSubject}
+                />
+                <MenuOptions style={styles.menuContainer}>
+                  {subjectArrState.length > 0 &&
+                    subjectArrState.map((item, index) => (
+                      <MenuOption
+                        key={index}
+                        onSelect={() => handleSelectSubject(item)}
+                        style={styles.menuOption}
+                      >
+                        <MyText style={styles.menuText}>
+                          {item.name_subject}
+                        </MyText>
+                      </MenuOption>
+                    ))}
+                </MenuOptions>
+              </Menu>
             </View>
             <View style={styles.group}>
               <View style={styles.row}>
@@ -193,7 +191,7 @@ const CreateMinigame = ({ navigation }) => {
             )}
           </View>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginTop: 20 }}>
           <Pressable
             onPress={handleStartGame}
             style={{
@@ -254,7 +252,7 @@ const CreateMinigame = ({ navigation }) => {
               }}
               onPress={handleCloseModal}
             >
-              <View
+              <Pressable
                 style={{
                   width: "100%",
                   height: "60%",
@@ -453,7 +451,7 @@ const CreateMinigame = ({ navigation }) => {
                     </Pressable>
                   </View>
                 </View>
-              </View>
+              </Pressable>
             </Pressable>
           </Modal>
         )}
@@ -481,8 +479,8 @@ const styles = StyleSheet.create({
   },
   group: {
     flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "center",
+    marginBottom: 14,
+    alignItems: "flex-end",
   },
   row: {
     flexDirection: "row",

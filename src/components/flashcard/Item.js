@@ -202,7 +202,8 @@ const styles = StyleSheet.create({
   add_btn_content: {
     flexDirection: "row",
     flex: 1,
-    alignItem: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   menu_container: {
     width: 150,
@@ -248,6 +249,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 40,
     lineHeight: 40,
+    alignItems: "center",
   },
 
   //input
@@ -259,24 +261,22 @@ const styles = StyleSheet.create({
   },
   //icon
   add_icon: {
-    marginLeft: 5,
     marginRight: 2,
-    marginTop: -1,
   },
   menu_add_icon: {
     marginLeft: 3,
     marginRight: 5,
-    marginTop: 2,
+    // marginTop: 2,
   },
   menu_edit_icon: {
     marginLeft: 3,
     marginRight: 5,
-    marginTop: 3,
+    // marginTop: 3,
   },
   menu_delete_icon: {
     marginLeft: 3,
     marginRight: 5,
-    marginTop: 3,
+    // marginTop: 3,
   },
   //text
   small: {

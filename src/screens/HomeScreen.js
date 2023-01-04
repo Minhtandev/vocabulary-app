@@ -263,7 +263,7 @@ export const HomeScreen = ({ navigation }) => {
               style={{ width: 40, height: 40 }}
               source={require("../../assets/icons/study.png")}
             />
-            <MyText style={styles.text}>LearnVoc</MyText>
+            <MyText style={styles.text}>Vocabulary</MyText>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -303,7 +303,7 @@ export const HomeScreen = ({ navigation }) => {
               style={{ width: 40, height: 40 }}
               source={require("../../assets/icons/dictionary.png")}
             />
-            <MyText style={styles.text}>Translate</MyText>
+            <MyText style={styles.text}>Translation</MyText>
           </Pressable>
         </View>
       </View>

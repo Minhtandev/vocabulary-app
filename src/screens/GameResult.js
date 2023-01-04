@@ -16,7 +16,7 @@ import { db } from "../../config/firebase_config";
 import Toast from "react-native-toast-message";
 import { useUser } from "../context/userContext";
 import { CustomModal } from "../components/flashcard/CustomModal";
-
+import { Audio } from "expo-av";
 const COLOR = {
   success: "#12d18e",
   wrong: "#f75555",
@@ -100,15 +100,8 @@ const GameResult = ({ navigation, route }) => {
   useEffect(
     () =>
       onSnapshot(collectionRef, (snapshot) => {
-        const favourite = {
-          id: "favourite",
-          name: "Yêu thích",
-          desc: "Các Flashcard bạn yêu thích",
-          user: userId,
-        };
         setSubjetArrState(
           [
-            favourite,
             ...snapshot.docs
               .map((doc) => ({ ...doc.data(), id: doc.id }))
               .filter((item) => item.user == userId),
@@ -462,6 +455,16 @@ const ItemFlashCard = ({
   setModalVisible = () => {},
   setAddedVoc = () => {},
 }) => {
+  //âm thanh khi thêm thành công
+  const [sound, setSound] = useState();
+  async function playSoundTrue() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/correct-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
   // db
   const collectionRef_card = collection(db, "flashcard");
   // function thêm thẻ vào
@@ -479,6 +482,7 @@ const ItemFlashCard = ({
       text1: "Thêm thành công",
       text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
     });
+    playSoundTrue();
   };
   return (
     <View

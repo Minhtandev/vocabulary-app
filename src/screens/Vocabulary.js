@@ -400,7 +400,7 @@ export const Vocabulary = ({ navigation, route }) => {
       text1: "Thêm thành công",
       text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
     });
-    playSoundTrue;
+    playSoundTrue();
   };
 
   useEffect(
@@ -421,6 +421,7 @@ export const Vocabulary = ({ navigation, route }) => {
           snapshot.docs
             .map((doc) => ({ ...doc.data(), id: doc.id }))
             .filter((item) => item.user == userId)
+            .sort((a, b) => a.name.localeCompare(b.name))
         );
       }),
     []

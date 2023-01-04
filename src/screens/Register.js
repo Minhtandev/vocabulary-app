@@ -151,7 +151,7 @@ const Register = ({ navigation, route }) => {
         <View style={styles.inputForm}>
           <Octicons
             name="mention"
-            size={20}
+            size={15}
             color={COLOR.primary}
             style={{
               paddingHorizontal: 15,

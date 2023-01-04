@@ -20,6 +20,7 @@ import MyText from "../components/MyText";
 import { CustomModal } from "../components/flashcard/CustomModal";
 import * as Speech from "expo-speech";
 import Toast from "react-native-toast-message";
+import { Audio } from "expo-av";
 import { useUser } from "../context/userContext";
 import {
   collection,
@@ -310,6 +311,18 @@ const Item = ({
 export const Vocabulary = ({ navigation, route }) => {
   // const [modalVisible, setModalVisible] = useState(false);
   // const [modalContent, setModalContent] = useState({});
+
+  //âm thanh khi thêm thành công
+  const [sound, setSound] = useState();
+  async function playSoundTrue() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/correct-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+
   const [subjectArrState, setSubjetArrState] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -339,6 +352,7 @@ export const Vocabulary = ({ navigation, route }) => {
       text1: "Thêm thành công",
       text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
     });
+    playSoundTrue;
   };
 
   useEffect(
@@ -348,10 +362,6 @@ export const Vocabulary = ({ navigation, route }) => {
           snapshot.docs
             .map((doc) => ({ ...doc.data(), id: doc.id }))
             .filter((item) => item.subject == subjectId)
-        );
-        setSubjetArrState(
-          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-          // .filter((item) => item.user == userId)
         );
       }),
     []
@@ -395,7 +405,9 @@ export const Vocabulary = ({ navigation, route }) => {
         // }}
         layout={"stack"}
         layoutCardOffset={18}
-        data={cardArrState}
+        data={cardArrState.sort((a, b) =>
+          a.name_card.localeCompare(b.name_card)
+        )}
         renderItem={({ item }) => (
           <Item
             name_card={item.name_card}

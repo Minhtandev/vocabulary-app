@@ -20,10 +20,19 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import MyText from "../components/MyText";
-const Item = ({ navigation, name, setModalVisible, index, id }) => (
+import { useUser } from "../context/userContext";
+const Item = ({
+  navigation,
+  name,
+  setModalVisible,
+  index,
+  id,
+  onPress = () => {},
+}) => (
   <Pressable
     style={styles.topic}
     onPress={() => {
+      onPress();
       navigation.navigate("Vocabulary", {
         name: "Vocabulary",
         subjectId: id,
@@ -62,6 +71,35 @@ export const LearnVoc = ({ navigation, route }) => {
       }),
     []
   );
+
+  // --- bộ từ vựng mới học
+  const userContext = useUser();
+  // Lấy dữ liệu
+  const collectionRef_laSubject = collection(db, "latest_subject");
+
+  //
+
+  const handleSetLatestSubject = async (id, name) => {
+    console.log(76, id, name);
+    console.log("userId", userContext.user.userId);
+
+    const querySnapshot = await getDocs(collection(db, "latest_subject"));
+    const data = querySnapshot.docs
+      .map((doc) => ({ ...doc.data(), id: doc.id }))
+      .find((item) => item.userId === userContext.user.userId);
+    if (data) {
+      const userDoc = doc(db, "latest_subject", data.id);
+      deleteDoc(userDoc);
+    }
+
+    //
+    await addDoc(collectionRef_laSubject, {
+      userId: userContext.user.userId,
+      subjectId: id,
+      subjectName: name,
+    });
+  };
+
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <View style={styles.body}>
@@ -71,6 +109,8 @@ export const LearnVoc = ({ navigation, route }) => {
             // numColumns={2}
             // columnWrapperStyle={{ justifyContent: "space-between" }}
             // horizontal={false}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             data={subjectArrState}
             renderItem={({ index, item }) => (
               <Item
@@ -78,6 +118,9 @@ export const LearnVoc = ({ navigation, route }) => {
                 name={item.name_subject}
                 id={item.id}
                 index={index + 1}
+                onPress={() =>
+                  handleSetLatestSubject(item.id, item.name_subject)
+                }
               ></Item>
             )}
           />

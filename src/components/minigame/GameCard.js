@@ -10,14 +10,14 @@ const GameCard = ({
   onPress,
   disabled = false,
 }) => {
-  const [bgColor, setBgColor] = useState("#fff");
+  const [bgColor, setBgColor] = useState("#f8f6ff");
   const [count, setCount] = useState(0);
   const handlePress = (index) => {
     setCount(count + 1);
     onPress(index);
     setBgColor("#e2ddff");
     if (count % 2 === 1) {
-      setBgColor("#fff");
+      setBgColor("#f8f6ff");
     }
   };
   return (
@@ -31,9 +31,9 @@ const GameCard = ({
         flexBasis: "40%",
         flexGrow: 1,
         marginBottom: 15,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#8469ff",
-        borderRadius: 8,
+        borderRadius: 20,
         justifyContent: "center",
         alignItems: "center",
         padding: 20,

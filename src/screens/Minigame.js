@@ -17,7 +17,7 @@ import {
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import GameCard from "../components/minigame/GameCard";
-import { compareAnswer, getIndexAnswer } from "../handle/getAnswer";
+import { compareAnswer, getAnswer, getIndexAnswer } from "../handle/getAnswer";
 
 import MyText from "../components/MyText";
 
@@ -98,8 +98,10 @@ export const Minigame = ({ navigation, route }) => {
   } else var cards = [];
   var trueAnswer = getIndexAnswer(cards);
   const [bgColor, setBgColor] = useState("#fff");
+
   //===== modal show
   const [modalVisible, setModalVisible] = useState(false);
+
   //==== âm thanh true - false
   const [sound, setSound] = useState();
   async function playSoundTrue() {
@@ -107,7 +109,6 @@ export const Minigame = ({ navigation, route }) => {
       require("../../assets/correct-answer.mp3")
     );
     setSound(sound);
-
     await sound.playAsync();
   }
   async function playSoundFalse() {
@@ -115,10 +116,8 @@ export const Minigame = ({ navigation, route }) => {
       require("../../assets/incorrect-answer.mp3")
     );
     setSound(sound);
-
     await sound.playAsync();
   }
-
   useEffect(() => {
     return sound
       ? () => {
@@ -126,6 +125,22 @@ export const Minigame = ({ navigation, route }) => {
         }
       : undefined;
   }, [sound]);
+
+  // ========== lưu kết quả game
+  const [dataResultCorrect, setDataResultCorrect] = useState([]);
+  const [dataResultWrong, setDataResultWrong] = useState([]);
+  const handleShowResult = () => {
+    let data = {
+      score,
+      wrong,
+      wrongResult: dataResultWrong,
+      correctResult: dataResultCorrect,
+    };
+    navigation.navigate("GameResult", {
+      name: "GameResult",
+      data,
+    });
+  };
   // ====== handle press card
   const handlePress = (index) => {
     //*********** */ mỗi card chỉ được click 1 lần
@@ -148,10 +163,16 @@ export const Minigame = ({ navigation, route }) => {
         playSoundTrue();
         setBgColor(COLOR.success);
         setScore((score) => score + 1);
+        // lưu lại kết quả
+        var anhviet = getAnswer(cards);
+        setDataResultCorrect((prev) => [...prev, anhviet]);
       } else {
         playSoundFalse();
         setBgColor(COLOR.wrong);
         setWrong((wrong) => wrong + 1);
+        // lưu lại kết quả
+        var anhviet = getAnswer(cards);
+        setDataResultWrong((prev) => [...prev, anhviet]);
         //------------------------
         // --> cho user làm lại cho đến khi đúng, nhưng điểm không tác động...
         //------------------------
@@ -164,6 +185,10 @@ export const Minigame = ({ navigation, route }) => {
       setModalVisible(true);
     }
     if (currentQuestionIndex < gameData.length - 1) {
+      if (answers.length < 2) {
+        var anhviet = getAnswer(cards);
+        setDataResultWrong((prev) => [...prev, anhviet]);
+      }
       setCurrentQuestionIndex((prev) => prev + 1);
       setAnswers([]);
       trueAnswer = "";
@@ -178,6 +203,7 @@ export const Minigame = ({ navigation, route }) => {
       useNativeDriver: false,
     }).start();
   };
+  // handle test again
   const handleTestAgain = () => {
     setModalVisible(!modalVisible);
     setCurrentQuestionIndex(0);
@@ -202,9 +228,10 @@ export const Minigame = ({ navigation, route }) => {
         barStyle="light-content"
         backgroundColor={COLOR.second}
       ></StatusBar>
+      {/* ----content ---- */}
       <View style={styles.container}>
         <ImageBackground
-          source={require("../../assets/gameBackground2.png")}
+          source={require("../../assets/gameBackground3.jpg")}
           resizeMode="cover"
           style={{
             flex: 1,
@@ -224,6 +251,8 @@ export const Minigame = ({ navigation, route }) => {
                 paddingHorizontal: 10,
                 paddingVertical: 5,
                 borderRadius: 50,
+                borderWidth: 2,
+                borderColor: "#abacce",
               }}
             >
               <MyText style={styles.text}>{currentQuestionIndex + 1}</MyText>
@@ -232,9 +261,11 @@ export const Minigame = ({ navigation, route }) => {
             <View
               style={{
                 width: "60%",
-                height: 20,
+                height: 24,
                 borderRadius: 20,
                 backgroundColor: COLOR.second,
+                borderWidth: 2,
+                borderColor: "#abacce",
               }}
             >
               <Animated.View
@@ -243,6 +274,8 @@ export const Minigame = ({ navigation, route }) => {
                     height: 20,
                     borderRadius: 20,
                     backgroundColor: COLOR.progress,
+                    borderWidth: 2,
+                    borderColor: COLOR.second,
                   },
                   {
                     width: progressAnim,
@@ -267,19 +300,20 @@ export const Minigame = ({ navigation, route }) => {
             <View
               style={{
                 ...styles.pointPart,
-                backgroundColor: "#f0fdf3",
+                // backgroundColor: "#f0fdf3",
+                // borderWidth: 2,
+                // borderColor: COLOR.success,
               }}
             >
-              <Feather
-                name="check-circle"
-                size={40}
-                color={COLOR.success}
-                style={{ marginRight: 5 }}
+              <Image
+                style={{ width: 50, height: 50 }}
+                source={require("../../assets/icons/correct.png")}
               />
               <MyText
                 style={{
                   fontSize: 30,
                   color: COLOR.success,
+                  marginLeft: -15,
                 }}
                 weight={900}
               >
@@ -289,19 +323,20 @@ export const Minigame = ({ navigation, route }) => {
             <View
               style={{
                 ...styles.pointPart,
-                backgroundColor: "#fce4e5",
+                // backgroundColor: "#fce4e5",
+                // borderWidth: 2,
+                // borderColor: COLOR.wrong,
               }}
             >
-              <Feather
-                name="x-circle"
-                size={40}
-                color={COLOR.wrong}
-                style={{ marginRight: 5 }}
+              <Image
+                style={{ width: 50, height: 50 }}
+                source={require("../../assets/icons/wrong.png")}
               />
               <MyText
                 style={{
                   fontSize: 30,
                   color: COLOR.wrong,
+                  marginLeft: -15,
                 }}
                 weight={900}
               >
@@ -336,20 +371,34 @@ export const Minigame = ({ navigation, route }) => {
           </View>
           {/*---- Next Button ---*/}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleNextQuestion}
-              // disabled={currentQuestionIndex + 1 === gameData.length}
-            >
-              <MyText
-                style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
+            {showNextButton ? (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleNextQuestion}
+                // disabled={currentQuestionIndex + 1 === gameData.length}
               >
-                {showNextButton ? "Next" : "Close"}
-              </MyText>
-            </TouchableOpacity>
+                <MyText
+                  style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
+                >
+                  Next
+                </MyText>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleShowResult}
+                // disabled={currentQuestionIndex + 1 === gameData.length}
+              >
+                <MyText
+                  style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
+                >
+                  Close
+                </MyText>
+              </TouchableOpacity>
+            )}
           </View>
           {/*------- MODAL -------*/}
-          <Modal
+          {/* <Modal
             animationType="slide"
             transparent={true}
             visible={modalVisible}
@@ -470,7 +519,7 @@ export const Minigame = ({ navigation, route }) => {
                 </View>
               </View>
             </View>
-          </Modal>
+          </Modal> */}
         </ImageBackground>
       </View>
     </SafeAreaView>
@@ -512,7 +561,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: COLOR.primary,
     padding: 20,
-    borderRadius: 5,
+    borderRadius: 40,
   },
   buttonMini: {
     width: "70%",
@@ -526,18 +575,17 @@ const styles = StyleSheet.create({
   },
   point: {
     flex: 2,
-    // width: 400,
-    // height: 100,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 100,
-    marginLeft: -100,
-  },
-  pointPart: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    // paddingHorizontal: 20,
+  },
+  pointPart: {
+    // flexDirection: "row",
+    // alignItems: "baseline",
+    alignItems: "center",
+    justifyContent: "center",
     marginHorizontal: 50,
     paddingHorizontal: 16,
     paddingVertical: 8,

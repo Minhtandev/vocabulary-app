@@ -91,9 +91,24 @@ export const HomeScreen = ({ navigation }) => {
       });
   };
 
+  // // ---- bộ từ vựng mới học
+  const collectionRef_laSubject = collection(db, "latest_subject");
+  const [subject, setSubject] = useState(null);
+  // console.log("subject", subject);
+  // console.log("userId", userContext.user.userId);
+  useEffect(() => {
+    onSnapshot(collectionRef_laSubject, (snapshot) => {
+      const data = snapshot.docs
+        .map((doc) => ({ ...doc.data(), id: doc.id }))
+        .find((item) => item.userId === userContext.user.userId);
+      setSubject(data);
+    });
+  }, [userContext.user.userId]);
+  //
   return (
     <SafeAreaView style={{ ...styles.container, flex: 1 }}>
       <StatusBar hidden={true} />
+      {/* top */}
       <View style={styles.top}>
         <TouchableOpacity onPress={handleLogOut}>
           <MyText style={{ color: "red" }}>Log out</MyText>
@@ -116,97 +131,181 @@ export const HomeScreen = ({ navigation }) => {
           )}
         </Pressable>
 
-        <MyText
+        <View
           style={{
-            color: "white",
-            // fontSize: "24",
-            backgroundColor: "#2d2c45",
-            paddingVertical: 14,
-            paddingHorizontal: 20,
-            borderRadius: 24,
-            overflow: "hidden",
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          Hi,
-          <MyText style={{ color: "#B5E67B" }}>
-            {" "}
+          <View style={{ backgroundColor: COLOR.primary, borderRadius: 100 }}>
+            <Image
+              style={{ width: 40, height: 40, paddingRight: 5 }}
+              source={require("../../assets/icons/avt.png")}
+            />
+          </View>
+          <MyText style={{ color: "#2d2c45", marginLeft: 5 }} weight={700}>
             {userContext.user?.username}
           </MyText>
-        </MyText>
+        </View>
       </View>
-      <View>
+      {/* center */}
+      {/* <View>
         <Image
           style={styles.image}
           source={require("../../assets/imgHP.png")}
         ></Image>
-      </View>
-      <View>
-        <MyText style={{ color: COLOR.third, fontSize: 24 }} weight={900}>
+      </View> */}
+      <View style={{ height: 200 }}>
+        {/* <MyText
+          style={{ color: COLOR.third, fontSize: 40, marginTop: 70 }}
+          weight={900}
+        >
           Learn English
-        </MyText>
+        </MyText> */}
+        <Image
+          style={{ width: 300, height: 240 }}
+          source={require("../../assets/logo.png")}
+        />
       </View>
-      <View style={styles.groupBtn}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Flashcard", {
-              name: "Flashcard",
-              userId: userContext.user?.userId,
-            });
-            if (playing == true) {
-              sound.pauseAsync();
-              setPlaying(!playing);
-            }
-          }}
-          style={{ ...styles.btn, backgroundColor: COLOR.bg }}
-        >
-          <MaterialCommunityIcons
-            name="cards-outline"
-            size={40}
-            color={COLOR.one}
-            style={{ marginBottom: 10 }}
-          />
-          <MyText style={styles.text}>Flashcard</MyText>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("LearnVoc", { name: "LearnVoc" });
-            if (playing == true) {
-              sound.pauseAsync();
-              setPlaying(!playing);
-            }
-          }}
-          style={{ ...styles.btn, backgroundColor: COLOR.bg }}
-        >
-          <MaterialCommunityIcons
-            name="bullseye-arrow"
-            size={40}
-            color={COLOR.two}
-            style={{ marginBottom: 10 }}
-          />
-          <MyText style={styles.text}>LearnVoc</MyText>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("CreateMinigame", {
-              name: "CreateMinigame",
-              // sound: sound,
-              // playing: playing,
-            });
-            if (playing == true) {
-              sound.pauseAsync();
-              setPlaying(!playing);
-            }
-          }}
-          style={{ ...styles.btn, backgroundColor: COLOR.bg }}
-        >
-          <MaterialCommunityIcons
-            name="gamepad-variant-outline"
-            size={40}
-            color={COLOR.three}
-            style={{ marginBottom: 10 }}
-          />
-          <MyText style={styles.text}>Minigame</MyText>
-        </Pressable>
+      {/*  */}
+      <View style={{ flex: 1, width: "90%" }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <MyText
+            style={{ fontSize: 24, marginLeft: 10, marginBottom: 10 }}
+            weight={700}
+          >
+            Bộ từ vừa học
+          </MyText>
+        </View>
+        <View>
+          <Pressable
+            onPress={() => {
+              if (subject) {
+                navigation.navigate("Vocabulary", {
+                  name: "Vocabulary",
+                  subjectId: subject.subjectId,
+                  subjectName: subject.subjectName,
+                });
+              } else {
+                navigation.navigate("LearnVoc", { name: "LearnVoc" });
+              }
+              if (playing == true) {
+                sound.pauseAsync();
+                setPlaying(!playing);
+              }
+            }}
+            style={{
+              ...styles.btnHorizontal,
+              backgroundColor: "#faf9ff",
+            }}
+          >
+            <Image
+              style={{ width: 36, height: 36 }}
+              source={require("../../assets/icons/learning.png")}
+            />
+            <MyText
+              style={{
+                ...styles.text,
+                color: COLOR.primary,
+                paddingLeft: 5,
+                fontSize: 18,
+                marginLeft: 10,
+              }}
+              weight={800}
+            >
+              {subject ? subject.subjectName : "Học ngay"}
+            </MyText>
+          </Pressable>
+        </View>
+      </View>
+      {/* GROUP FUNCTION */}
+      <View style={{ flex: 2 }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <MyText style={{ fontSize: 24, marginLeft: 10 }} weight={700}>
+            Tính năng
+          </MyText>
+          {/* <Image
+            style={{ width: 24, height: 24 }}
+            source={require("../../assets/icons/feature.png")}
+          /> */}
+        </View>
+        <View style={styles.groupBtn}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Flashcard", {
+                name: "Flashcard",
+                userId: userContext.user?.userId,
+              });
+              if (playing == true) {
+                sound.pauseAsync();
+                setPlaying(!playing);
+              }
+            }}
+            style={{ ...styles.btn, backgroundColor: COLOR.bg }}
+          >
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={require("../../assets/icons/flash-cards.png")}
+            />
+            <MyText style={styles.text}>Flashcard</MyText>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("LearnVoc", { name: "LearnVoc" });
+              if (playing == true) {
+                sound.pauseAsync();
+                setPlaying(!playing);
+              }
+            }}
+            style={{ ...styles.btn, backgroundColor: COLOR.bg }}
+          >
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={require("../../assets/icons/study.png")}
+            />
+            <MyText style={styles.text}>LearnVoc</MyText>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("CreateMinigame", {
+                name: "CreateMinigame",
+                // sound: sound,
+                // playing: playing,
+              });
+              if (playing == true) {
+                sound.pauseAsync();
+                setPlaying(!playing);
+              }
+            }}
+            style={{ ...styles.btn, backgroundColor: COLOR.bg }}
+          >
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={require("../../assets/icons/game.png")}
+            />
+            <MyText style={styles.text}>Minigame</MyText>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("CreateMinigame", {
+                name: "CreateMinigame",
+                // sound: sound,
+                // playing: playing,
+              });
+              if (playing == true) {
+                sound.pauseAsync();
+                setPlaying(!playing);
+              }
+            }}
+            style={{ ...styles.btn, backgroundColor: COLOR.bg }}
+          >
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={require("../../assets/icons/dictionary.png")}
+            />
+            <MyText style={styles.text}>Search</MyText>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -257,11 +356,14 @@ const styles = StyleSheet.create({
   groupBtn: {
     width: "90%",
     flexDirection: "row",
+    flexWrap: "wrap",
+    // alignItems: "flex-start",
     justifyContent: "space-between",
     marginBottom: 100,
     height: 160,
     // padding: 10,
     paddingVertical: 10,
+    paddingLeft: 10,
     // borderRadius: 10,
     // shadowColor: "#abacce",
     // shadowOffset: {
@@ -273,17 +375,36 @@ const styles = StyleSheet.create({
     // elevation: 5,
   },
   btn: {
-    width: "31%",
+    width: "50%",
     // backgroundColor: "#2d2c45",
     backgroundColor: "#a9d675",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
-    elevation: 5,
+    padding: 20,
+    borderRadius: 25,
+    // elevation: 5,
+    borderWidth: 2,
+    borderColor: "#abacce",
+    marginRight: 10,
+    flexBasis: "40%",
+    flexGrow: 1,
+    marginBottom: 10,
   },
   text: {
     color: "#2d2c45",
-    // fontWeight: "700",
     fontSize: 16,
+    marginTop: 4,
+  },
+  btnHorizontal: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 18,
+    // elevation: 5,
+    borderWidth: 2,
+    borderColor: COLOR.primary,
+    flexBasis: "40%",
+    flexGrow: 1,
   },
 });

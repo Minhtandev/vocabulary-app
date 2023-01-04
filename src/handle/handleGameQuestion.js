@@ -29,21 +29,25 @@ export default function handleGameQuestion(arrVoc, number) {
       let cards = [
         {
           id: item.id + "1",
+          tag: 1,
           title: item.name_card,
           value: true,
         },
         {
           id: item.id + "2",
+          tag: 2,
           title: item.mean_viet,
           value: true,
         },
         {
           id: item.id + "3",
+          tag: 0,
           title: otherCard1.name_card || "identification",
           value: false,
         },
         {
           id: item.id + "4",
+          tag: 0,
           title: otherCard2.mean_viet || "Xác minh",
           value: false,
         },

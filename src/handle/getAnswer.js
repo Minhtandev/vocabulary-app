@@ -9,6 +9,16 @@ export const getIndexAnswer = (data) => {
   return answers;
 };
 
+export const getAnswer = (data) => {
+  let anh = "";
+  let viet = "";
+  if (data.length > 0) {
+    anh = data.find((item) => item.tag === 1).title;
+    viet = data.find((item) => item.tag === 2).title;
+  }
+  return { anh, viet };
+};
+
 export const compareAnswer = (arr1, arr2) => {
   let result = true;
   if (arr1.length !== arr2.length) return false;

@@ -88,6 +88,8 @@ export const Flashcard = ({ navigation, route }) => {
         ></Item> */}
         <FlatList
           data={subjectArrState}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <Item
               navigation={navigation}

@@ -54,7 +54,8 @@ export const Flashcard = ({ navigation, route }) => {
             favourite,
             ...snapshot.docs
               .map((doc) => ({ ...doc.data(), id: doc.id }))
-              .filter((item) => item.user == userId),
+              .filter((item) => item.user == userId)
+              .sort((a, b) => a.name.localeCompare(b.name)),
           ]
           // .push(favourite)
         );
@@ -90,7 +91,7 @@ export const Flashcard = ({ navigation, route }) => {
         <FlatList
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={subjectArrState.sort((a, b) => a.name.localeCompare(b.name))}
+          data={subjectArrState}
           renderItem={({ item }) => (
             <Item
               navigation={navigation}

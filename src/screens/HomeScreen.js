@@ -222,7 +222,7 @@ export const HomeScreen = ({ navigation }) => {
       <View style={{ flex: 2 }}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <MyText style={{ fontSize: 24, marginLeft: 10 }} weight={700}>
-            Tính n
+            Tính năng
           </MyText>
           {/* <Image
             style={{ width: 24, height: 24 }}
@@ -263,7 +263,7 @@ export const HomeScreen = ({ navigation }) => {
               style={{ width: 40, height: 40 }}
               source={require("../../assets/icons/study.png")}
             />
-            <MyText style={styles.text}>LearnVoc</MyText>
+            <MyText style={styles.text}>Vocabulary</MyText>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -303,7 +303,7 @@ export const HomeScreen = ({ navigation }) => {
               style={{ width: 40, height: 40 }}
               source={require("../../assets/icons/dictionary.png")}
             />
-            <MyText style={styles.text}>Search</MyText>
+            <MyText style={styles.text}>Translation</MyText>
           </Pressable>
         </View>
       </View>

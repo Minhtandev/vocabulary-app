@@ -17,6 +17,9 @@ import Register from "./src/screens/Register";
 import Toast from "react-native-toast-message";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import MyText from "./src/components/MyText";
+
+//nhạc nền
+import { useState, createContext, useContext, useEffect } from "react";
 // save data of user
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -231,7 +234,6 @@ function GameStack() {
 }
 
 function App() {
-  //
   const userContext = useUser();
   return (
     <>

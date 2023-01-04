@@ -111,7 +111,9 @@ export const LearnVoc = ({ navigation, route }) => {
             // horizontal={false}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={subjectArrState}
+            data={subjectArrState.sort((a, b) =>
+              a.name_subject.localeCompare(b.name_subject)
+            )}
             renderItem={({ index, item }) => (
               <Item
                 navigation={navigation}
@@ -183,6 +185,7 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     paddingTop: 30,
+    paddingBottom: 10,
     backgroundColor: "rgba(132, 105, 255, 0.3)",
   },
   header: {

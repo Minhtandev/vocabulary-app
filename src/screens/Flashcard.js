@@ -1,5 +1,5 @@
 //Của react và react native
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import MyText from "../components/MyText";
 import { Item } from "../components/flashcard/Item";
 import { CustomModal } from "../components/flashcard/CustomModal";
 import image from "../../assets/flashcard_background.jpg";
+
 //Của database
 import { db } from "../../config/firebase_config";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
@@ -44,8 +45,8 @@ export const Flashcard = ({ navigation, route }) => {
       onSnapshot(collectionRef, (snapshot) => {
         const favourite = {
           id: "favourite",
-          name: "Yêu thích",
-          desc: "Các Flashcard bạn yêu thích",
+          name: " Yêu thích",
+          desc: " Các Flashcard bạn yêu thích",
           user: userId,
         };
         setSubjetArrState(
@@ -87,9 +88,9 @@ export const Flashcard = ({ navigation, route }) => {
           id={"favourite"}
         ></Item> */}
         <FlatList
-          data={subjectArrState}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
+          data={subjectArrState.sort((a, b) => a.name.localeCompare(b.name))}
           renderItem={({ item }) => (
             <Item
               navigation={navigation}
@@ -98,6 +99,7 @@ export const Flashcard = ({ navigation, route }) => {
               desc={item.desc}
               id={item.id}
               userId={userId}
+              subjectArr={subjectArrState}
             ></Item>
           )}
         />

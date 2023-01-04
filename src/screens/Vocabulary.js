@@ -10,11 +10,14 @@ import {
   Alert,
   GestureFlipView,
   Modal,
+  ImageBackground,
+  ScrollView,
 } from "react-native";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 // import { Modal } from "react-native-paper";
 import React, { useState, useEffect } from "react";
 import { db } from "../../config/firebase_config";
+import imageBackground from "../../assets/vocabularyBackground.jpg";
 import Carousel from "react-native-snap-carousel";
 import MyText from "../components/MyText";
 import { CustomModal } from "../components/flashcard/CustomModal";
@@ -22,6 +25,7 @@ import * as Speech from "expo-speech";
 import Toast from "react-native-toast-message";
 import { Audio } from "expo-av";
 import { useUser } from "../context/userContext";
+import { LinearGradient } from "react-native-gradients";
 import {
   collection,
   getDocs,
@@ -196,6 +200,34 @@ const IMAGES = {
   "Cliff.jpg": require("../../assets/images/Cliff.jpg"),
   "Coastline.jpg": require("../../assets/images/Coastline.jpg"),
   "Bay.jpg": require("../../assets/images/Bay.jpg"),
+  "Cauliflower.jpg": require("../../assets/images/Cauliflower.jpg"),
+  "Cabbage.jpg": require("../../assets/images/Cabbage.jpg"),
+  "Artichoke.jpg": require("../../assets/images/Artichoke.jpg"),
+  "Peas.jpg": require("../../assets/images/Peas.jpg"),
+  "Bean.jpg": require("../../assets/images/Bean.jpg"),
+  "Corn.jpg": require("../../assets/images/Corn.jpg"),
+  "Garlic.jpg": require("../../assets/images/Garlic.jpg"),
+  "White.jpg": require("../../assets/images/White.jpg"),
+  "Blue.jpg": require("../../assets/images/Blue.jpg"),
+  "Green.jpg": require("../../assets/images/Green.jpg"),
+  "Yellow.jpg": require("../../assets/images/Yellow.jpg"),
+  "Orange.jpg": require("../../assets/images/Orange.jpg"),
+  "Solution.jpg": require("../../assets/images/Solution.jpg"),
+  "Binary.jpg": require("../../assets/images/Binary.jpg"),
+  "Software.jpg": require("../../assets/images/Software.jpg"),
+  "Digital.jpg": require("../../assets/images/Digital.jpg"),
+  "Database.jpg": require("../../assets/images/Database.jpg"),
+  "Hardware.jpg": require("../../assets/images/Hardware.jpg"),
+  "Design.jpg": require("../../assets/images/Design.jpg"),
+  "Photography.jpg": require("../../assets/images/Photography.jpg"),
+  "Sculpture.jpg": require("../../assets/images/Sculpture.jpg"),
+  "Crafts.jpg": require("../../assets/images/Crafts.jpg"),
+  "Palette.jpg": require("../../assets/images/Palette.jpg"),
+  "Beat.jpg": require("../../assets/images/Beat.jpg"),
+  "Harmony.jpg": require("../../assets/images/Harmony.jpg"),
+  "Lyrics.jpg": require("../../assets/images/Lyrics.jpg"),
+  "Rhythm.jpg": require("../../assets/images/Rhythm.jpg"),
+  "Duet.jpg": require("../../assets/images/Duet.jpg"),
 };
 
 // const Item = ({ name, setModalVisible, route, content, setModalContent }) => (
@@ -249,6 +281,20 @@ const IMAGES = {
 //   </Modal>
 // );
 
+const COLOR = {
+  icon: "#2d2c45",
+  one: "#FF9F9F",
+  two: "#B5E67B",
+  three: "#B9E0FF",
+  four: "#ADA2FF",
+
+  bg: "#fff",
+  primary: "#8469ff",
+  second: "#f0edff",
+  third: "#6e4fff",
+  fourth: "#EEF1FF",
+};
+
 const Item = ({
   name_card,
   ipa,
@@ -289,19 +335,20 @@ const Item = ({
           <View style={styles.add_btn_content}>
             <Entypo
               name="plus"
-              size={16}
+              size={20}
               color="white"
               style={styles.add_icon}
             />
-            <MyText weight={500} style={styles.add_btn_text}>
-              THÊM BỘ
-            </MyText>
             {/* <MyText style={styles.add_btn_text}>{userId}</MyText> */}
           </View>
         </Pressable>
 
-        <MyText style={styles.meanViet}>{mean_viet}</MyText>
-        <MyText style={styles.meanEng}>{mean_eng}</MyText>
+        <MyText style={styles.meanViet} weight={700} size={16}>
+          {mean_viet}
+        </MyText>
+        <MyText style={styles.meanEng} weight={700} size={16}>
+          {mean_eng}
+        </MyText>
         <Image source={image ? IMAGES[image] : ""} style={styles.imageCard} />
       </View>
     </View>
@@ -341,6 +388,7 @@ export const Vocabulary = ({ navigation, route }) => {
   const subjectId = route.params.subjectId;
 
   const addToFC = async (id) => {
+    setModalVisible(!modalVisible);
     await addDoc(collectionRef_card, {
       name: cardName,
       defi: cardDefi,
@@ -381,84 +429,87 @@ export const Vocabulary = ({ navigation, route }) => {
   let image = "../../assets/images/Run.jpg";
 
   return (
-    <View style={styles.cover}>
-      {/* <Image source={require("../../assets/study.gif")} style={styles.gif} /> */}
+    <ImageBackground source={imageBackground} resizeMode="cover">
+      <View style={styles.cover}>
+        {/* <Image source={require("../../assets/study.gif")} style={styles.gif} /> */}
 
-      {/* <FlatList
-        data={cardArrState}
-        renderItem={({ item }) => (
-          <Item
-            // navigation={navigation}
-            name={item.name_card}
-            // symbol={item.symbol}
-            content={item}
-            setModalVisible={() => setModalVisible(true)}
-            setModalContent={(item) => setModalContent(item)}
-          ></Item>
-        )}
-      /> */}
-      {/* <Text>{subjectArrState.length}</Text>
-      <Text>{userId}</Text> */}
-      <Carousel
-        // ref={(c) => {
-        //   this._carousel = c;
-        // }}
-        layout={"stack"}
-        layoutCardOffset={18}
-        data={cardArrState.sort((a, b) =>
-          a.name_card.localeCompare(b.name_card)
-        )}
-        renderItem={({ item }) => (
-          <Item
-            name_card={item.name_card}
-            image={item.image}
-            ipa={item.ipa}
-            mean_eng={item.mean_eng}
-            mean_viet={item.mean_viet}
-            setModalVisible={setModalVisible}
-            setCardName={setCardName}
-            setCardDefi={setCardDefi}
-          />
-        )}
-        sliderWidth={700}
-        itemWidth={300}
-      />
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+        {/* <FlatList
+          data={cardArrState}
+          renderItem={({ item }) => (
+            <Item
+              // navigation={navigation}
+              name={item.name_card}
+              // symbol={item.symbol}
+              content={item}
+              setModalVisible={() => setModalVisible(true)}
+              setModalContent={(item) => setModalContent(item)}
+            ></Item>
+          )}
+        /> */}
+        {/* <Text>{subjectArrState.length}</Text>
+        <Text>{userId}</Text> */}
+        <Carousel
+          // ref={(c) => {
+          //   this._carousel = c;
+          // }}
+          layout={"stack"}
+          layoutCardOffset={18}
+          data={cardArrState}
+          renderItem={({ item }) => (
+            <Item
+              name_card={item.name_card}
+              image={item.image}
+              ipa={item.ipa}
+              mean_eng={item.mean_eng}
+              mean_viet={item.mean_viet}
+              setModalVisible={setModalVisible}
+              setCardName={setCardName}
+              setCardDefi={setCardDefi}
+            />
+          )}
+          sliderWidth={700}
+          itemWidth={300}
+        />
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={{ ...styles.add_subject_centeredView }}>
             <AntDesign
               name="close"
-              size={20}
+              size={25}
               color="black"
               onPress={() => {
                 setModalVisible(!modalVisible);
               }}
-              style={styles.close_icon}
+              style={styles.btn_close_icon}
             />
-            {subjectArrState.length > 0 ? (
-              subjectArrState.map((item, i) => (
-                <View key={i}>
-                  <Text>{item.name}</Text>
-                  <Pressable onPress={() => addToFC(item.id)}>
-                    <Text>Thêm</Text>
-                  </Pressable>
-                </View>
-              ))
-            ) : (
-              <Text>Chưa có bộ nào</Text>
-            )}
-            <Text>{cardName + " " + cardDefi}</Text>
+            <ScrollView style={{ ...styles.add_subject_modalView }}>
+              {subjectArrState.length > 0 ? (
+                subjectArrState.map((item, i) => (
+                  <View key={i} style={styles.subject_view}>
+                    <Text style={styles.subject_name}>{item.name}</Text>
+                    <Pressable
+                      onPress={() => addToFC(item.id)}
+                      style={styles.btn_add}
+                    >
+                      <AntDesign name="addfolder" size={24} color="black" />
+                    </Pressable>
+                  </View>
+                ))
+              ) : (
+                <Text>Chưa có bộ nào</Text>
+              )}
+              {/* <Text>{cardName + " " + cardDefi}</Text> */}
+            </ScrollView>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -469,21 +520,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+  // modalView: {
+  //   margin: 20,
+  //   backgroundColor: "white",
+  //   borderRadius: 10,
+  //   padding: 35,
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 4,
+  //   elevation: 5,
+  // },
   button: {
     width: 150,
     borderRadius: 20,
@@ -518,9 +569,9 @@ const styles = StyleSheet.create({
 
   cover: {
     height: "100%",
-    backgroundColor: "#f0edff",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "rgba(132, 105, 255, 0.2)",
   },
   item: {
     width: "80%",
@@ -571,7 +622,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     alignItems: "center",
-    elevation: 5,
+    elevation: 10,
     // display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -628,10 +679,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fcf9de",
   },
   //icon
-  close_icon: {
+  btn_close_icon: {
     zIndex: 10,
     position: "absolute",
     backgroundColor: "#fff",
+    right: "18%",
+    top: "33%",
+    paddingTop: 10,
+    fontSize: 20,
   },
   sound_icon: {
     color: "#60bfeb",
@@ -654,5 +709,82 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 24,
     justifyContent: "center",
+  },
+  add_subject_btn: {
+    position: "absolute",
+    backgroundColor: "#FAEAB1",
+    opacity: 0.8,
+    zIndex: 10,
+    top: -15,
+    right: 20,
+    width: 30,
+    height: 30,
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: "#E5BA73",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  add_icon: {
+    //backgroundColor: "#000",
+    color: "#000",
+  },
+  add_subject_modalView: {
+    margin: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 35,
+    paddingTop: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    maxHeight: 300,
+  },
+  add_subject_centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0005",
+  },
+  subject_view: {
+    width: 200,
+    height: 50,
+    textAlign: 30,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 5,
+    //borderWidth: 2,
+    borderColor: COLOR.four,
+    marginBottom: 5,
+    backgroundColor: COLOR.fourth,
+  },
+  btn_add: {
+    backgroundColor: COLOR.three,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  subject_name: {
+    maxWidth: 100,
+    height: 25,
+    lineHeight: 25,
+    overflow: "hidden",
   },
 });

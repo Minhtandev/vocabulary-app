@@ -71,6 +71,8 @@ export const LearnVoc = ({ navigation, route }) => {
             // numColumns={2}
             // columnWrapperStyle={{ justifyContent: "space-between" }}
             // horizontal={false}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             data={subjectArrState.sort((a, b) =>
               a.name_subject.localeCompare(b.name_subject)
             )}
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     paddingTop: 30,
+    paddingBottom: 10,
     backgroundColor: "rgba(132, 105, 255, 0.3)",
   },
   header: {

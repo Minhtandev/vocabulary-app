@@ -23,6 +23,7 @@ import MyText from "../components/MyText";
 import { CustomModal } from "../components/flashcard/CustomModal";
 import * as Speech from "expo-speech";
 import Toast from "react-native-toast-message";
+import { Audio } from "expo-av";
 import { useUser } from "../context/userContext";
 import { LinearGradient } from "react-native-gradients";
 import {
@@ -357,6 +358,18 @@ const Item = ({
 export const Vocabulary = ({ navigation, route }) => {
   // const [modalVisible, setModalVisible] = useState(false);
   // const [modalContent, setModalContent] = useState({});
+
+  //âm thanh khi thêm thành công
+  const [sound, setSound] = useState();
+  async function playSoundTrue() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/correct-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+
   const [subjectArrState, setSubjetArrState] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -387,6 +400,7 @@ export const Vocabulary = ({ navigation, route }) => {
       text1: "Thêm thành công",
       text2: "Bạn vừa thêm thành công thẻ mới!!! 👋",
     });
+    playSoundTrue;
   };
 
   useEffect(

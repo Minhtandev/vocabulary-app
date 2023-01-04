@@ -27,7 +27,27 @@ import * as Speech from "expo-speech";
 var width = Dimensions.get("window").width;
 import image from "../../../assets/flashcard_item_bg.jpg";
 import Toast from "react-native-toast-message";
+import { Audio } from "expo-av";
 export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
+  //âm thanh khi thêm thành công
+  const [sound, setSound] = useState();
+  async function playSoundTrue() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../assets/correct-answer.mp3")
+    );
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   const voiceHandle = () => {
     // console.log("hello");
     Speech.speak(name, { language: "en" });
@@ -47,12 +67,14 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
         text1: "Thêm thành công",
         text2: "Đã thêm vào bộ yêu thích!!!👋",
       });
+      playSoundTrue();
     } else {
       Toast.show({
         type: "success",
         text1: "Xóa thành công",
         text2: "Đã xóa khỏi bộ yêu thích!!!",
       });
+      playSoundTrue();
     }
     setFavoState(!favo);
   };
@@ -95,43 +117,6 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
           />
         )}
       </View>
-      {/* <Menu>
-        <MenuTrigger
-          customStyles={{
-            TriggerTouchableComponent: Pressable,
-            triggerTouchable: { title: "Select (Custom Touchables)" },
-            triggerOuterWrapper: styles.practice_btn,
-            triggerText: styles.practice_btn_text,
-          }}
-          text="THAO TÁC"
-        /> */}
-      {/* <MenuOptions style={styles.menu_container}>
-          <MenuOption
-            onSelect={() => setEditModalVisible(true)}
-            style={styles.menu_option}
-          >
-            <Entypo
-              name="edit"
-              size={16}
-              color="white"
-              style={styles.menu_edit_icon}
-            />
-            <MyText style={styles.menu_text}>Chỉnh sửa</MyText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => setDeleteModalVisible(true)}
-            style={styles.menu_option}
-          >
-            <MaterialIcons
-              name="delete"
-              size={16}
-              color="white"
-              style={styles.menu_delete_icon}
-            />
-            <MyText style={styles.menu_text}>Xóa</MyText>
-          </MenuOption>
-        </MenuOptions>
-      </Menu> */}
       <View style={styles.btns_container}>
         <Pressable
           style={styles.edit_btn}
@@ -176,7 +161,6 @@ export const CardItem = ({ navigation, name, defi, id, subjectId, favo }) => {
         defi={defi}
         favo={favo}
       ></CustomModal>
-      {/* </ImageBackground> */}
     </Pressable>
   );
 };

@@ -73,7 +73,9 @@ export const LearnVoc = ({ navigation, route }) => {
             // horizontal={false}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={subjectArrState}
+            data={subjectArrState.sort((a, b) =>
+              a.name_subject.localeCompare(b.name_subject)
+            )}
             renderItem={({ index, item }) => (
               <Item
                 navigation={navigation}

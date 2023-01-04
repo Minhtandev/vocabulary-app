@@ -37,7 +37,7 @@ export const Translate = ({ navigation, route }) => {
 
   const voiceHandle = () => {
     // console.log("hello");
-    Speech.speak(name_card, { language: "en" });
+    Speech.speak(enteredText, { language: "en" });
   };
 
   const onSubmit = useCallback(() => {

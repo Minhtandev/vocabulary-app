@@ -33,7 +33,9 @@ export const Item = ({ navigation, name, desc, id, userId, subjectArr }) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
-  console.log("item >>>", userId);
+  // console.log("item >>>", userId);
+  // console.log("subjectArr at item >>>", subjectArr);
+
   return (
     <Pressable
       style={styles.item}
@@ -61,6 +63,7 @@ export const Item = ({ navigation, name, desc, id, userId, subjectArr }) => {
                 name: name,
                 subjectId: id,
                 subjectName: name,
+                subjectArr: subjectArr,
               })
             }
           >

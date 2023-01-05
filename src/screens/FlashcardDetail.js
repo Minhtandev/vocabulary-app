@@ -35,7 +35,10 @@ export const FlashcardDetail = ({ navigation, route }) => {
   //Biến truyền Item bộ
   const subjectId = route.params.subjectId;
   const subjectName = route.params.subjectName;
-  const subjectIdArr = route.params.subjectArr.map((item) => item.id);
+  const subjectIdArr = route.params.subjectArr
+    ? route.params.subjectArr.map((item) => item.id)
+    : [];
+  // console.log("params.subjectArr>>>", route.params.subjectArr);
   //lấy dữ liệu (các thẻ)
   useEffect(
     () =>
@@ -83,22 +86,26 @@ export const FlashcardDetail = ({ navigation, route }) => {
             Chưa có thẻ nào hết bạn ơi &#128517;
           </MyText>
         )}
-        <Pressable
-          style={styles.add_subject_btn}
-          onPress={() => setModalVisible(true)}
-        >
-          <View style={styles.add_btn_content}>
-            <Entypo
-              name="plus"
-              size={16}
-              color="white"
-              style={styles.add_icon}
-            />
-            <MyText weight={500} style={styles.add_btn_text}>
-              THÊM THẺ
-            </MyText>
-          </View>
-        </Pressable>
+        {subjectId != "favourite" ? (
+          <Pressable
+            style={styles.add_subject_btn}
+            onPress={() => setModalVisible(true)}
+          >
+            <View style={styles.add_btn_content}>
+              <Entypo
+                name="plus"
+                size={16}
+                color="white"
+                style={styles.add_icon}
+              />
+              <MyText weight={500} style={styles.add_btn_text}>
+                THÊM THẺ
+              </MyText>
+            </View>
+          </Pressable>
+        ) : (
+          <></>
+        )}
         <CustomModal
           modalType="add-card"
           modalVisible={modalVisible}

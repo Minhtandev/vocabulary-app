@@ -72,8 +72,8 @@ export const Translate = ({ navigation, route }) => {
       <View style={styles.cover}>
         <View style={styles.header}>
           <MyText>English</MyText>
-          {/* <Pressable style={styles.translate} onPress={onSubmit}> */}
-          <Pressable style={styles.translate}>
+          <Pressable style={styles.translate} onPress={onSubmit}>
+            {/* <Pressable style={styles.translate}> */}
             <MaterialIcons name="g-translate" size={24} color="black" />
           </Pressable>
           <MyText>Vietnamese</MyText>
@@ -100,10 +100,10 @@ export const Translate = ({ navigation, route }) => {
         </View>
 
         <View style={styles.vietnameseContent}>
-          {/* <MyText style={styles.translatedContent}>{resultText}</MyText> */}
-          <MyText style={styles.translatedContent}>
+          <MyText style={styles.translatedContent}>{resultText}</MyText>
+          {/* <MyText style={styles.translatedContent}>
             Đây là nội dung được dịch
-          </MyText>
+          </MyText> */}
         </View>
       </View>
     </ImageBackground>

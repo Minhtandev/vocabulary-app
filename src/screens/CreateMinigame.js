@@ -113,7 +113,7 @@ const CreateMinigame = ({ navigation }) => {
         style={styles.container}
       >
         <View style={styles.setUp}>
-          <MyText style={styles.textTitle}>Setup game</MyText>
+          <MyText style={styles.textTitle}>Thiết lập game</MyText>
           <View style={{ flex: 1 }}>
             <View style={styles.group}>
               <View style={styles.row}>
@@ -122,7 +122,7 @@ const CreateMinigame = ({ navigation }) => {
                   source={require("../../assets/icons/menu.png")}
                 />
                 <MyText style={{ marginRight: 10, fontSize: 16 }}>
-                  Choose subject
+                  Chọn bộ từ vựng
                 </MyText>
               </View>
               <Menu>
@@ -168,7 +168,7 @@ const CreateMinigame = ({ navigation }) => {
                   source={require("../../assets/icons/numbers.png")}
                 />
                 <MyText style={{ fontSize: 16 }}>
-                  The number of questions
+                  Số lượng câu hỏi bạn muốn
                 </MyText>
               </View>
               <TextInput
@@ -202,7 +202,7 @@ const CreateMinigame = ({ navigation }) => {
             }}
           >
             <MyText style={{ ...styles.textBtn, color: "#fff" }} weight={900}>
-              Start game
+              Chơi game
             </MyText>
           </Pressable>
         </View>
@@ -225,7 +225,7 @@ const CreateMinigame = ({ navigation }) => {
           }}
           onPress={() => setShowModal(true)}
         >
-          <MyText style={{ color: "blue" }}>Introduction</MyText>
+          <MyText style={{ color: "blue" }}>Hướng dẫn</MyText>
           <Feather
             name="info"
             size={20}

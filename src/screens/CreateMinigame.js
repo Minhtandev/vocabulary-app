@@ -239,8 +239,8 @@ const CreateMinigame = ({ navigation }) => {
             transparent={true}
             visible={true}
             onRequestClose={() => {
-              Alert.alert("Closed.");
-              setModalVisible(false);
+              // Alert.alert("Closed.");
+              setShowModal(false);
             }}
           >
             <Pressable

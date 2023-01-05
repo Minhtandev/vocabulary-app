@@ -72,10 +72,7 @@ export const Translate = ({ navigation, route }) => {
       <View style={styles.cover}>
         <View style={styles.header}>
           <MyText>English</MyText>
-          <Pressable style={styles.translate} onPress={onSubmit}>
-            {/* <Pressable style={styles.translate}> */}
-            <MaterialIcons name="g-translate" size={24} color="black" />
-          </Pressable>
+
           <MyText>Vietnamese</MyText>
         </View>
         <View style={styles.englishContent}>
@@ -98,7 +95,13 @@ export const Translate = ({ navigation, route }) => {
             style={styles.sound_icon}
           />
         </View>
-
+        <Pressable style={styles.translate} onPress={onSubmit}>
+          {/* <Pressable style={styles.translate}> */}
+          <MaterialIcons name="g-translate" size={24} color="#6e4fff" />
+          <MyText style={{ fontSize: 18, color: "#6e4fff" }} weight={500}>
+            Dịch
+          </MyText>
+        </Pressable>
         <View style={styles.vietnameseContent}>
           <MyText style={styles.translatedContent}>{resultText}</MyText>
           {/* <MyText style={styles.translatedContent}>
@@ -160,26 +163,39 @@ const styles = StyleSheet.create({
     top: 0,
   },
   translate: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     backgroundColor: "#ddd",
     borderRadius: 20,
     //position: "absolute",
-    width: 40,
-    height: 40,
-    justifyContent: "center",
+    width: 90,
+    height: 50,
     alignItems: "center",
     left: 10,
+    top: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    borderWidth: 2,
+    borderColor: "#fff",
+    padding: 10,
   },
   sound_icon: {
     color: "#60bfeb",
-    backgroundColor: "#fcf9de",
+    //backgroundColor: "#fcf9de",
     fontSize: 24,
     height: 50,
     textAlign: "center",
     lineHeight: 40,
     right: 10,
-    top: -60,
+    top: -50,
     padding: 5,
     borderRadius: 10,
-    borderWidth: 2,
+    //borderWidth: 2,
   },
 });

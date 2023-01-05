@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   add_btn_content: {
     flexDirection: "row",
     flex: 1,
-    alignItem: "center",
+    alignItems: "center",
   },
   centeredView: {
     flex: 1,
@@ -167,10 +167,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#8469ff",
     borderRadius: 50,
     paddingTop: 5,
-    paddingLeft: 5,
+    // paddingLeft: 5,
     paddingBottom: 5,
-    paddingRight: 5,
-    width: 115,
+    // paddingRight: 5,
+    paddingHorizontal: 10,
+    // width: 115,
     position: "absolute",
     bottom: 15,
   },
@@ -183,9 +184,9 @@ const styles = StyleSheet.create({
   },
   //icon
   add_icon: {
-    marginLeft: 5,
+    // marginLeft: 5,
     marginRight: 2,
-    marginTop: 2,
+    // marginTop: 2,
   },
   //text
   title: {

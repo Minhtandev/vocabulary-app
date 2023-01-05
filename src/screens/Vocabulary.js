@@ -489,7 +489,7 @@ export const Vocabulary = ({ navigation, route }) => {
               }}
               style={styles.btn_close_icon}
             />
-            <ScrollView style={{ ...styles.add_subject_modalView }}>
+            <ScrollView style={styles.add_subject_modalView}>
               {subjectArrState.length > 0 ? (
                 subjectArrState.map((item, i) => (
                   <View key={i} style={styles.subject_view}>
@@ -684,8 +684,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
     position: "absolute",
     backgroundColor: "#fff",
-    right: "18%",
-    top: "33%",
+    right: "15%",
+    top: "32%",
     paddingTop: 10,
     fontSize: 20,
   },
@@ -731,11 +731,13 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   add_subject_modalView: {
-    margin: 20,
+    // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 35,
-    paddingTop: 50,
+    // paddingTop: 35,
+    paddingRight: 35,
+    paddingLeft: 35,
+    // paddingTop: 50,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

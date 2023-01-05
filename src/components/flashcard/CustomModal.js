@@ -45,9 +45,8 @@ export const CustomModal = ({
   const [inputEditDescState, setInputEditDescState] = useState(desc);
   const [inputAddNameCardState, setInputAddNameCardState] = useState("");
   const [inputAddDefiState, setInputAddDefiState] = useState("");
-  const [inputEditNameCardState, setInputEditNameCardState] =
-    useState(nameCard);
-  const [inputEditDefiState, setInputEditDefiState] = useState(defi);
+  const [inputEditNameCardState, setInputEditNameCardState] = useState("");
+  const [inputEditDefiState, setInputEditDefiState] = useState("");
   //database
   const collectionRef_subject = collection(db, "flashcard_subject");
   const collectionRef_card = collection(db, "flashcard");

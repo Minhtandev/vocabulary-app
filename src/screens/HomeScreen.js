@@ -236,10 +236,10 @@ export const HomeScreen = ({ navigation }) => {
                 name: "Flashcard",
                 userId: userContext.user?.userId,
               });
-              if (playing == true) {
-                sound.pauseAsync();
-                setPlaying(!playing);
-              }
+              // if (playing == true) {
+              //   sound.pauseAsync();
+              //   setPlaying(!playing);
+              // }
             }}
             style={{ ...styles.btn, backgroundColor: COLOR.bg }}
           >
@@ -252,10 +252,10 @@ export const HomeScreen = ({ navigation }) => {
           <Pressable
             onPress={() => {
               navigation.navigate("LearnVoc", { name: "LearnVoc" });
-              if (playing == true) {
-                sound.pauseAsync();
-                setPlaying(!playing);
-              }
+              // if (playing == true) {
+              //   sound.pauseAsync();
+              //   setPlaying(!playing);
+              // }
             }}
             style={{ ...styles.btn, backgroundColor: COLOR.bg }}
           >
@@ -272,10 +272,10 @@ export const HomeScreen = ({ navigation }) => {
                 // sound: sound,
                 // playing: playing,
               });
-              if (playing == true) {
-                sound.pauseAsync();
-                setPlaying(!playing);
-              }
+              // if (playing == true) {
+              //   sound.pauseAsync();
+              //   setPlaying(!playing);
+              // }
             }}
             style={{ ...styles.btn, backgroundColor: COLOR.bg }}
           >
@@ -292,10 +292,10 @@ export const HomeScreen = ({ navigation }) => {
                 // sound: sound,
                 // playing: playing,
               });
-              if (playing == true) {
-                sound.pauseAsync();
-                setPlaying(!playing);
-              }
+              // if (playing == true) {
+              //   sound.pauseAsync();
+              //   setPlaying(!playing);
+              // }
             }}
             style={{ ...styles.btn, backgroundColor: COLOR.bg }}
           >

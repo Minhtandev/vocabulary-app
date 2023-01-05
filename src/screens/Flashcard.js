@@ -45,17 +45,17 @@ export const Flashcard = ({ navigation, route }) => {
       onSnapshot(collectionRef, (snapshot) => {
         const favourite = {
           id: "favourite",
-          name: " Yêu thích",
-          desc: " Các Flashcard bạn yêu thích",
+          name: "Yêu thích",
+          desc: "Các Flashcard bạn yêu thích",
           user: userId,
         };
         setSubjetArrState(
           [
-            favourite,
             ...snapshot.docs
               .map((doc) => ({ ...doc.data(), id: doc.id }))
               .filter((item) => item.user == userId)
               .sort((a, b) => a.name.localeCompare(b.name)),
+            favourite,
           ]
           // .push(favourite)
         );
@@ -119,10 +119,8 @@ export const Flashcard = ({ navigation, route }) => {
             <MyText weight={500} style={styles.add_btn_text}>
               THÊM BỘ
             </MyText>
-            {/* <MyText style={styles.add_btn_text}>{userId}</MyText> */}
           </View>
         </Pressable>
-        {/* <Button title="Play Sound" onPress={playSound} /> */}
         {/* Modal thêm bộ */}
         <CustomModal
           modalType="add-subject"
@@ -140,7 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
-    // paddingBottom: 10,
+    paddingBottom: 30,
     alignItems: "center",
     backgroundColor: "rgba(132, 105, 255, 0.3)",
     // color: "#FFF",

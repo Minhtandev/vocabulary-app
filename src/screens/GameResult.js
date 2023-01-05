@@ -216,7 +216,9 @@ const GameResult = ({ navigation, route }) => {
                 ))}
 
               {!data?.wrongResult || data?.wrongResult?.length == 0 ? (
-                <MyText style={{ ...styles.text, marginTop: 5 }}>Empty</MyText>
+                <MyText style={{ ...styles.text, marginTop: 5 }}>
+                  Bạn giỏi quá, hong có từ nào sai hết &#128536;
+                </MyText>
               ) : null}
             </View>
             <View style={{}}>
@@ -242,7 +244,9 @@ const GameResult = ({ navigation, route }) => {
                   ></Item>
                 ))}
               {!data?.correctResult || data?.correctResult?.length == 0 ? (
-                <MyText style={{ ...styles.text, marginTop: 5 }}>Empty</MyText>
+                <MyText style={{ ...styles.text, marginTop: 5 }}>
+                  Chưa có từ nào đúng hết á, cố gắng thêm bạn nha &#128536;
+                </MyText>
               ) : null}
             </View>
           </View>
@@ -278,7 +282,7 @@ const GameResult = ({ navigation, route }) => {
                   }}
                   weight={700}
                 >
-                  Test Again
+                  Chơi lại
                 </MyText>
               </Pressable>
               <Pressable
